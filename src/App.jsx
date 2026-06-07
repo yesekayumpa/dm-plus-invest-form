@@ -224,7 +224,21 @@ const translations = {
     agréeUemoa: "Agréé UEMOA",
     institutionAgrée: "Institution Agréée",
     retour: "RETOUR",
-    jeConfirmeLecture: "Je confirme avoir pris connaissance des conditions d'adhésion et je souhaite continuer le remplissage du formulaire"
+    jeConfirmeLecture: "Je confirme avoir pris connaissance des conditions d'adhésion et je souhaite continuer le remplissage du formulaire",
+    subIdentite: "Vos informations personnelles",
+    subContact: "Vos coordonnées et moyens de contact",
+    subResidence: "Votre adresse et lieu de résidence",
+    subSituationPro: "Votre activité et revenus professionnels",
+    subProfil: "Définissez votre profil pour une stratégie personnalisée",
+    subCapital: "Définissez votre capacité d'investissement et vos instruments",
+    plusieursChoix: "Plusieurs choix",
+    subRisquePrudent: "Faible risque",
+    subRisqueEquilibre: "Risque modéré",
+    subRisqueDynamique: "Risque élevé",
+    subRisqueAgressif: "Risque maximal",
+    subActions: "BRVM & marché",
+    subObligations: "Revenus fixes",
+    subFCP: "Fonds collectifs"
   },
   EN: {
     institution: "Elite Institution",
@@ -439,7 +453,21 @@ const translations = {
     conditions: "membership conditions",
     agréeUemoa: "UEMOA Approved",
     institutionAgrée: "Approved Institution",
-    retour: "BACK"
+    retour: "BACK",
+    subIdentite: "Your personal information",
+    subContact: "Your contact details",
+    subResidence: "Your address and place of residence",
+    subSituationPro: "Your professional activity and income",
+    subProfil: "Define your profile for a personalized strategy",
+    subCapital: "Define your investment capacity and instruments",
+    plusieursChoix: "Multiple choices",
+    subRisquePrudent: "Low risk",
+    subRisqueEquilibre: "Moderate risk",
+    subRisqueDynamique: "High risk",
+    subRisqueAgressif: "Maximum risk",
+    subActions: "BRVM & market",
+    subObligations: "Fixed income",
+    subFCP: "Collective funds"
   }
 };
 
@@ -823,7 +851,7 @@ function App() {
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100">
                           <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.identiteCivile}</div>
-                          <p className="text-[9px] text-slate-400 mt-1">Vos informations personnelles</p>
+                          <p className="text-[9px] text-slate-400 mt-1">{t.subIdentite}</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1 min-w-0">
@@ -942,7 +970,7 @@ function App() {
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100">
                           <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.contact}</div>
-                          <p className="text-[9px] text-slate-400 mt-1">Vos coordonnées et moyens de contact</p>
+                          <p className="text-[9px] text-slate-400 mt-1">{t.subContact}</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1">
@@ -1020,7 +1048,7 @@ function App() {
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100">
                           <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.residenceActuelle}</div>
-                          <p className="text-[9px] text-slate-400 mt-1">Votre adresse et lieu de résidence</p>
+                          <p className="text-[9px] text-slate-400 mt-1">{t.subResidence}</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                            <div className="space-y-1">
@@ -1047,7 +1075,7 @@ function App() {
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100 mb-4">
                           <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.situationPro}</div>
-                          <p className="text-[9px] text-slate-400 mt-1">Votre activité et revenus professionnels</p>
+                          <p className="text-[9px] text-slate-400 mt-1">{t.subSituationPro}</p>
                         </div>                        
                         <div className="space-y-4">
                           <div className="space-y-1">
@@ -1146,7 +1174,7 @@ function App() {
                         {/* Section title */}
                         <div className="pb-3 border-b border-slate-100">
                           <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.profilInvestisseur}</div>
-                          <p className="text-[9px] text-slate-400 mt-1">Définissez votre profil pour une stratégie personnalisée</p>
+                          <p className="text-[9px] text-slate-400 mt-1">{t.subProfil}</p>
                         </div>
 
                         {/* Expérience */}
@@ -1197,10 +1225,10 @@ function App() {
                           <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">{t.toleranceRisque}</label>
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                             {[
-                              { id: "prudent", label: t.prudent, sub: "Faible risque" },
-                              { id: "equilibre", label: t.equilibre, sub: "Risque modéré" },
-                              { id: "dynamique", label: t.dynamique, sub: "Risque élevé" },
-                              { id: "agressif", label: t.agressif, sub: "Risque maximal" }
+                              { id: "prudent", label: t.prudent, sub: t.subRisquePrudent },
+                              { id: "equilibre", label: t.equilibre, sub: t.subRisqueEquilibre },
+                              { id: "dynamique", label: t.dynamique, sub: t.subRisqueDynamique },
+                              { id: "agressif", label: t.agressif, sub: t.subRisqueAgressif }
                             ].map((risk) => {
                               const isSelected = formData.toleranceRisque === risk.id;
                               return (
@@ -1218,7 +1246,7 @@ function App() {
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">{t.objectifsPatrimoniaux}</label>
-                            <span className="text-[8px] text-slate-400 italic">(Plusieurs choix)</span>
+                            <span className="text-[8px] text-slate-400 italic">({t.plusieursChoix})</span>
                           </div>
                           <div className="grid grid-cols-2 gap-2">
                             {[
@@ -1254,7 +1282,7 @@ function App() {
 
                         <div className="pb-3 border-b border-slate-100">
                           <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.capitalInstruments}</div>
-                          <p className="text-[9px] text-slate-400 mt-1">Définissez votre capacité d'investissement et vos instruments</p>
+                          <p className="text-[9px] text-slate-400 mt-1">{t.subCapital}</p>
                         </div>
 
                         {/* Capital à investir */}
@@ -1284,13 +1312,13 @@ function App() {
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">{t.instrumentsFinanciers}</label>
-                            <span className="text-[8px] text-slate-400 italic">(Plusieurs choix)</span>
+                            <span className="text-[8px] text-slate-400 italic">({t.plusieursChoix})</span>
                           </div>
                           <div className="grid grid-cols-3 gap-2">
                             {[
-                              { id: "Actions", label: t.instruments.actions, sub: "BRVM & marché" },
-                              { id: "Obligations", label: t.instruments.obligations, sub: "Revenus fixes" },
-                              { id: "FCP", label: t.instruments.fcp, sub: "Fonds collectifs" }
+                              { id: "Actions", label: t.instruments.actions, sub: t.subActions },
+                              { id: "Obligations", label: t.instruments.obligations, sub: t.subObligations },
+                              { id: "FCP", label: t.instruments.fcp, sub: t.subFCP }
                             ].map((inst) => {
                               const isChecked = formData.instrumentsExp.includes(inst.id);
                               return (
