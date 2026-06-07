@@ -1,5 +1,5 @@
 import {
-  ArrowLeft, ArrowRight, Check, Crown, Lock, Shield, Sparkles, Target, User, Wallet, Phone, MapPin, Building2, CreditCard, Briefcase, Star, TrendingUp, Users, Quote, ChevronDown, ExternalLink, Globe, Layers, FileText, Layout
+  ArrowLeft, ArrowRight, Check, Crown, Lock, Shield, Sparkles, Target, User, Wallet, Phone, MapPin, Building2, CreditCard, Briefcase, Star, TrendingUp, Users, Quote, ChevronDown, ExternalLink, Globe, Layers, FileText, Layout, Scale, Zap
 } from "lucide-react";
 import { Fragment, useState } from "react";
 import PrivacyPolicy from "./PrivacyPolicy";
@@ -255,7 +255,13 @@ const translations = {
     stepCarriere: "Carrière",
     stepProfil: "Profil",
     stepCapital: "Capital",
-    alertSelectOffer: "Veuillez sélectionner une formule d'abonnement avant de continuer."
+    alertSelectOffer: "Veuillez sélectionner une formule d'abonnement avant de continuer.",
+    fermer: "Fermer",
+    emailError: "Veuillez entrer une adresse email valide",
+    emailRequired: "Email requis",
+    errorMessage: "Erreur",
+    emailSubject: "Inscription Elite Light DM+ Invest",
+    pdfFilenamePrefix: "Convention"
   },
   EN: {
     institution: "Elite Institution",
@@ -501,7 +507,13 @@ const translations = {
     stepCarriere: "Career",
     stepProfil: "Profile",
     stepCapital: "Capital",
-    alertSelectOffer: "Please select a subscription plan before continuing."
+    alertSelectOffer: "Please select a subscription plan before continuing.",
+    fermer: "Close",
+    emailError: "Please enter a valid email address",
+    emailRequired: "Email required",
+    errorMessage: "Error",
+    emailSubject: "Elite Light DM+ Invest Registration",
+    pdfFilenamePrefix: "Agreement"
   }
 };
 
@@ -576,7 +588,7 @@ function App() {
       // Validate email field
       if (name === "email" && value) {
         if (!validateEmail(value)) {
-          setErrors(prev => ({ ...prev, email: "Veuillez entrer une adresse email valide" }));
+          setErrors(prev => ({ ...prev, email: t.emailError }));
         }
       }
       
@@ -613,12 +625,12 @@ function App() {
     
     // Validate email
     if (!formData.email) {
-      setErrors(prev => ({ ...prev, email: "Email requis" }));
+      setErrors(prev => ({ ...prev, email: t.emailRequired }));
       return;
     }
     
     if (!validateEmail(formData.email)) {
-      setErrors(prev => ({ ...prev, email: "Veuillez entrer une adresse email valide" }));
+      setErrors(prev => ({ ...prev, email: t.emailError }));
       return;
     }
     
@@ -629,13 +641,13 @@ function App() {
       const serverUrl = window.location.hostname === 'localhost' ? 'http://localhost:3002/api/send-email' : '/api/send-email';
       const fd = new FormData();
       Object.keys(finalData).forEach(k => fd.append(k, typeof finalData[k] === 'object' ? JSON.stringify(finalData[k]) : String(finalData[k])));
-      fd.append('sujet', 'Inscription Elite Light DM+ Invest');
+      fd.append('sujet', t.emailSubject);
       fd.append('_replyto', finalData.email);
-      fd.append('convention_pdf', blob, `Convention_${finalData.nom}_DM_Invest.pdf`);
+      fd.append('convention_pdf', blob, `${t.pdfFilenamePrefix}_${finalData.nom}_DM_Invest.pdf`);
       await fetch(serverUrl, { method: 'POST', body: fd });
       setIsSubmitted(true);
       setTimeout(() => window.location.reload(), 5000);
-    } catch (e) { alert(`Erreur: ${e.message}`); }
+    } catch (e) { alert(`${t.errorMessage}: ${e.message}`); }
   };
 
   const stepsInfo = [
@@ -1255,21 +1267,27 @@ function App() {
                         </div>
 
                         {/* Tolérance au risque */}
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                           <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">{t.toleranceRisque}</label>
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             {[
-                              { id: "prudent", label: t.prudent, sub: t.subRisquePrudent },
-                              { id: "equilibre", label: t.equilibre, sub: t.subRisqueEquilibre },
-                              { id: "dynamique", label: t.dynamique, sub: t.subRisqueDynamique },
-                              { id: "agressif", label: t.agressif, sub: t.subRisqueAgressif }
+                              { id: "prudent", label: t.prudent, sub: t.subRisquePrudent,  color: "from-emerald-500 to-emerald-600", bgColor: "bg-emerald-50", borderColor: "border-emerald-200" },
+                              { id: "equilibre", label: t.equilibre, sub: t.subRisqueEquilibre, color: "from-blue-500 to-blue-600", bgColor: "bg-blue-50", borderColor: "border-blue-200" },
+                              { id: "dynamique", label: t.dynamique, sub: t.subRisqueDynamique, color: "from-amber-500 to-amber-600", bgColor: "bg-amber-50", borderColor: "border-amber-200" },
+                              { id: "agressif", label: t.agressif, sub: t.subRisqueAgressif, color: "from-red-500 to-red-600", bgColor: "bg-red-50", borderColor: "border-red-200" }
                             ].map((risk) => {
                               const isSelected = formData.toleranceRisque === risk.id;
                               return (
-                                <label key={risk.id} className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isSelected ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
-                                  <span className={`text-[9px] font-black uppercase tracking-wider leading-tight ${isSelected ? 'text-white' : 'text-slate-700'}`}>{risk.label}</span>
-                                  <span className={`text-[8px] font-semibold ${isSelected ? 'text-white/70' : 'text-slate-400'}`}>{risk.sub}</span>
+                                <label key={risk.id} className="relative cursor-pointer transition-all duration-200">
                                   <input type="radio" name="toleranceRisque" value={risk.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
+                                  <div className={"flex flex-col items-center gap-2 py-4 px-3 rounded-xl border-2 transition-all duration-200 text-center " + (isSelected ? "border-[#deb833] bg-[#deb833] shadow-sm" : "border-slate-200 bg-white hover:border-[#deb833]/40")}>
+                                    <span className={"text-[9px] font-black uppercase tracking-wider leading-tight " + (isSelected ? "text-white" : "text-slate-700")}>
+                                      {risk.label.split(' - ')[0]}
+                                    </span>
+                                    <span className={"text-[8px] font-semibold " + (isSelected ? "text-white/70" : "text-slate-400")}>
+                                      {risk.sub}
+                                    </span>
+                                  </div>
                                 </label>
                               );
                             })}
@@ -1296,8 +1314,8 @@ function App() {
                               const isChecked = formData.patrimoineExistant && formData.patrimoineExistant.includes(obj.id);
                               return (
                                 <label key={obj.id} className={`flex items-center gap-2.5 p-2.5 rounded-xl border-2 cursor-pointer transition-all duration-200 ${isChecked ? 'border-[#deb833] bg-[#deb833]/10' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
-                                  <div className={`h-4 w-4 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all ${isChecked ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white'}`}>
-                                    {isChecked && <Check size={9} className="text-white" strokeWidth={3} />}
+                                  <div className={`h-4 w-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${isChecked ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white'}`}>
+                                    {isChecked && <div className="h-2 w-2 rounded-full bg-white"></div>}
                                   </div>
                                   <span className={`text-[8px] font-black uppercase tracking-wider leading-tight ${isChecked ? 'text-slate-900' : 'text-slate-600'}`}>{obj.label}</span>
                                   <input type="checkbox" name="patrimoineExistant" value={obj.id} checked={isChecked} onChange={handleInputChange} className="sr-only" />
@@ -1442,8 +1460,8 @@ function App() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-xl animate-fade-in">
           <div className="absolute inset-0 bg-white/80" onClick={() => setShowPrivacyPolicy(false)} />
           <div className="form-card-light relative max-h-[85vh] w-full max-w-4xl overflow-y-auto border-slate-100">
-            <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
-            <button onClick={() => setShowPrivacyPolicy(false)} className="ui-btn-elite-gold mt-12 w-full" style={{ backgroundColor: '#deb833', color: '#ffffff' }}>Fermer</button>
+            <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} lang={lang} />
+            <button onClick={() => setShowPrivacyPolicy(false)} className="ui-btn-elite-gold mt-12 w-full" style={{ backgroundColor: '#deb833', color: '#ffffff' }}>{t.fermer}</button>
           </div>
         </div>
       )}
@@ -1452,8 +1470,8 @@ function App() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-xl animate-fade-in">
           <div className="absolute inset-0 bg-white/80" onClick={() => setShowConditions(false)} />
           <div className="form-card-light relative max-h-[85vh] w-full max-w-5xl overflow-y-auto border-slate-100">
-            <MembershipConditions onClose={() => setShowConditions(false)} />
-            <button onClick={() => setShowConditions(false)} className="ui-btn-elite-gold mt-12 w-full" style={{ backgroundColor: '#deb833', color: '#ffffff' }}>Fermer</button>
+            <MembershipConditions onClose={() => setShowConditions(false)} lang={lang} />
+            <button onClick={() => setShowConditions(false)} className="ui-btn-elite-gold mt-12 w-full" style={{ backgroundColor: '#deb833', color: '#ffffff' }}>{t.fermer}</button>
           </div>
         </div>
       )}
