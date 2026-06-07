@@ -238,7 +238,24 @@ const translations = {
     subRisqueAgressif: "Risque maximal",
     subActions: "BRVM & marché",
     subObligations: "Revenus fixes",
-    subFCP: "Fonds collectifs"
+    subFCP: "Fonds collectifs",
+    excellenceCertifiee: "Excellence Certifiée",
+    sidePanelTitle: "L'EXCELLENCE",
+    sidePanelAccent: "FINANCIÈRE",
+    sidePanelSuffix: "À VOTRE PORTÉE.",
+    sidePanelDesc: "Nous combinons intelligence de marché et exécution d'élite pour optimiser votre patrimoine sur la BRVM.",
+    secu2: "SÉCURITÉ INSTITUTIONNELLE",
+    secuDesc: "Agréé par les autorités de l'UEMOA",
+    objectifsPerso: "OBJECTIFS PERSONNALISÉS",
+    objectifsPersoDesc: "Stratégies sur mesure haute performance",
+    stepOffres: "Offres",
+    stepIdentite: "Identité",
+    stepContact: "Contact",
+    stepResidence: "Résidence",
+    stepCarriere: "Carrière",
+    stepProfil: "Profil",
+    stepCapital: "Capital",
+    alertSelectOffer: "Veuillez sélectionner une formule d'abonnement avant de continuer."
   },
   EN: {
     institution: "Elite Institution",
@@ -467,7 +484,24 @@ const translations = {
     subRisqueAgressif: "Maximum risk",
     subActions: "BRVM & market",
     subObligations: "Fixed income",
-    subFCP: "Collective funds"
+    subFCP: "Collective funds",
+    excellenceCertifiee: "Certified Excellence",
+    sidePanelTitle: "FINANCIAL",
+    sidePanelAccent: "EXCELLENCE",
+    sidePanelSuffix: "AT YOUR REACH.",
+    sidePanelDesc: "We combine market intelligence and elite execution to optimize your wealth on the BRVM.",
+    secu2: "INSTITUTIONAL SECURITY",
+    secuDesc: "Approved by UEMOA authorities",
+    objectifsPerso: "PERSONALIZED OBJECTIVES",
+    objectifsPersoDesc: "Tailor-made high-performance strategies",
+    stepOffres: "Offers",
+    stepIdentite: "Identity",
+    stepContact: "Contact",
+    stepResidence: "Residence",
+    stepCarriere: "Career",
+    stepProfil: "Profile",
+    stepCapital: "Capital",
+    alertSelectOffer: "Please select a subscription plan before continuing."
   }
 };
 
@@ -560,7 +594,7 @@ function App() {
   const nextStep = () => {
   // Validation pour l'étape 1 - nécessite une sélection d'offre
   if (step === 1 && !formData.selectedOffer) {
-    alert('Veuillez sélectionner une formule d\'abonnement avant de continuer.');
+    alert(t.alertSelectOffer);
     return;
   }
   setStep(s => Math.min(s + 1, 7)); window.scrollTo(0,0);
@@ -605,9 +639,9 @@ function App() {
   };
 
   const stepsInfo = [
-    { title: "Offres", icon: Layout }, { title: "Identité", icon: User }, { title: "Contact", icon: Phone },
-    { title: "Résidence", icon: MapPin }, { title: "Carrière", icon: Briefcase },
-    { title: "Profil", icon: Target }
+    { title: t.stepOffres, icon: Layout }, { title: t.stepIdentite, icon: User }, { title: t.stepContact, icon: Phone },
+    { title: t.stepResidence, icon: MapPin }, { title: t.stepCarriere, icon: Briefcase },
+    { title: t.stepProfil, icon: Target }, { title: t.stepCapital, icon: Wallet }
   ];
 
   if (!showForm) {
@@ -796,15 +830,15 @@ function App() {
                 <div className="space-y-8 hidden lg:block animate-elite 2xl:space-y-12">
                   <div className="space-y-5">
                     <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-[#deb833]/5 border border-[#deb833]/10 rounded-full 2xl:px-6 2xl:py-2">
-                       <Crown size={12} className="text-[#deb833] 2xl:w-5 2xl:h-5" /><span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#deb833] 2xl:text-sm 2xl:tracking-[0.4em]">Excellence Certifiée</span>
+                       <Crown size={12} className="text-[#deb833] 2xl:w-5 2xl:h-5" /><span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#deb833] 2xl:text-sm 2xl:tracking-[0.4em]">{t.excellenceCertifiee}</span>
                     </div>
-                    <h2 className="font-display text-3xl font-black text-slate-950 leading-[1.4] tracking-tighter 2xl:text-6xl 2xl:leading-[1.2] 2xl:tracking-tight">L'EXCELLENCE <br /> <span className="text-[#deb833]">FINANCIÈRE</span> <br /> À VOTRE PORTÉE.</h2>
-                    <p className="max-w-xs text-[9px] text-slate-400 leading-relaxed font-bold uppercase tracking-[0.2em] 2xl:max-w-md 2xl:text-sm 2xl:tracking-[0.3em] 2xl:leading-relaxed">Nous combinons intelligence de marché et exécution d'élite pour optimiser votre patrimoine sur la BRVM.</p>
+                    <h2 className="font-display text-3xl font-black text-slate-950 leading-[1.4] tracking-tighter 2xl:text-6xl 2xl:leading-[1.2] 2xl:tracking-tight">{t.sidePanelTitle} <br /> <span className="text-[#deb833]">{t.sidePanelAccent}</span> <br /> {t.sidePanelSuffix}</h2>
+                    <p className="max-w-xs text-[9px] text-slate-400 leading-relaxed font-bold uppercase tracking-[0.2em] 2xl:max-w-md 2xl:text-sm 2xl:tracking-[0.3em] 2xl:leading-relaxed">{t.sidePanelDesc}</p>
                   </div>
                   <div className="grid grid-cols-1 gap-4 2xl:gap-6">
                     {[
-                      { icon: Shield, text: "SÉCURITÉ INSTITUTIONNELLE", desc: "Agréé par les autorités de l'UEMOA" },
-                      { icon: Target, text: "OBJECTIFS PERSONNALISÉS", desc: "Stratégies sur mesure haute performance" }
+                      { icon: Shield, text: t.secu2, desc: t.secuDesc },
+                      { icon: Target, text: t.objectifsPerso, desc: t.objectifsPersoDesc }
                     ].map((item, idx) => (
                       <div key={idx} className="flex items-center gap-4 group 2xl:gap-6">
                          <div className="h-11 w-11 flex items-center justify-center rounded-xl bg-white border border-slate-100 shadow-lg shadow-slate-200/40 text-[#deb833] group-hover:bg-[#deb833] group-hover:text-white transition-all duration-500 2xl:h-14 2xl:w-14"><item.icon size={18} className="2xl:w-6 2xl:h-6" /></div>
