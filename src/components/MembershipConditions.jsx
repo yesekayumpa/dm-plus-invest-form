@@ -1,4 +1,5 @@
 import { useState } from "react";
+import clsx from "clsx";
 import { 
   Check, 
   TrendingUp, 
@@ -10,13 +11,9 @@ import {
   ChevronDown,
   Globe,
   Database,
-  Mail,
   Star,
-  Shield,
   Zap,
-  Users,
   BarChart3,
-  Briefcase,
   Building2
 } from "lucide-react";
 
@@ -118,7 +115,6 @@ const membershipTranslations = {
 const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSelect, lang = "FR" }) => {
   const [expandedArticle, setExpandedArticle] = useState(null);
   const [expandedServices, setExpandedServices] = useState({});
-  const [expandedCards, setExpandedCards] = useState({});
   const mt = membershipTranslations[lang] || membershipTranslations.FR;
 
   const toggleServices = (tierId, e) => {
@@ -127,33 +123,6 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       ...prev,
       [tierId]: !prev[tierId]
     }));
-  };
-
-  const toggleCard = (tierId, e) => {
-    if (e) e.stopPropagation();
-    setExpandedCards(prev => ({
-      ...prev,
-      [tierId]: !prev[tierId]
-    }));
-  };
-
-  // On mobile, ensure only one card can be expanded at a time
-  const toggleCardMobile = (tierId, e) => {
-    if (e) e.stopPropagation();
-    setExpandedCards(prev => {
-      const isCurrentlyExpanded = prev[tierId];
-      // If opening a card, close all others
-      if (!isCurrentlyExpanded) {
-        const newState = {};
-        newState[tierId] = true;
-        return newState;
-      }
-      // If closing the current card, just close it
-      return {
-        ...prev,
-        [tierId]: false
-      };
-    });
   };
 
   const toggleArticle = (articleId) => {
@@ -232,7 +201,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
     },
     {
       id: "corporate",
-      title: "DM+ INVEST ELITE CORPORATE",
+      title: "DM+ INVEST CORPORATE",
       subtitle: "SMEs, mid-caps, institutions",
       icon: Factory,
       color: "from-slate-700 to-slate-900",
@@ -241,7 +210,6 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       currentPrice: "From 500 000",
       priceSuffix: "FCFA / month",
       offer: null,
-      renewalPrice: "AUM Commission: 0.3–0.5%/year based on AUM · Spot fees: custom quote",
       featured: false,
       features: {
         basic: [
@@ -273,7 +241,6 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       currentPrice: "30 000",
       priceSuffix: "FCFA / trimestre",
       offer: null,
-      renewalPrice: "Commission AUM : 1% / an, facturé trimestriellement",
       featured: false,
       features: {
         basic: [
@@ -288,11 +255,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
         ],
         exclusive: []
       },
-      includedBox: {
-        title: "Accompagnement ouverture compte SGI",
-        desc: "Assistance complète pour l'ouverture de votre compte titres auprès d'une SGI partenaire — inclus sans frais supplémentaires."
-      },
-      target: "Salariés, entrepreneurs, diaspora africaine — capital 500 000 à 5 000 000 FCFA"
+      target: "Salariés, entrepreneurs, diaspora africaine"
     },
     {
       id: "prestige",
@@ -305,35 +268,25 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       currentPrice: "75 000",
       priceSuffix: "FCFA / trimestre",
       offer: null,
-      renewalPrice: "Commission AUM : 1% / an - Honoraires mission spécifique : à partir de 150 000 FCFA",
       featured: true,
       features: {
         basic: [
           { icon: Globe, text: "Tout le contenu de la formule Horizon" },
           { icon: BarChart3, text: "Conseil patrimonial global (financier + immobilier + successoral)" },
           { icon: Database, text: "Portefeuille diversifié multi-actifs" },
-          { icon: Zap, text: "Stratégie de transmission patrimoniale" },
-          { icon: Star, text: "Accès prioritaire aux opportunités" }
         ],
         premium: [
           { icon: Check, text: "Reporting mensuel personnalisé", badge: null },
-          { icon: Check, text: "Accès plateforme DM+ Investment premium", badge: null }
-        ],
-        exclusive: [
+          { icon: Check, text: "Accès plateforme DM+ Investment premium", badge: null },
           { icon: Star, text: "2 rendez-vous par trimestre avec conseiller dédié" },
-          { icon: Star, text: "Conseil patrimonial global complet" },
-          { icon: Star, text: "Optimisation fiscale et stratégie de transmission" }
-        ]
-      },
-      includedBox: {
-        title: "Accompagnement ouverture compte SGI",
-        desc: "Assistance complète pour l'ouverture de votre compte titres auprès d'une SGI partenaire — inclus sans frais supplémentaires."
+        ],
+      
       },
       target: "Cadres supérieurs, chefs d'entreprise"
     },
     {
       id: "corporate",
-      title: "DM+ INVEST ELITE CORPORATE",
+      title: "DM+ INVEST CORPORATE",
       subtitle: "PME, ETI, institutions",
       icon: Factory,
       color: "from-slate-700 to-slate-900",
@@ -342,7 +295,6 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       currentPrice: "À partir de 500 000",
       priceSuffix: "FCFA / mois",
       offer: null,
-      renewalPrice: "Commission AUM : 0,3 à 0,5% / an selon encours · Honoraires ponctuels : devis sur mesure",
       featured: false,
       features: {
         basic: [
@@ -352,37 +304,33 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
         ],
         premium: [
           { icon: Check, text: "Reporting mensuel personnalisé comité de direction", badge: null },
-          { icon: Check, text: "Recommandations de placement stratégiques", badge: null }
-        ],
-        exclusive: [
+          { icon: Check, text: "Recommandations de placement stratégiques", badge: null },
           { icon: Star, text: "Conseiller senior dédié — interlocuteur unique exclusif" },
-          { icon: Star, text: "Comité d'investissement mensuel avec présentation aux dirigeants" },
-          { icon: Star, text: "Accès à la plateforme premium DM+ Investment" }
-        ]
+        ],
       },
       target: "PME, ETI, institutions"
     }
   ];
 
   return (
-    <div className="bg-white font-sans text-slate-600">
+    <div className={clsx('bg-white', 'font-sans', 'text-slate-600')}>
       {!isStep && (
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md border-b border-slate-100 pb-6 mb-8 flex items-center justify-between px-2">
-          <div className="flex items-center gap-4">
-            <div className="h-12 w-12 flex items-center justify-center rounded-xl bg-[#deb833]/5 text-[#deb833] border border-[#deb833]/10">
+        <div className={clsx('sticky', 'top-0', 'z-10', 'bg-white/95', 'backdrop-blur-md', 'border-b', 'border-slate-100', 'pb-6', 'mb-8', 'flex', 'items-center', 'justify-between', 'px-2')}>
+          <div className={clsx('flex', 'items-center', 'gap-4')}>
+            <div className={clsx('h-12', 'w-12', 'flex', 'items-center', 'justify-center', 'rounded-xl', 'bg-[#deb833]/5', 'text-[#deb833]', 'border', 'border-[#deb833]/10')}>
               <Layout size={24} />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-black text-slate-950 leading-none tracking-tighter uppercase">
-                {mt.conditionsTitle} <span className="text-brand">{mt.conditionsBrand}</span>
+              <h1 className={clsx('font-display', 'text-2xl', 'font-black', 'text-[#332E32]', 'leading-none', 'tracking-tighter', 'uppercase')}>
+                {mt.conditionsTitle} <span className="text-[#deb833]">{mt.conditionsBrand}</span>
               </h1>
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1.5">{mt.conditionsSub}</p>
+              <p className={clsx('text-[9px]', 'font-black', 'uppercase', 'tracking-[0.2em]', 'text-slate-400', 'mt-1.5')}>{mt.conditionsSub}</p>
             </div>
           </div>
           {onClose && (
             <button 
               onClick={onClose}
-              className="h-10 w-10 flex items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-400 hover:text-slate-950 transition-colors"
+              className={clsx('h-10', 'w-10', 'flex', 'items-center', 'justify-center', 'rounded-full', 'bg-slate-50', 'border', 'border-slate-200', 'text-slate-400', 'hover:text-[#332E32]', 'transition-colors')}
             >
               <X size={18} />
             </button>
@@ -392,17 +340,17 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
 
       {/* Section Conditions Générales */}
       {!isStep && (
-        <div className="max-w-4xl mx-auto px-4 pb-8">
-          <div className="bg-linear-to-r from-brand/5 to-[#b8962a]/2 border border-brand/20 rounded-2xl p-8 mb-8">
-            <div className="text-center space-y-4">
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-brand/10 border border-brand/20 rounded-full">
-                <FileText size={16} className="text-brand" />
-                <span className="text-[11px] font-black text-brand uppercase tracking-wider">{mt.documentContractuel}</span>
+        <div className={clsx('max-w-4xl', 'mx-auto', 'px-4', 'pb-8')}>
+          <div className={clsx('bg-linear-to-r', 'from-[#deb833]/5', 'to-[#b8962a]/2', 'border', 'border-[#deb833]/20', 'rounded-2xl', 'p-8', 'mb-8')}>
+            <div className={clsx('text-center', 'space-y-4')}>
+              <div className={clsx('inline-flex', 'items-center', 'gap-3', 'px-4', 'py-2', 'bg-[#deb833]/10', 'border', 'border-[#deb833]/20', 'rounded-full')}>
+                <FileText size={16} className="text-[#deb833]" />
+                <span className={clsx('text-[11px]', 'font-black', 'text-[#deb833]', 'uppercase', 'tracking-wider')}>{mt.documentContractuel}</span>
               </div>
-              <h2 className="text-xl font-black text-slate-950 tracking-tight">
+              <h2 className={clsx('text-xl', 'font-black', 'text-[#332E32]', 'tracking-tight')}>
                 {mt.conditionsGeneralesAdhesion}
               </h2>
-              <p className="text-[11px] text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              <p className={clsx('text-[11px]', 'text-slate-600', 'leading-relaxed', 'max-w-2xl', 'mx-auto')}>
                 {mt.conditionsIntro}
               </p>
             </div>
@@ -412,7 +360,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
           <div className="space-y-6">
             {[
               { id: 'article1', num: 1, title: mt.art1Title, sub: mt.art1Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <div><strong>{lang==='EN'?'Company name:':'Dénomination sociale:'}</strong> DM+ Investment</div>
                   <div><strong>{lang==='EN'?'Parent company:':'Société mère:'}</strong> DM+ Group</div>
                   <div><strong>{lang==='EN'?'Registered office:':'Siège social:'}</strong> Medina, Rue 35 angle 24, Dakar (Sénégal)</div>
@@ -422,9 +370,9 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
                 </div>
               )},
               { id: 'article2', num: 2, title: mt.art2Title, sub: mt.art2Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'The personal data collected via the membership form are exclusively intended to establish and manage a commercial relationship with the User.':'Les données personnelles collectées via le formulaire d\'adhésion sont exclusivement destinées à établir et gérer une relation commerciale avec l\'Utilisateur.'}</p>
-                  <ul className="space-y-1 list-disc list-inside">
+                  <ul className={clsx('space-y-1', 'list-disc', 'list-inside')}>
                     {lang==='EN'?<>
                       <li>Creation and management of your member account</li>
                       <li>Responding to your information or assistance requests</li>
@@ -442,15 +390,15 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
                 </div>
               )},
               { id: 'article3', num: 3, title: mt.art3Title, sub: mt.art3Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'The processing of personal data is based on your consent, expressed by filling out and submitting the membership form.':'Le traitement des données personnelles repose sur votre consentement, exprimé par le remplissage et la soumission du formulaire d\'adhésion.'}</p>
                   <p>{lang==='EN'?'It is also based on pre-contractual and contractual measures, in particular for account opening, subscription to advisory services or investment support.':'Il repose également sur les mesures précontractuelles et contractuelles, notamment pour l\'ouverture de compte, la souscription aux services de conseil ou l\'accompagnement en investissement.'}</p>
                 </div>
               )},
               { id: 'article4', num: 4, title: mt.art4Title, sub: mt.art4Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'Personal data is retained by the Company for a period consistent with the purposes for which it was collected.':'Les données personnelles sont conservées par la Société pour une durée conforme aux finalités pour lesquelles elles ont été collectées.'}</p>
-                  <ul className="space-y-1 list-disc list-inside">
+                  <ul className={clsx('space-y-1', 'list-disc', 'list-inside')}>
                     {lang==='EN'?<>
                       <li>Throughout the duration of the commercial relationship</li>
                       <li>Archived for five (5) years after the end of the relationship for administrative, statistical and legal reasons, or in accordance with applicable financial regulatory requirements</li>
@@ -462,73 +410,73 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
                 </div>
               )},
               { id: 'article5', num: 5, title: mt.art5Title, sub: mt.art5Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'In accordance with Senegalese law n° 2008-12 of January 25, 2008, you have the right to access, rectify, update, erase and object to the processing of your personal data for legitimate reasons.':'Conformément à la loi sénégalaise n° 2008-12 du 25 janvier 2008, vous disposez d\'un droit d\'accès, de rectification, de mise à jour, d\'effacement et d\'opposition au traitement de vos données personnelles pour des motifs légitimes.'}</p>
                   <p>{lang==='EN'?'You can also withdraw your consent at any time.':'Vous pouvez également retirer votre consentement à tout moment.'}</p>
                   <p>{lang==='EN'?'To exercise these rights or for any questions regarding data processing, send a request with valid proof of identity to the address indicated in Article 1.':'Pour exercer ces droits ou pour toute question concernant le traitement des données, envoyez une demande avec une preuve d\'identité valide à l\'adresse indiquée à l\'article 1.'}</p>
                 </div>
               )},
               { id: 'article6', num: 6, title: mt.art6Title, sub: mt.art6Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'DM+ Investment is solely responsible for data processing.':'DM+ Investment est seul responsable du traitement des données.'}</p>
                   <p>{lang==='EN'?'Information is never transferred or sold to third parties without your explicit consent, except as required by law.':'Les informations ne sont jamais transférées ou vendues à des tiers sans votre consentement explicite, sauf obligation légale.'}</p>
                   <p>{lang==='EN'?'We implement all appropriate technical and organizational measures to ensure the security and confidentiality of your data.':'Nous mettons en œuvre toutes les mesures techniques et organisationnelles appropriées pour garantir la sécurité et la confidentialité de vos données.'}</p>
                 </div>
               )},
               { id: 'article7', num: 7, title: mt.art7Title, sub: mt.art7Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'All content on the site (texts, images, logos, graphics, etc.) is protected by intellectual property law.':'L\'ensemble du contenu du site (textes, images, logos, graphismes, etc.) est protégé par le droit de la propriété intellectuelle.'}</p>
                   <p>{lang==='EN'?'Any reproduction, representation, modification or exploitation of this content, without express authorization, is prohibited.':'Toute reproduction, représentation, modification ou exploitation de ce contenu, sans autorisation expresse, est interdite.'}</p>
                 </div>
               )},
               { id: 'article8', num: 8, title: mt.art8Title, sub: mt.art8Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'DM+ Investment cannot be held liable for direct or indirect damages resulting from the use of the site or services.':'DM+ Investment ne saurait être tenue responsable des dommages directs ou indirects résultant de l\'utilisation du site ou des services.'}</p>
                   <p>{lang==='EN'?'Investment advice is provided for informational purposes and does not engage the Company\'s liability in the event of loss.':'Les conseils en investissement sont fournis à titre informatif et n\'engagent pas la responsabilité de la Société en cas de perte.'}</p>
                 </div>
               )},
               { id: 'article9', num: 9, title: mt.art9Title, sub: mt.art9Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'The site uses cookies to improve navigation, personalize content and compile statistics.':'Le site utilise des cookies pour améliorer la navigation, personnaliser le contenu et réaliser des statistiques.'}</p>
                   <p>{lang==='EN'?'By continuing to browse, you accept the use of cookies. You can refuse cookies, but this may affect certain site features.':'En continuant à naviguer, vous acceptez l\'utilisation de cookies. Vous pouvez refuser les cookies, mais cela peut affecter certaines fonctionnalités du site.'}</p>
                 </div>
               )},
               { id: 'article10', num: 10, title: mt.art10Title, sub: mt.art10Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'The site may contain links to third-party sites (partners, financial institutions, etc.).':'Le site peut contenir des liens vers des sites tiers (partenaires, institutions financières, etc.).'}</p>
                   <p>{lang==='EN'?'DM+ Investment has no control over the content or privacy practices of these third-party sites and disclaims any liability for damage.':'DM+ Investment n\'exerce aucun contrôle sur le contenu ou les pratiques de confidentialité de ces sites tiers et décline toute responsabilité en cas de dommage.'}</p>
                 </div>
               )},
               { id: 'article11', num: 11, title: mt.art11Title, sub: mt.art11Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'DM+ Investment reserves the right to modify these General Conditions at any time without notice.':'DM+ Investment se réserve le droit de modifier les présentes Conditions Générales à tout moment sans préavis.'}</p>
                   <p>{lang==='EN'?'The new version will be applicable as soon as it is published online. It is your responsibility to consult them regularly.':'La nouvelle version sera applicable dès sa mise en ligne. Il vous incombe de les consulter régulièrement.'}</p>
                   <p>{lang==='EN'?'Continued use of the service after modification implies acceptance of the new conditions.':'La poursuite de l\'utilisation du service après modification implique l\'acceptation des nouvelles conditions.'}</p>
                 </div>
               )},
               { id: 'article12', num: 12, title: mt.art12Title, sub: mt.art12Sub, content: (
-                <div className="space-y-3 text-[11px] text-slate-600">
+                <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                   <p>{lang==='EN'?'These General Conditions are governed by Senegalese law.':'Les présentes Conditions Générales sont régies par le droit sénégalais.'}</p>
                   <p>{lang==='EN'?'In the event of a dispute related to the use of the membership form, the site, the client portal or DM+ Investment services, and in the absence of an amicable resolution, the courts of Dakar shall have sole jurisdiction.':'En cas de litige lié à l\'utilisation du formulaire d\'adhésion, du site, du portail client ou des services de DM+ Investment, et en l\'absence de résolution amiable, les tribunaux de Dakar sont seuls compétents.'}</p>
                 </div>
               )},
             ].map(({ id, num, title, sub, content }) => (
-              <div key={id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+              <div key={id} className={clsx('bg-white', 'border', 'border-slate-200', 'rounded-xl', 'overflow-hidden')}>
                 <button 
                   onClick={() => toggleArticle(id)}
-                  className="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+                  className={clsx('w-full', 'px-6', 'py-4', 'flex', 'items-center', 'justify-between', 'hover:bg-slate-50', 'transition-colors')}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center font-black text-sm ${num >= 6 ? 'bg-[#deb833]/10 text-[#deb833]' : 'bg-brand/10 text-brand'}`}>{num}</div>
+                  <div className={clsx('flex', 'items-center', 'gap-4')}>
+                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center font-black text-sm ${num >= 6 ? 'bg-[#deb833]/10 text-[#deb833]' : 'bg-[#deb833]/10 text-[#deb833]'}`}>{num}</div>
                     <div className="text-left">
-                      <h3 className="font-black text-slate-950 text-sm">{title}</h3>
-                      <p className="text-[10px] text-slate-500">{sub}</p>
+                      <h3 className={clsx('font-black', 'text-[#332E32]', 'text-sm')}>{title}</h3>
+                      <p className={clsx('text-[10px]', 'text-slate-500')}>{sub}</p>
                     </div>
                   </div>
                   <ChevronDown size={16} className={`text-slate-400 transition-transform ${expandedArticle === id ? 'rotate-180' : ''}`} />
                 </button>
                 {expandedArticle === id && (
-                  <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/30">
+                  <div className={clsx('px-6', 'py-4', 'border-t', 'border-slate-100', 'bg-slate-50/30')}>
                     {content}
                   </div>
                 )}
@@ -536,9 +484,9 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
             ))}
 
             {/* Lexique */}
-            <div className="bg-gradient-to-r from-[#deb833]/[0.05] to-[#b8962a]/[0.02] border border-[#deb833]/20 rounded-xl p-6">
-              <h3 className="font-black text-slate-950 text-sm mb-4">{mt.lexique}</h3>
-              <div className="space-y-3 text-[11px] text-slate-600">
+            <div className={clsx('bg-gradient-to-r', 'from-[#deb833]/[0.05]', 'to-[#b8962a]/[0.02]', 'border', 'border-[#deb833]/20', 'rounded-xl', 'p-6')}>
+              <h3 className={clsx('font-black', 'text-[#332E32]', 'text-sm', 'mb-4')}>{mt.lexique}</h3>
+              <div className={clsx('space-y-3', 'text-[11px]', 'text-slate-600')}>
                 <div><strong>{lang==='EN'?'Personal data:':'Données à caractère personnel:'}</strong> {lang==='EN'?'Any information relating to an identified or identifiable natural person.':'Toute information concernant une personne physique identifiée ou identifiable.'}</div>
                 <div><strong>{lang==='EN'?'Data processing:':'Traitement de données:'}</strong> {lang==='EN'?'Any operation applied to data (collection, recording, storage, modification, use, communication, erasure, etc.).':'Toute opération appliquée aux données (collecte, enregistrement, conservation, modification, utilisation, communication, effacement, etc.).'}</div>
                 <div><strong>BRVM:</strong> {lang==='EN'?'Bourse Régionale des Valeurs Mobilières (UEMOA financial market).':'Bourse Régionale des Valeurs Mobilières (marché financier de l\'UEMOA).'}</div>
@@ -548,14 +496,14 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
             </div>
 
             {/* Case d'acceptation */}
-            <div className="bg-gradient-to-r from-[#deb833]/[0.08] to-[#b8962a]/[0.05] border border-[#deb833]/30 rounded-xl p-6">
-              <label className="flex items-start gap-4 cursor-pointer">
+            <div className={clsx('bg-gradient-to-r', 'from-[#deb833]/[0.08]', 'to-[#b8962a]/[0.05]', 'border', 'border-[#deb833]/30', 'rounded-xl', 'p-6')}>
+              <label className={clsx('flex', 'items-start', 'gap-4', 'cursor-pointer')}>
                 <input 
                   type="checkbox" 
-                  className="mt-1 h-5 w-5 rounded border-2 border-[#deb833] bg-white text-[#deb833] focus:ring-0 focus:ring-offset-0"
+                  className={clsx('mt-1', 'h-5', 'w-5', 'rounded', 'border-2', 'border-[#deb833]', 'bg-white', 'text-[#deb833]', 'focus:ring-0', 'focus:ring-offset-0')}
                 />
                 <div className="flex-1">
-                  <p className="text-[11px] font-black text-slate-700 leading-relaxed">
+                  <p className={clsx('text-[11px]', 'font-black', 'text-slate-700', 'leading-relaxed')}>
                     <strong>{mt.obligatoire}</strong> {mt.obligatoireText}
                   </p>
                 </div>
@@ -567,87 +515,67 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
 
       {/* Offres - mode étape */}
       {isStep && (
-        <div className="space-y-6 pb-20 lg:pb-6 overflow-visible px-2 md:px-3 lg:px-4">
-          <div className="text-center mb-8 space-y-2 animate-fade-in">
-            <h2 className="text-xl lg:text-2xl font-black text-slate-950 tracking-tight uppercase">
+        <div className={clsx('space-y-6', 'pb-20', 'lg:pb-6', 'overflow-visible', 'px-2', 'md:px-3', 'lg:px-4')}>
+          <div className={clsx('text-center', 'mb-8', 'space-y-2', 'animate-fade-in')}>
+            <h2 className={clsx('text-xl', 'lg:text-2xl', 'font-black', 'text-[#332E32]', 'tracking-tight', 'uppercase')}>
               {mt.selectTitle} <span className="text-[#deb833]">{mt.selectAccent}</span>
             </h2>
-            <p className="text-[11px] lg:text-[13px] font-medium text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            <p className={clsx('text-[11px]', 'lg:text-[13px]', 'font-medium', 'text-slate-500', 'max-w-2xl', 'mx-auto', 'leading-relaxed')}>
               {mt.selectDesc}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start max-w-6xl mx-auto">
+          <div className={clsx('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-4', 'items-start', 'max-w-6xl', 'mx-auto')}>
             {tiers.map((tier, idx) => {
               const Icon = tier.icon;
-              const isExpanded = !!expandedCards[tier.id];
               return (
                 <div 
                   key={tier.id} 
                   className={`relative bg-white border rounded-2xl transition-all duration-300 cursor-pointer hover:shadow-xl ${tier.featured ? 'border-[#deb833] shadow-lg' : 'border-slate-200 shadow-md'} ${selectedTier === tier.id ? 'ring-2 ring-[#deb833] ring-offset-2' : ''}`}
                   onClick={() => isStep && onTierSelect && onTierSelect(tier.id)}
                 >
-                  <div className="p-5 flex flex-col">
+                  <div className={clsx('p-5', 'flex', 'flex-col')}>
                     <div className="mb-2">
-                      <h3 className="text-lg font-black text-slate-950 tracking-tight">{tier.title}</h3>
-                      <p className="text-xs text-slate-600 mt-1">{tier.subtitle}</p>
+                      <h3 className={clsx('text-lg', 'font-black', 'text-[#332E32]', 'tracking-tight')}>{tier.title}</h3>
+                      <p className={clsx('text-xs', 'text-slate-600', 'mt-1')}>{tier.subtitle}</p>
                     </div>
 
                     <div className="mb-3">
                       {tier.oldPrice && (
                         <div className="mb-1">
-                          <span className="text-sm text-slate-400 line-through">{tier.oldPrice} FCFA</span>
+                          <span className={clsx('text-sm', 'text-slate-400', 'line-through')}>{tier.oldPrice} FCFA</span>
                         </div>
                       )}
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-2xl font-black text-slate-950">{tier.currentPrice}</span>
-                        <span className="text-sm text-slate-600">{tier.priceSuffix}</span>
+                      <div className={clsx('flex', 'items-baseline', 'gap-1')}>
+                        <span className={clsx('text-2xl', 'font-black', 'text-[#332E32]')}>{tier.currentPrice}</span>
+                        <span className={clsx('text-sm', 'text-slate-600')}>{tier.priceSuffix}</span>
                       </div>
-                      <div className="mt-1 text-[10px] text-slate-500">{tier.renewalPrice}</div>
+                      <div className={clsx('mt-1', 'text-[10px]', 'text-slate-500')}>{tier.renewalPrice}</div>
                     </div>
 
-                    <button
-                      onClick={(e) => {
-                        // Use mobile toggle on small screens, regular toggle on larger screens
-                        if (window.innerWidth < 768) {
-                          toggleCardMobile(tier.id, e);
-                        } else {
-                          toggleCard(tier.id, e);
-                        }
-                      }}
-                      className={`w-full flex items-center justify-center gap-1.5 py-2 mb-3 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all duration-300 border ${
-                        tier.featured
-                          ? 'border-[#deb833]/40 text-[#deb833] hover:bg-[#deb833]/5'
-                          : 'border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-700'
-                      }`}
-                    >
-                      {isExpanded ? mt.voirMoins : mt.voirPlus}
-                      <ChevronDown size={14} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                      <div className="h-px bg-slate-200 mb-4"></div>
-                      <div className="space-y-4 mb-4">
+                    <div className="overflow-hidden">
+                      <div className={clsx('h-px', 'bg-slate-200', 'mb-4')}></div>
+                      <div className={clsx('space-y-4', 'mb-4', 'max-h-[600px]', 'overflow-y-auto')}>
                         <div>
-                          <p className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">{mt.inclus}</p>
+                          <p className={clsx('text-xs', 'font-bold', 'text-slate-700', 'mb-2', 'uppercase', 'tracking-wider')}>{mt.inclus}</p>
                           <div className="space-y-2">
                             {tier.features.basic.map((feature, fIdx) => {
                               const FeatureIcon = feature.icon;
                               return (
-                                <div key={fIdx} className="flex items-start gap-2">
-                                  <div className="mt-0.5 flex-shrink-0 text-slate-500"><FeatureIcon size={14} /></div>
-                                  <span className="text-xs text-slate-600">{feature.text}</span>
+                                <div key={fIdx} className={clsx('flex', 'items-start', 'gap-2')}>
+                                  <div className={clsx('mt-0.5', 'flex-shrink-0', 'text-slate-500')}><FeatureIcon size={14} /></div>
+                                  <span className={clsx('text-xs', 'text-slate-600')}>{feature.text}</span>
                                 </div>
                               );
                             })}
                           </div>
                           {tier.includedBox && (
-                            <div className="bg-[#79347d]/5 border border-[#79347d]/20 p-2.5 rounded-lg mt-3">
-                              <div className="flex items-start gap-2">
-                                <FileText size={14} className="text-[#79347d] mt-0.5 flex-shrink-0" />
+                            <div className={clsx('bg-[#79347d]/5', 'border', 'border-[#79347d]/20', 'p-2.5', 'rounded-lg', 'mt-3')}>
+                              <div className={clsx('flex', 'items-start', 'gap-2')}>
+                                <FileText size={14} className={clsx('text-[#79347d]', 'mt-0.5', 'flex-shrink-0')} />
                                 <div>
-                                  <span className="text-[11px] font-bold text-[#79347d] tracking-wide block mb-0.5">{tier.includedBox.title}</span>
-                                  <p className="text-[10px] text-slate-500 leading-relaxed">{tier.includedBox.desc}</p>
+                                  <span className={clsx('text-[11px]', 'font-bold', 'text-[#79347d]', 'tracking-wide', 'block', 'mb-0.5')}>{tier.includedBox.title}</span>
+                                  <p className={clsx('text-[10px]', 'text-slate-500', 'leading-relaxed')}>{tier.includedBox.desc}</p>
                                 </div>
                               </div>
                             </div>
@@ -656,15 +584,15 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
 
                         {tier.features.premium && tier.features.premium.length > 0 && (
                           <div>
-                            <p className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">{mt.avantages}</p>
+                            <p className={clsx('text-xs', 'font-bold', 'text-slate-700', 'mb-2', 'uppercase', 'tracking-wider')}>{mt.avantages}</p>
                             <div className="space-y-2">
                               {tier.features.premium.map((feature, fIdx) => (
-                                <div key={fIdx} className="flex items-start gap-2">
-                                  <div className="mt-0.5 flex-shrink-0 text-slate-600"><Check size={14} /></div>
+                                <div key={fIdx} className={clsx('flex', 'items-start', 'gap-2')}>
+                                  <div className={clsx('mt-0.5', 'flex-shrink-0', 'text-slate-600')}><Check size={14} /></div>
                                   <div className="flex-1">
-                                    <span className="text-xs text-slate-600">{feature.text}</span>
+                                    <span className={clsx('text-xs', 'text-slate-600')}>{feature.text}</span>
                                     {feature.badge && (
-                                      <span className="ml-2 inline-flex items-center bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">{feature.badge}</span>
+                                      <span className={clsx('ml-2', 'inline-flex', 'items-center', 'bg-slate-100', 'text-slate-700', 'px-2', 'py-0.5', 'rounded', 'text-[9px]', 'font-bold', 'uppercase', 'tracking-wider')}>{feature.badge}</span>
                                     )}
                                   </div>
                                 </div>
@@ -675,14 +603,14 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
 
                         {tier.features.exclusive && tier.features.exclusive.length > 0 && (
                           <div>
-                            <p className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider">{mt.fonctionnalites}</p>
+                            <p className={clsx('text-xs', 'font-bold', 'text-slate-700', 'mb-2', 'uppercase', 'tracking-wider')}>{mt.fonctionnalites}</p>
                             <div className="space-y-2">
                               {tier.features.exclusive.map((feature, fIdx) => {
                                 const FeatureIcon = feature.icon || Star;
                                 return (
-                                  <div key={fIdx} className="flex items-start gap-2">
-                                    <div className="mt-0.5 flex-shrink-0 text-[#deb833]"><FeatureIcon size={14} /></div>
-                                    <div className="flex-1"><span className="text-xs text-slate-600">{feature.text}</span></div>
+                                  <div key={fIdx} className={clsx('flex', 'items-start', 'gap-2')}>
+                                    <div className={clsx('mt-0.5', 'flex-shrink-0', 'text-[#deb833]')}><FeatureIcon size={14} /></div>
+                                    <div className="flex-1"><span className={clsx('text-xs', 'text-slate-600')}>{feature.text}</span></div>
                                   </div>
                                 );
                               })}
@@ -690,12 +618,12 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
                           </div>
                         )}
 
-                        <div className="p-3 bg-slate-50 rounded-lg">
-                          <div className="text-[10px] uppercase tracking-wider font-black mb-1 text-slate-400">{mt.cibleIdeale}</div>
-                          <p className="text-xs text-slate-600">{tier.target}</p>
+                        <div className={clsx('p-3', 'bg-slate-50', 'rounded-lg')}>
+                          <div className={clsx('text-[10px]', 'uppercase', 'tracking-wider', 'font-black', 'mb-1', 'text-slate-400')}>{mt.cibleIdeale}</div>
+                          <p className={clsx('text-xs', 'text-slate-600')}>{tier.target}</p>
                         </div>
                       </div>
-                      <div className="h-px bg-slate-100 mb-4"></div>
+                      <div className={clsx('h-px', 'bg-slate-100', 'mb-4')}></div>
                     </div>
 
                     <button 
