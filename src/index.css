@@ -1,0 +1,555 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --color-brand: #deb833;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900 antialiased selection:bg-[--color-brand]/30 font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* ── Elite Light Landing Page ─────────────────────────── */
+  .elite-light-bg {
+    @apply relative min-h-screen bg-white overflow-hidden;
+  }
+
+  .elite-header-light {
+    @apply flex items-center justify-between px-6 py-4 lg:px-20 border-b border-slate-100 bg-white/80 backdrop-blur-md z-50;
+  }
+
+  .elite-nav-light {
+    @apply flex items-center justify-end px-6 lg:px-20 py-2.5 gap-10 border-b border-slate-50 bg-slate-50/50;
+  }
+
+  .elite-link-light {
+    @apply text-[10px] font-black text-slate-400 hover:text-[--color-brand] transition-all uppercase tracking-[0.2em];
+  }
+
+  .elite-hero-light {
+    @apply grid lg:grid-cols-2 bg-white text-slate-950 overflow-hidden;
+    height: calc(100vh - 130px);
+  }
+
+  .ui-btn-elite-gold {
+    @apply text-white px-10 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em];
+    @apply transition-all duration-500 active:scale-[0.98] shadow-lg shadow-[#deb833]/10 hover:shadow-[#deb833]/25 hover:-translate-y-0.5;
+    background-color: #deb833;
+  }
+
+  .ui-btn-elite-secondary {
+    @apply h-11 w-11 flex items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-slate-400;
+    @apply transition-all duration-300 hover:bg-white hover:text-slate-900 hover:border-slate-200 hover:shadow-sm;
+  }
+
+  /* ── Form Design (Elite Corporate - Shocking Edition) ── */
+  .form-card-light {
+    @apply relative bg-white/80 backdrop-blur-3xl border border-slate-200/60 rounded-[2.5rem] p-6 lg:p-8 shadow-[0_32px_64px_-16px_rgba(222,184,51,0.06)] transition-all duration-700 flex flex-col overflow-hidden;
+    height: 100%;
+    max-height: calc(100vh - 140px);
+  }
+
+  .form-card-light::before {
+    content: "";
+    @apply absolute -top-24 -right-24 h-48 w-48 bg-[#deb833]/5 blur-[80px] rounded-full;
+  }
+
+  /* Amélioration des champs de formulaire */
+  .ui-input-elite {
+    @apply w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 sm:px-4 sm:py-3 text-[11px] font-semibold text-slate-700 font-sans placeholder:text-slate-300;
+    @apply transition-all duration-300 focus:border-[--color-brand] focus:bg-white focus:shadow-lg focus:shadow-[#deb833]/10 focus:outline-none focus:ring-1 focus:ring-[--color-brand]/20;
+    box-sizing: border-box;
+  }
+
+  input[type="date"].ui-input-elite {
+    min-width: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Label plus moderne */
+  .ui-field-label-elite {
+    @apply text-[8px] font-black uppercase tracking-[0.2em] text-slate-600 mb-1.5 ml-0.5 block;
+  }
+
+  /* Section header amélioré */
+  .ui-section-label-shock {
+    @apply flex items-center gap-3 text-[11px] font-serif italic font-bold tracking-[0.15em] text-[--color-brand] mb-5 pb-1 border-b border-[--color-brand]/10;
+  }
+
+  .ui-section-label-shock::before {
+    content: "";
+    @apply h-1.5 w-1.5 rounded-full bg-[--color-brand] animate-pulse;
+  }
+
+  /* Choix radio/checkbox améliorés */
+  .ui-choice-elite {
+    @apply flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-slate-100 bg-slate-50/30 p-3.5;
+    @apply transition-all duration-300 hover:bg-white hover:border-[--color-brand]/30 hover:shadow-md;
+  }
+
+  .ui-choice-selected-elite {
+    @apply border-[#deb833] bg-[#deb833]/5 shadow-lg shadow-[#deb833]/10 ring-1 ring-[#deb833]/20;
+  }
+
+  /* Bouton principal amélioré */
+  .ui-nav-btn-elite {
+    @apply flex items-center justify-center gap-2.5 bg-gradient-to-r from-[--color-brand] to-[#c49f1f] text-white px-6 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em];
+    @apply transition-all duration-300 hover:shadow-xl hover:shadow-[#deb833]/25 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
+  }
+
+  /* Bouton retour */
+  .ui-nav-btn-back {
+    @apply h-11 w-11 flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500;
+    @apply transition-all duration-300 hover:bg-white hover:text-slate-800 hover:border-slate-300 hover:shadow-md;
+  }
+
+  /* Badge de progression */
+  .progress-dot {
+    @apply h-1.5 rounded-full transition-all duration-500 cursor-pointer;
+  }
+  .progress-dot-active {
+    @apply bg-[--color-brand] shadow-sm shadow-[#deb833]/30 w-6;
+  }
+  .progress-dot-inactive {
+    @apply bg-slate-100 w-4;
+  }
+
+  /* ── Scrollbar Styles améliorés ── */
+  .elite-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #deb833 #f1f5f9;
+  }
+
+  .elite-scrollbar::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  .elite-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+  }
+
+  .elite-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #deb833 0%, #b8962a 100%);
+    border-radius: 8px;
+    border: 3px solid #f1f5f9;
+    background-clip: content-box;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .elite-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #d4a029 0%, #a08020 100%);
+    border-color: #e2e8f0;
+  }
+
+  .elite-scrollbar::-webkit-scrollbar-corner {
+    background: #f1f5f9;
+  }
+
+  /* Container scroll */
+  .scroll-container {
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 20px;
+    padding-bottom: 16px;
+  }
+
+  .scroll-container-sm {
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .scroll-container-lg {
+    max-height: 520px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* ── Animations améliorées ── */
+  @keyframes eliteReveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes cinematicZoom {
+    from {
+      transform: scale(1.25) translateX(-2%);
+    }
+    to {
+      transform: scale(1.4) translateX(2%);
+    }
+  }
+
+  .animate-cinematic-zoom {
+    animation: cinematicZoom 40s ease-in-out infinite alternate;
+  }
+
+  @keyframes slowZoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.1);
+    }
+  }
+
+  .animate-slow-zoom {
+    animation: slowZoom 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulseSubtle {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 3s ease-in-out infinite;
+  }
+
+  .animate-elite {
+    animation: eliteReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeInUp 0.4s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  /* ── États de focus et hover ── */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    @apply outline-none;
+  }
+
+  /* Tooltip ou message d'erreur */
+  .error-message {
+    @apply text-red-500 text-[9px] font-medium mt-1.5 flex items-center gap-1;
+  }
+
+  /* Cartes d'options */
+  .option-card {
+    @apply transition-all duration-200 cursor-pointer;
+  }
+  .option-card:hover {
+    @apply transform -translate-y-0.5;
+  }
+
+  /* ── Layout responsive supplémentaire ── */
+  @media (max-width: 1024px) {
+    .scroll-container {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+  }
+  .form-card-light {
+    max-height: calc(100vh - 120px);
+    height: auto;
+    margin: 0.5rem 0;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 768px) {
+    .form-card-light {
+      max-height: calc(100vh - 100px);
+      padding: 1rem;
+    }
+  }
+}
+
+/* ── Utilitaires supplémentaires ── */
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .bg-gradient-shine {
+    background: linear-gradient(135deg, #deb833 0%, #c49f1f 50%, #deb833 100%);
+  }
+}
+
+/* ============================================
+   STYLES SPÉCIFIQUES POUR ÉCRANS 17 POUCES (1366x768)
+   ============================================ */
+
+/* Cible spécifiquement le 1366x768 (avec marge pour barre de tâches) */
+@media screen and (min-width: 1360px) and (max-width: 1370px) and (min-height: 600px) and (max-height: 800px) {
+  .seventeen-only-container {
+    max-width: 1300px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .seventeen-only-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.25rem !important;
+    align-items: stretch !important;
+  }
+
+  .seventeen-only-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 500px !important;
+  }
+
+  .seventeen-only-card-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    gap: 0.75rem !important;
+  }
+
+  .seventeen-only-services {
+    flex: 1 1 auto !important;
+  }
+
+  .seventeen-only-pricing {
+    margin-top: auto !important;
+  }
+
+  .seventeen-only-card .subtitle-text {
+    font-size: 10px !important;
+  }
+
+  .seventeen-only-card .title-main {
+    font-size: 12px !important;
+  }
+
+  .seventeen-only-card .service-text {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .seventeen-only-card .pricing-label {
+    font-size: 9px !important;
+  }
+
+  .seventeen-only-card .pricing-value {
+    font-size: 11px !important;
+  }
+
+  .seventeen-only-card .card-padding {
+    padding: 1rem !important;
+  }
+
+  .seventeen-only-card .services-list {
+    gap: 0.5rem !important;
+  }
+
+  .seventeen-only-card .services-list li {
+    margin-bottom: 0.35rem !important;
+  }
+}
+
+/* Pour les résolutions proches (variantes 17 pouces ou 15 pouces scalés) */
+@media screen and (min-width: 1270px) and (max-width: 1360px) and (min-height: 600px) and (max-height: 850px) {
+  .seventeen-only-container {
+    max-width: 1280px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .seventeen-only-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(320px, 1fr)) !important;
+    gap: 1rem !important;
+  }
+
+  .seventeen-only-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 480px !important;
+  }
+
+  .seventeen-only-card-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    gap: 0.5rem !important;
+  }
+
+  .seventeen-only-services {
+    flex: 1 !important;
+  }
+
+  .seventeen-only-pricing {
+    margin-top: auto !important;
+  }
+
+  .seventeen-only-card .subtitle-text {
+    font-size: 9px !important;
+  }
+
+  .seventeen-only-card .title-main {
+    font-size: 11px !important;
+  }
+
+  .seventeen-only-card .service-text {
+    font-size: 10px !important;
+  }
+
+  .seventeen-only-card .pricing-value {
+    font-size: 10px !important;
+  }
+}
+
+/* ============================================
+   STYLES SPÉCIFIQUES POUR ÉCRANS 15 POUCES (1920x1080)
+   ============================================ */
+
+/* Cible spécifiquement le 1920x1080 (15 pouces HD natif) */
+@media screen and (min-width: 1900px) and (max-width: 1940px) and (min-height: 900px) and (max-height: 1100px) {
+  .fifteen-only-container {
+    max-width: 1400px !important; /* Centré et plus étroit pour un look premium */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 1.5rem !important;
+  }
+
+  .fifteen-only-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.5rem !important; /* Espacement équilibré */
+    align-items: stretch !important;
+    justify-content: center !important;
+  }
+
+  .fifteen-only-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 520px !important; /* Réduit pour éviter le scroll excessif */
+    padding: 1.25rem !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  }
+
+  .fifteen-only-card-content {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    gap: 0.75rem !important;
+  }
+
+  .fifteen-only-services {
+    flex: 1 1 auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .fifteen-only-pricing {
+    margin-top: auto !important;
+    padding-top: 0.75rem !important;
+  }
+
+  /* Typography matching the mockup image */
+  .fifteen-only-card .subtitle-text {
+    font-size: 9px !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  .fifteen-only-card .title-main {
+    font-size: 11px !important;
+    font-weight: 900 !important;
+  }
+
+  .fifteen-only-card .service-text {
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+  }
+
+  .fifteen-only-card .pricing-label {
+    font-size: 8.5px !important;
+    font-weight: 800 !important;
+  }
+
+  .fifteen-only-card .pricing-value {
+    font-size: 10.5px !important;
+    font-weight: 900 !important;
+  }
+
+  .fifteen-only-card .services-list {
+    gap: 0.4rem !important;
+  }
+
+  .fifteen-only-card .services-list li {
+    margin-bottom: 0.35rem !important;
+  }
+
+  /* Special glow for featured card as seen in image */
+  .fifteen-only-card.border-\[\#deb833\] {
+    box-shadow: 0 15px 40px rgba(222, 184, 51, 0.15) !important;
+  }
+}
+
+

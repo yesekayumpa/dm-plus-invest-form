@@ -1,0 +1,63 @@
+/* Styles spécifiques pour les écrans 1920x1080 */
+@media screen and (width: 1920px) and (height: 1080px) {
+  .seventeen-only-container {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .seventeen-only-grid {
+    gap: 1rem !important;
+    padding: 1rem 1rem 0 !important;
+  }
+
+  .seventeen-only-card {
+    padding: 0.5rem !important;
+  }
+}
+
+/* Styles spécifiques pour les écrans 2048x1080 */
+@media screen and (width: 2048px) and (height: 1080px) {
+  .seventeen-only-container {
+    padding: 0.875rem 1.25rem !important;
+  }
+
+  .seventeen-only-grid {
+    gap: 1.25rem !important;
+    padding: 1.25rem 1.25rem 0 !important;
+  }
+
+  .seventeen-only-card {
+    padding: 0.625rem !important;
+  }
+}
+
+/* Styles spécifiques pour les écrans 2304x1080 */
+@media screen and (width: 2304px) and (height: 1080px) {
+  .seventeen-only-container {
+    padding: 0.9375rem 1.375rem !important;
+  }
+
+  .seventeen-only-grid {
+    gap: 1.375rem !important;
+    padding: 1.375rem 1.375rem 0 !important;
+  }
+
+  .seventeen-only-card {
+    padding: 0.6875rem !important;
+  }
+}
+
+/* Styles spécifiques pour les écrans 2560x1080 */
+@media screen and (width: 2560px) and (height: 1080px) {
+  .seventeen-only-container {
+    padding: 1rem 1.5rem !important;
+  }
+
+  .seventeen-only-grid {
+    gap: 1.5rem !important;
+    padding: 1.5rem 1.5rem 0 !important;
+  }
+
+  .seventeen-only-card {
+    padding: 0.75rem !important;
+  }
+}
