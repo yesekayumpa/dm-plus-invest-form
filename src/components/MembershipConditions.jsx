@@ -142,6 +142,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       priceSuffix: "FCFA / quarter",
       offer: null,
       renewalPrice: "AUM Commission: 1% / year, billed quarterly",
+      
       featured: false,
       features: {
         basic: [
@@ -241,6 +242,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
       currentPrice: "30 000",
       priceSuffix: "FCFA / trimestre",
       offer: null,
+      renewalPrice: "Commission AUM : 1% / an, facturé trimestriellement",
       featured: false,
       features: {
         basic: [
