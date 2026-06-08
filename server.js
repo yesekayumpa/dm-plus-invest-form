@@ -65,24 +65,24 @@ app.post('/send-email', upload.single('convention_pdf'), async (req, res) => {
       subject: `NOUVELLE INSCRIPTION REÇUE : ${formData.nom || ''} ${formData.prenoms || ''} (${_replyto || 'email@fourni.com'})`,
       html: `
         <div style="font-family: Arial, sans-serif;">
-          <h2 style="color: #d97706;">⚡ NOUVEAU CLIENT INSCRIT</h2>
+          <h2 style="color: #d97706;">NOUVEAU CLIENT INSCRIT</h2>
           <p><strong>Un client vient de terminer et soumettre son formulaire d'inscription.</strong></p>
           <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 15px 0;">
-            <p style="margin: 0; font-weight: bold;">📋 Informations complètes du client :</p>
+            <p style="margin: 0; font-weight: bold;">Informations complètes du client :</p>
           </div>
           <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #6366f1;">
             ${summaryHtml}
           </div>
           <p><strong>Informations de contact direct du client :</strong></p>
           <ul style="list-style: none; padding-left: 10px;">
-            <li><strong>📧 Email du client :</strong> ${_replyto || 'Non fourni'}</li>
-            <li><strong>📱 Téléphone principal :</strong> ${formData.telephonePrincipal || 'Non fourni'}</li>
-            <li><strong>💬 WhatsApp :</strong> ${formData.whatsapp || 'Non fourni'}</li>
+            <li><strong>Email du client :</strong> ${_replyto || 'Non fourni'}</li>
+            <li><strong>Téléphone principal :</strong> ${formData.telephonePrincipal || 'Non fourni'}</li>
+            <li><strong>WhatsApp :</strong> ${formData.whatsapp || 'Non fourni'}</li>
           </ul>
-          <p><strong>📄 Document PDF contractuel joint à cet email.</strong></p>
+          <p><strong>Document PDF contractuel joint à cet email.</strong></p>
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
           <p style="font-size: 12px; color: #666;">
-            <strong>📌 Action requise :</strong> Contacter le client à l'adresse ${_replyto || 'email non fourni'} pour finaliser son inscription.
+            <strong>Action requise :</strong> Contacter le client à l'adresse ${_replyto || 'email non fourni'} pour finaliser son inscription.
           </p>
         </div>
       `,
@@ -99,15 +99,15 @@ app.post('/send-email', upload.single('convention_pdf'), async (req, res) => {
     const mailClientOptions = {
       from: companyEmail, // L'ENVOIE DEPUIS L'ENTREPRISE (investment@dmplus-group.com)
       to: _replyto, // Envoyer au client (n'importe quel client)
-      subject: '✅ Votre inscription DM+ Invest a été reçue avec succès',
+      subject: 'Votre inscription DM+ Invest a été reçue avec succès',
       replyTo: companyEmail, // Le client répond à l'entreprise
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-          <h2 style="color: #10b981;"> Félicitations !</h2>
+          <h2 style="color: #DEB833;"> Félicitations !</h2>
           <p><strong>Votre inscription DM+ Invest a été soumise avec succès.</strong></p>
           <p>Nous vous remercions de votre confiance. Votre dossier est maintenant entre les mains de notre équipe qui va le traiter dans les plus brefs délais.</p>
-          <div style="background: #ecfdf5; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; margin: 20px 0;">
-            <h3 style="color: #10b981; margin-top: 0;"> Prochaines étapes :</h3>
+          <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 4px solid #DEB833; margin: 20px 0;">
+            <h3 style="color: #332E32; margin-top: 0;"> Prochaines étapes :</h3>
             <ol style="margin: 10px 0; padding-left: 20px;">
               <li>Notre équipe examine votre dossier</li>
               <li>Nous vous contacterons par téléphone ou email</li>
