@@ -219,7 +219,10 @@ const translations = {
     validationFinale: "Validation Finale",
     iban: "RIB / IBAN",
     depotInitial: "Dépôt Initial",
-    certification: "Je certifie l'exactitude des informations et j'accepte les",
+    certification: "Je déclare que les informations fournies dans ce formulaire sont exactes, complètes et sincères. Je m'engage à informer DM+ Investment de tout changement de ma situation.",
+    certification2: "J'ai pris connaissance de l'offre de services DM+ Investment, des conditions générales et de la grille tarifaire, et j'accepte les termes de la formule sélectionnée.",
+    certification3: "J'autorise DM+ Investment à collecter, conserver et traiter mes données personnelles dans le strict cadre de la relation contractuelle, conformément à la réglementation en vigueur.",
+    certification4: "Je certifie avoir été informé(e) des risques liés à l'investissement sur les marchés financiers. Les performances passées ne préjugent pas des performances futures.",
     conditions: "conditions d'adhésion",
     agréeUemoa: "Agréé UEMOA",
     institutionAgrée: "Institution Agréée",
@@ -472,7 +475,10 @@ const translations = {
     validationFinale: "Final Validation",
     iban: "RIB / IBAN",
     depotInitial: "Initial Deposit",
-    certification: "I certify the accuracy of the information and I accept the",
+    certification: "I declare that the information provided in this form is accurate, complete and sincere. I undertake to inform DM+ Investment of any change in my situation.",
+    certification2: "I have read the DM+ Investment service offering, the general conditions and the 2025 fee schedule, and I accept the terms of the selected formula.",
+    certification3: "I authorize DM+ Investment to collect, store and process my personal data within the strict framework of the contractual relationship, in accordance with the regulations in force.",
+    certification4: "I certify that I have been informed of the risks associated with investing in financial markets. Past performance does not prejudge future performance.",
     conditions: "membership conditions",
     agréeUemoa: "UEMOA Approved",
     institutionAgrée: "Approved Institution",
@@ -551,6 +557,7 @@ function App() {
     patrimoineExistant: [], informationsComplementaires: "", servicesSouhaites: [],
     frequenceSuivi: "", modeConsultation: "", membreBRVM: "", iban: "",
     depotInitial: "", instructionsSpeciales: "", accepteConditions: false,
+    accepteConditions2: false, accepteConditions3: false, accepteConditions4: false,
     luConditionsStep1: false, selectedOffer: ""
   });
 
@@ -564,7 +571,7 @@ function App() {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
-      if (name === "accepteConditions" || name === "luConditionsStep1") setFormData(p => ({ ...p, [name]: checked }));
+      if (name === "accepteConditions" || name === "luConditionsStep1" || name === "accepteConditions2" || name === "accepteConditions3" || name === "accepteConditions4") setFormData(p => ({ ...p, [name]: checked }));
       else setFormData(p => {
         const arr = p[name] || [];
         return checked ? { ...p, [name]: [...arr, value] } : { ...p, [name]: arr.filter(i => i !== value) };
@@ -604,8 +611,8 @@ function App() {
   };
 
   const nextStep = () => {
-  // Validation pour l'étape 1 - nécessite une sélection d'offre
-  if (step === 1 && !formData.selectedOffer) {
+  // Validation pour l'étape 1 - nécessite une sélection d'offre et l'acceptation des conditions
+  if (step === 1 && (!formData.selectedOffer || !formData.luConditionsStep1)) {
     alert(t.alertSelectOffer);
     return;
   }
@@ -1385,7 +1392,7 @@ function App() {
                         </div>
 
                         {/* Conditions Générales */}
-                        <div className="bg-[#deb833]/5 border border-[#deb833]/20 p-4 rounded-xl">
+                        <div className="bg-[#deb833]/5 border border-[#deb833]/20 p-4 rounded-xl space-y-3">
                           <div className="flex items-start gap-3">
                             <div
                               onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
@@ -1397,7 +1404,7 @@ function App() {
                               onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
                               className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
                             >
-                              {t.certification}{" "}
+                              {t.certification}
                             </span>
                             <button
                               type="button"
@@ -1406,6 +1413,48 @@ function App() {
                             >
                               {t.conditions}
                             </button>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions2: !p.accepteConditions2 }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions2 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions2 && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions2: !p.accepteConditions2 }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification2}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions3: !p.accepteConditions3 }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions3 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions3 && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions3: !p.accepteConditions3 }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification3}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions4: !p.accepteConditions4 }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions4 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions4 && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions4: !p.accepteConditions4 }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification4}
+                            </span>
                           </div>
                         </div>
 
@@ -1428,8 +1477,8 @@ function App() {
                       <button
                         type={step === 7 ? "submit" : "button"}
                         onClick={step < 7 ? nextStep : undefined}
-                        disabled={step === 7 && !formData.accepteConditions}
-                        className={`ui-btn-elite-gold py-2 sm:py-3 px-8 sm:px-12 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full sm:w-auto 2xl:h-12 2xl:text-xs mb-4 sm:mb-0 ${step === 7 && !formData.accepteConditions ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4)}
+                        className={`ui-btn-elite-gold py-2 sm:py-3 px-8 sm:px-12 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full sm:w-auto 2xl:h-12 2xl:text-xs mb-4 sm:mb-0 ${step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4) ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         {step === 7 ? t.soumettreDossier : t.étapeSuivante}
                       </button>
@@ -1442,13 +1491,14 @@ function App() {
         </main>
       </div>
 
-        {/* Bouton flottant conditionnel - apparaît seulement si une offre est sélectionnée */}
+        {/* Bouton flottant conditionnel - apparaît seulement si une offre est sélectionnée et les conditions acceptées */}
         {step === 1 && formData.selectedOffer && (
           <div className="fixed bottom-6 right-6 z-50 animate-fade-in">
             <button 
               type="button" 
               onClick={nextStep} 
-              className="ui-btn-elite-gold py-3 px-6 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] shadow-lg hover:shadow-xl transition-all duration-300"
+              className={`ui-btn-elite-gold py-3 px-6 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] shadow-lg hover:shadow-xl transition-all duration-300 ${!formData.luConditionsStep1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={!formData.luConditionsStep1}
             >
               {t.étapeSuivante}
             </button>

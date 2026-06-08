@@ -31,7 +31,7 @@ const membershipTranslations = {
     voirPlus: "Voir plus",
     voirMoins: "Voir moins",
     selectionner: "Sélectionner",
-    selectionne: "Sélectionné ✓",
+    selectionne: "Sélectionner ✓",
     inclus: "Inclus dans la formule :",
     avantages: "Avantages supplémentaires :",
     fonctionnalites: "Fonctionnalités exclusives :",
@@ -627,7 +627,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
                     </div>
 
                     <button 
-                      className={`w-full py-3 px-5 rounded-lg font-black text-xs uppercase tracking-wider transition-all duration-300 ${tier.featured ? 'bg-[#deb833] text-white hover:bg-[#b8962a]' : 'bg-white text-slate-900 border-2 border-slate-200 hover:border-[#deb833] hover:text-[#deb833]'}`}
+                      className="w-full py-3 px-5 rounded-lg font-black text-xs uppercase tracking-wider transition-all duration-300 bg-[#deb833] text-white hover:bg-[#b8962a]"
                     >
                       {selectedTier === tier.id ? mt.selectionne : mt.selectionner}
                     </button>
