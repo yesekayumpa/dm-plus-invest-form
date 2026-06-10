@@ -607,7 +607,13 @@ function App() {
   };
 
   const handleOfferSelect = (offerId) => {
-    setFormData(p => ({ ...p, selectedOffer: offerId }));
+    // Sur mobile, activer automatiquement la confirmation des conditions quand une offre est sélectionnée
+    const isMobile = window.innerWidth < 1024;
+    setFormData(p => ({ 
+      ...p, 
+      selectedOffer: offerId,
+      ...(isMobile && { luConditionsStep1: true })
+    }));
   };
 
   const nextStep = () => {
@@ -903,7 +909,7 @@ function App() {
                     {step === 2 && (
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100">
-                          <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.identiteCivile}</div>
+                          <div className="text-[13px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.identiteCivile}</div>
                           <p className="text-[9px] text-slate-400 mt-1">{t.subIdentite}</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
@@ -1022,7 +1028,7 @@ function App() {
                     {step === 3 && (
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100">
-                          <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.contact}</div>
+                          <div className="text-[13px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.contact}</div>
                           <p className="text-[9px] text-slate-400 mt-1">{t.subContact}</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
@@ -1100,7 +1106,7 @@ function App() {
                     {step === 4 && (
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100">
-                          <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.residenceActuelle}</div>
+                          <div className="text-[13px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.residenceActuelle}</div>
                           <p className="text-[9px] text-slate-400 mt-1">{t.subResidence}</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
@@ -1127,7 +1133,7 @@ function App() {
                     {step === 5 && (
                       <div className="space-y-4 animate-fade-in">
                         <div className="pb-3 border-b border-slate-100 mb-4">
-                          <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.situationPro}</div>
+                          <div className="text-[13px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.situationPro}</div>
                           <p className="text-[9px] text-slate-400 mt-1">{t.subSituationPro}</p>
                         </div>                        
                         <div className="space-y-4">
@@ -1226,7 +1232,7 @@ function App() {
 
                         {/* Section title */}
                         <div className="pb-3 border-b border-slate-100">
-                          <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.profilInvestisseur}</div>
+                          <div className="text-[13px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.profilInvestisseur}</div>
                           <p className="text-[9px] text-slate-400 mt-1">{t.subProfil}</p>
                         </div>
 
@@ -1340,7 +1346,7 @@ function App() {
                       <div className="space-y-5 animate-fade-in">
 
                         <div className="pb-3 border-b border-slate-100">
-                          <div className="text-[11px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.capitalInstruments}</div>
+                          <div className="text-[13px] font-black uppercase tracking-[0.3em] text-[#deb833]">{t.capitalInstruments}</div>
                           <p className="text-[9px] text-slate-400 mt-1">{t.subCapital}</p>
                         </div>
 
