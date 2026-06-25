@@ -121,7 +121,7 @@ export default async function handler(req, res) {
       from: 'investment@dmplus-group.com', // Doit être l'adresse authentifiée sur LWS
       to: _replyto, // Envoyer au client (n'importe quel client)
       subject: 'Votre inscription DM+ Invest a été reçue avec succès',
-      replyTo: 'mail.dmplusgroup@gmail.com', // Le client répond sur l'adresse Gmail
+      replyTo: 'investment@dmplus-group.com', // Le client répond sur l'adresse Gmail
       headers: {
         'X-Priority': '3',
         'X-Mailer': 'DM+ Invest System',
