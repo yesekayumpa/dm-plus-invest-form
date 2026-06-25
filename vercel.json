@@ -2,6 +2,9 @@
   "functions": {
     "api/send-email.js": {
       "maxDuration": 20
+    },
+    "api/reply-email.js": {
+      "maxDuration": 20
     }
   },
   "framework": "vite"
