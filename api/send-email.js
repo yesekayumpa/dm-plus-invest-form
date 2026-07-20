@@ -126,7 +126,7 @@ export default async function handler(req, res) {
       from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',
       to: companyEmail,
       replyTo: _replyto,
-      subject: `Nouvelle inscription : ${clientFullName} — ${offerLabel}`,
+      subject: `Nouvelle inscription : ${clientFullName}`,
       html: `
 <!DOCTYPE html>
 <html lang="fr">
