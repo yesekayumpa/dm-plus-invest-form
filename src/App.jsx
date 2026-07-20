@@ -1426,6 +1426,15 @@ function App() {
 
                         {/* Conditions Générales */}
                         <div className="bg-[#deb833]/5 border border-[#deb833]/20 p-4 rounded-xl space-y-3">
+                          <div className="flex justify-end mb-2">
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setShowConditions(true); }}
+                              className="text-[10px] text-[#deb833] underline underline-offset-2 hover:text-[#b8962a] transition-colors font-black"
+                            >
+                              {t.conditions}
+                            </button>
+                          </div>
                           <div className="flex items-start gap-3">
                             <div
                               onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
@@ -1439,13 +1448,6 @@ function App() {
                             >
                               {t.certification}
                             </span>
-                            <button
-                              type="button"
-                              onClick={(e) => { e.stopPropagation(); setShowConditions(true); }}
-                              className="text-[9px] text-[#deb833] underline underline-offset-2 hover:text-[#b8962a] transition-colors font-black mt-0 self-start"
-                            >
-                              {t.conditions}
-                            </button>
                           </div>
                           <div className="flex items-start gap-3">
                             <div
