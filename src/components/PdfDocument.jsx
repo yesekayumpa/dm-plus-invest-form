@@ -318,10 +318,14 @@ export const PdfDocument = ({ data }) => {
             <Text style={styles.bullet}>•</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={styles.text}>Périodicité : </Text>
-              <View style={[styles.checkbox, { width: 8, height: 8, marginHorizontal: 5 }]}><Text style={{ fontSize: 6 }}>{isCorporate ? 'X' : ''}</Text></View>
-              <Text style={styles.text}>Mensuelle </Text>
-              <View style={[styles.checkbox, { width: 8, height: 8, marginHorizontal: 5 }]}><Text style={{ fontSize: 6 }}>{isHorizon || isPatrimoine ? 'X' : ''}</Text></View>
-              <Text style={styles.text}>Trimestrielle</Text>
+              <View style={[styles.checkbox, { width: 9, height: 9, marginHorizontal: 5 }, isCorporate && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
+                <Text style={{ fontSize: 7, fontWeight: 'bold', color: isCorporate ? '#deb833' : 'transparent' }}>✓</Text>
+              </View>
+              <Text style={[styles.text, isCorporate && { fontWeight: 'bold' }]}>Mensuelle </Text>
+              <View style={[styles.checkbox, { width: 9, height: 9, marginHorizontal: 5 }, (isHorizon || isPatrimoine) && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
+                <Text style={{ fontSize: 7, fontWeight: 'bold', color: (isHorizon || isPatrimoine) ? '#deb833' : 'transparent' }}>✓</Text>
+              </View>
+              <Text style={[styles.text, (isHorizon || isPatrimoine) && { fontWeight: 'bold' }]}>Trimestrielle</Text>
             </View>
           </View>
           <View style={styles.bulletPoint}>
