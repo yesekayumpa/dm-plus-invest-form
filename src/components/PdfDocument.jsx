@@ -22,14 +22,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 30,
+    width: 180,
   },
-  logoText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#332E32',
-  },
-  logoAccent: {
-    color: '#d97706',
+  logoImage: {
+    width: '100%',
+    height: 'auto',
   },
   titleContainer: {
     alignItems: 'center',
@@ -172,9 +169,7 @@ const styles = StyleSheet.create({
 
 const renderHeader = () => (
   <View style={styles.logoContainer} fixed>
-    <Text style={styles.logoText}><Text style={styles.logoAccent}>IGITAL</Text></Text>
-    <Text style={styles.logoText}><Text style={styles.logoAccent}>MIND+</Text></Text>
-    <Text style={{ fontSize: 6, letterSpacing: 2 }}>I N V E S T M E N T</Text>
+    <Image src="/LOGOTYPE 10.png" style={styles.logoImage} />
   </View>
 );
 
