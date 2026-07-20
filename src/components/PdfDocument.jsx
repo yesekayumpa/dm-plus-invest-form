@@ -1,6 +1,9 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
 
+// ============================================================================
+// 1. CONFIGURATION DES POLICES (FONTS)
+// ============================================================================
 Font.register({
   family: 'Open Sans',
   fonts: [
@@ -10,6 +13,9 @@ Font.register({
   ]
 });
 
+// ============================================================================
+// 2. STYLES DU DOCUMENT
+// ============================================================================
 const styles = StyleSheet.create({
   page: {
     paddingTop: 35,
@@ -167,6 +173,9 @@ const styles = StyleSheet.create({
   },
 });
 
+// ============================================================================
+// 3. COMPOSANTS RÉUTILISABLES (EN-TÊTE ET PIED DE PAGE)
+// ============================================================================
 const renderHeader = () => (
   <View style={styles.logoContainer} fixed>
     <Image src="/LOGOTYPE 10.png" style={styles.logoImage} />
@@ -191,6 +200,9 @@ const renderFooter = () => (
   </View>
 );
 
+// ============================================================================
+// 4. COMPOSANT PRINCIPAL : DOCUMENT PDF
+// ============================================================================
 export const PdfDocument = ({ data }) => {
   const safeData = data || {};
   
@@ -200,7 +212,9 @@ export const PdfDocument = ({ data }) => {
 
   return (
     <Document>
-      {/* PAGE 1 */}
+      {/* ===================================================================== */}
+      {/* PAGE 1 : INFORMATIONS CLIENT ET OBJET DE LA CONVENTION */}
+      {/* ===================================================================== */}
       <Page size="A4" style={styles.page}>
         {renderHeader()}
         
@@ -278,7 +292,9 @@ export const PdfDocument = ({ data }) => {
         {renderFooter()}
       </Page>
 
-      {/* PAGE 2 */}
+      {/* ===================================================================== */}
+      {/* PAGE 2 : DÉTAILS DE LA FORMULE ET PRESTATIONS (ART. 3) */}
+      {/* ===================================================================== */}
       <Page size="A4" style={styles.page}>
         {renderHeader()}
         
@@ -343,7 +359,9 @@ export const PdfDocument = ({ data }) => {
         {renderFooter()}
       </Page>
 
-      {/* PAGE 3 */}
+      {/* ===================================================================== */}
+      {/* PAGE 3 : OBLIGATIONS (ART. 4), HONORAIRES (ART. 5), RISQUES (ART. 6) */}
+      {/* ===================================================================== */}
       <Page size="A4" style={styles.page}>
         {renderHeader()}
 
@@ -435,7 +453,9 @@ export const PdfDocument = ({ data }) => {
         {renderFooter()}
       </Page>
 
-      {/* PAGE 4 */}
+      {/* ===================================================================== */}
+      {/* PAGE 4 : CONFIDENTIALITÉ, DURÉE, RÉSILIATION ET RESPONSABILITÉ */}
+      {/* ===================================================================== */}
       <Page size="A4" style={styles.page}>
         {renderHeader()}
 
@@ -492,7 +512,9 @@ export const PdfDocument = ({ data }) => {
         {renderFooter()}
       </Page>
 
-      {/* PAGE 5 */}
+      {/* ===================================================================== */}
+      {/* PAGE 5 : DISPOSITIONS GÉNÉRALES ET SIGNATURES */}
+      {/* ===================================================================== */}
       <Page size="A4" style={styles.page}>
         {renderHeader()}
 
