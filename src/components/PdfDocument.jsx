@@ -288,20 +288,20 @@ export const PdfDocument = ({ data }) => {
 
         <View style={[styles.clientBox, { marginTop: 0 }]}>
           <View style={styles.checkboxRow}>
-            <View style={[styles.checkbox, isHorizon && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-              <Text style={{ fontSize: 7, fontWeight: 'bold', color: isHorizon ? '#deb833' : 'transparent' }}>✓</Text>
+            <View style={[styles.checkbox, isHorizon ? { backgroundColor: '#1f2937', borderColor: '#1f2937' } : { backgroundColor: '#ffffff' }]}>
+              {isHorizon && <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>}
             </View>
             <Text style={[styles.text, isHorizon && { fontWeight: 'bold' }]}>DM+ Invest Horizon — 30 000 FCFA / trimestre</Text>
           </View>
           <View style={styles.checkboxRow}>
-            <View style={[styles.checkbox, isPatrimoine && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-              <Text style={{ fontSize: 7, fontWeight: 'bold', color: isPatrimoine ? '#deb833' : 'transparent' }}>✓</Text>
+            <View style={[styles.checkbox, isPatrimoine ? { backgroundColor: '#1f2937', borderColor: '#1f2937' } : { backgroundColor: '#ffffff' }]}>
+              {isPatrimoine && <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>}
             </View>
             <Text style={[styles.text, isPatrimoine && { fontWeight: 'bold' }]}>DM+ Invest Patrimoine — 75 000 FCFA / trimestre</Text>
           </View>
           <View style={styles.checkboxRow}>
-            <View style={[styles.checkbox, isCorporate && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-              <Text style={{ fontSize: 7, fontWeight: 'bold', color: isCorporate ? '#deb833' : 'transparent' }}>✓</Text>
+            <View style={[styles.checkbox, isCorporate ? { backgroundColor: '#1f2937', borderColor: '#1f2937' } : { backgroundColor: '#ffffff' }]}>
+              {isCorporate && <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>}
             </View>
             <Text style={[styles.text, isCorporate && { fontWeight: 'bold' }]}>DM+ Invest Corporate — À partir de 500 000 FCFA / mois</Text>
           </View>
@@ -318,12 +318,12 @@ export const PdfDocument = ({ data }) => {
             <Text style={styles.bullet}>•</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={styles.text}>Périodicité : </Text>
-              <View style={[styles.checkbox, { width: 9, height: 9, marginHorizontal: 5 }, isCorporate && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: isCorporate ? '#deb833' : 'transparent' }}>✓</Text>
+              <View style={[styles.checkbox, { width: 9, height: 9, marginHorizontal: 5 }, isCorporate ? { backgroundColor: '#1f2937', borderColor: '#1f2937' } : { backgroundColor: '#ffffff' }]}>
+                {isCorporate && <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>}
               </View>
               <Text style={[styles.text, isCorporate && { fontWeight: 'bold' }]}>Mensuelle </Text>
-              <View style={[styles.checkbox, { width: 9, height: 9, marginHorizontal: 5 }, (isHorizon || isPatrimoine) && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: (isHorizon || isPatrimoine) ? '#deb833' : 'transparent' }}>✓</Text>
+              <View style={[styles.checkbox, { width: 9, height: 9, marginHorizontal: 5 }, (isHorizon || isPatrimoine) ? { backgroundColor: '#1f2937', borderColor: '#1f2937' } : { backgroundColor: '#ffffff' }]}>
+                {(isHorizon || isPatrimoine) && <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>}
               </View>
               <Text style={[styles.text, (isHorizon || isPatrimoine) && { fontWeight: 'bold' }]}>Trimestrielle</Text>
             </View>
