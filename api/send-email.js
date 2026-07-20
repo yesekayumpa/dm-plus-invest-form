@@ -58,9 +58,33 @@ export default async function handler(req, res) {
       }
     });
 
-    // 1. EMAIL POUR L'ENTREPRISE (IMMÉDIAT - INFOS CLIENT + PDF)
-    const companyEmail = 'investment@dmplus-group.com';
-    let summaryHtml = `<h3 style="color: #DEB833; margin-top: 20px;">Informations du client :</h3>`;
+    // Helper pour les labels lisibles
+    const fieldLabels = {
+      nom: 'Nom', prenoms: 'Prénoms', dateNaissance: 'Date de naissance', lieuNaissance: 'Lieu de naissance',
+      nationalite: 'Nationalité', typePiece: 'Type de pièce', numeroPiece: 'N° de pièce',
+      email: 'Email', telephonePrincipal: 'Téléphone principal', telephoneSecondaire: 'Téléphone secondaire',
+      whatsapp: 'WhatsApp', adresse: 'Adresse', ville: 'Ville', paysResidence: 'Pays de résidence', codePostal: 'Code postal',
+      profession: 'Profession', revenuMensuel: 'Revenu mensuel', patrimoineEstime: 'Patrimoine estimé',
+      origineFonds: 'Origine des fonds', objectifInvestissement: 'Objectif d\'investissement',
+      servicesSouhaites: 'Services souhaités', frequenceSuivi: 'Fréquence de suivi', modeConsultation: 'Mode de consultation',
+      membreBRVM: 'Membre BRVM', iban: 'IBAN', depotInitial: 'Dépôt initial', instructionsSpeciales: 'Instructions spéciales',
+      hasSGIAccount: 'Compte SGI existant', wantsSGIAssistance: 'Assistance ouverture SGI',
+      sgiPreferenceType: 'Préférence SGI', selectedSGI: 'SGI choisie'
+    };
+
+    const categoryIcons = {
+      'Informations personnelles': '👤',
+      'Coordonnées': '',
+      'Situation financière': '',
+      'Services souhaités': ''
+    };
+
+    const categoryColors = {
+      'Informations personnelles': '#1e3a5f',
+      'Coordonnées': '#0f4c35',
+      'Situation financière': '#4a1f0f',
+      'Services souhaités': '#2d1f4f'
+    };
 
     const categories = {
       'Informations personnelles': ['nom', 'prenoms', 'dateNaissance', 'lieuNaissance', 'nationalite', 'typePiece', 'numeroPiece'],
@@ -69,43 +93,107 @@ export default async function handler(req, res) {
       'Services souhaités': ['servicesSouhaites', 'frequenceSuivi', 'modeConsultation', 'membreBRVM', 'iban', 'depotInitial', 'instructionsSpeciales', 'hasSGIAccount', 'wantsSGIAssistance', 'sgiPreferenceType', 'selectedSGI']
     };
 
+    // 1. EMAIL POUR L'ENTREPRISE (IMMÉDIAT - INFOS CLIENT + PDF)
+    const companyEmail = 'investment@dmplus-group.com';
+
+    let summaryHtml = '';
     Object.entries(categories).forEach(([category, fields]) => {
-      summaryHtml += `<h4 style="color: #DEB833; margin-top: 20px;">${category}</h4><ul style="list-style: none; padding-left: 10px;">`;
-      fields.forEach(field => {
-        if (formData[field]) {
-          summaryHtml += `<li><strong>${field}:</strong> ${formData[field]}</li>`;
-        }
-      });
-      summaryHtml += '</ul>';
+      const color = categoryColors[category] || '#1a1a2e';
+      const icon = categoryIcons[category] || '📋';
+      const rows = fields
+        .filter(f => formData[f])
+        .map(f => `
+          <tr>
+            <td style="padding: 8px 14px; font-size: 12px; color: #64748b; font-weight: 600; width: 40%; border-bottom: 1px solid #f1f5f9; vertical-align: top;">${fieldLabels[f] || f}</td>
+            <td style="padding: 8px 14px; font-size: 12px; color: #1e293b; font-weight: 500; border-bottom: 1px solid #f1f5f9; vertical-align: top;">${formData[f]}</td>
+          </tr>`)
+        .join('');
+      if (!rows) return;
+      summaryHtml += `
+        <div style="margin-bottom: 20px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+          <div style="background: ${color}; padding: 10px 16px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px;">${icon}</span>
+            <span style="color: #deb833; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;">${category}</span>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; background: #ffffff;">${rows}</table>
+        </div>`;
     });
 
+    const clientFullName = `${formData.prenoms || ''} ${formData.nom || ''}`.trim() || 'Nouveau Client';
+    const offerLabel = formData.selectedOffer === 'marche-financier' ? 'Horizon' : formData.selectedOffer === 'prestige' ? 'Patrimoine' : formData.selectedOffer === 'corporate' ? 'Corporate' : formData.selectedOffer || '—';
+
     const mailCompanyOptions = {
-      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>', // Doit être l'adresse authentifiée sur LWS
-      to: companyEmail, // L'entreprise reçoit immédiatement
-      replyTo: _replyto, // L'entreprise peut répondre directement au client
-      subject: `NOUVELLE INSCRIPTION REÇUE : ${formData.nom || ''} ${formData.prenoms || ''} (${_replyto || 'email@fourni.com'})`,
+      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',
+      to: companyEmail,
+      replyTo: _replyto,
+      subject: `🆕 Nouvelle inscription : ${clientFullName} — ${offerLabel}`,
       html: `
-        <div style="font-family: Arial, sans-serif;">
-          <h2 style="color: #DEB833;"> NOUVEAU CLIENT INSCRIT</h2>
-          <p><strong>Un client vient de terminer et soumettre son formulaire d'inscription.</strong></p>
-          <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #DEB833; margin: 15px 0;">
-            <p style="margin: 0; font-weight: bold;"> Informations complètes du client :</p>
-          </div>
-          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #DEB833;">
-            ${summaryHtml}
-          </div>
-          <p><strong>Informations de contact direct du client :</strong></p>
-          <ul style="list-style: none; padding-left: 10px;">
-            <li><strong>Email du client :</strong> ${_replyto || 'Non fourni'}</li>
-            <li><strong>Téléphone principal :</strong> ${formData.telephonePrincipal || 'Non fourni'}</li>
-            <li><strong>WhatsApp :</strong> ${formData.whatsapp || 'Non fourni'}</li>
-          </ul>
-          <p><strong>Document PDF contractuel joint à cet email.</strong></p>
-          <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
-          <p style="font-size: 12px; color: #666;">
-            <strong>Action requise :</strong> Contacter le client à l'adresse ${_replyto || 'email non fourni'} pour finaliser son inscription.
-          </p>
-        </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#f0f4f8;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4f8;padding:30px 10px;">
+  <tr><td align="center">
+    <table width="620" cellpadding="0" cellspacing="0" style="max-width:620px;width:100%;">
+
+      <!-- HEADER -->
+      <tr><td style="background: linear-gradient(135deg, #0a0f1e 0%, #1a2744 50%, #0d1b33 100%); border-radius: 16px 16px 0 0; padding: 36px 40px; text-align: center;">
+        <div style="font-size: 11px; color: #deb833; font-weight: 800; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 10px;">DM+ INVESTMENT</div>
+        <div style="font-size: 26px; font-weight: 900; color: #ffffff; letter-spacing: 0.04em; margin-bottom: 6px;">Nouvelle Inscription</div>
+        <div style="width: 50px; height: 3px; background: #deb833; margin: 12px auto 16px; border-radius: 2px;"></div>
+        <div style="display: inline-block; background: #deb833; color: #0a0f1e; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 18px; border-radius: 20px;">Formule ${offerLabel}</div>
+      </td></tr>
+
+      <!-- ALERT BAND -->
+      <tr><td style="background: #deb833; padding: 12px 40px; text-align: center;">
+        <span style="font-size: 13px; font-weight: 700; color: #0a0f1e;">⚡ Action requise — Un nouveau client vient de soumettre son dossier</span>
+      </td></tr>
+
+      <!-- CLIENT HERO CARD -->
+      <tr><td style="background: #ffffff; padding: 28px 40px 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="background: linear-gradient(135deg, #f8faff, #eef2ff); border: 1px solid #dde3f0; border-radius: 12px; padding: 20px 24px;">
+              <div style="font-size: 10px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;">Client</div>
+              <div style="font-size: 22px; font-weight: 900; color: #0a0f1e; margin-bottom: 4px;">${clientFullName}</div>
+              <div style="font-size: 12px; color: #64748b;">
+                📧 ${_replyto || '—'} &nbsp;|&nbsp; 📱 ${formData.telephonePrincipal || '—'}${formData.whatsapp ? ' &nbsp;|&nbsp; 💬 WhatsApp: ' + formData.whatsapp : ''}
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <!-- SUMMARY -->
+      <tr><td style="background: #ffffff; padding: 0 40px 28px;">
+        <div style="font-size: 11px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 14px; padding-top: 4px; border-top: 1px solid #f1f5f9; padding-top: 16px;">Détail du dossier</div>
+        ${summaryHtml}
+      </td></tr>
+
+      <!-- PDF NOTICE -->
+      <tr><td style="background: #f8fafc; border-top: 2px solid #deb833; border-bottom: 2px solid #deb833; padding: 16px 40px; text-align: center;">
+        <span style="font-size: 13px; color: #1e293b;">📎 <strong>Le document PDF contractuel est joint à cet email.</strong></span>
+      </td></tr>
+
+      <!-- ACTION CTA -->
+      <tr><td style="background: #ffffff; padding: 28px 40px; text-align: center;">
+        <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">Cliquez pour contacter le client directement :</div>
+        <a href="mailto:${_replyto}" style="display: inline-block; background: linear-gradient(135deg, #deb833, #c9a520); color: #0a0f1e; font-size: 13px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 32px; border-radius: 8px; text-decoration: none; margin: 0 6px;">✉ Répondre au client</a>
+        ${formData.telephonePrincipal ? `<a href="tel:${formData.telephonePrincipal}" style="display: inline-block; background: #0a0f1e; color: #deb833; font-size: 13px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 32px; border-radius: 8px; text-decoration: none; margin: 0 6px;">📞 Appeler</a>` : ''}
+      </td></tr>
+
+      <!-- FOOTER -->
+      <tr><td style="background: linear-gradient(135deg, #0a0f1e, #1a2744); border-radius: 0 0 16px 16px; padding: 24px 40px; text-align: center;">
+        <div style="font-size: 11px; color: #deb833; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px;">DM MIND PLUS INVESTMENT</div>
+        <div style="font-size: 11px; color: #64748b;">Médina rue 37x24, Dakar, Sénégal &nbsp;|&nbsp; +221 76 619 34 10 &nbsp;|&nbsp; investment@dmplus-group.com</div>
+        <div style="margin-top: 10px; font-size: 10px; color: #334155;">Ce message est destiné exclusivement aux équipes internes de DM+ Investment.</div>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>
       `,
       attachments: [
         {
