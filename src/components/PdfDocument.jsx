@@ -223,7 +223,7 @@ export const PdfDocument = ({ data }) => {
   const randomPart = Math.random().toString(36).toUpperCase().slice(2, 6);
   const numeroUnique = `DM-${datePart}-${randomPart}`;
 
-  const isHorizon = safeData.selectedOffer === 'marche-financier';
+  const isHorizon = safeData.selectedOffer === 'marche-financier' || safeData.selectedOffer === 'horizon';
   const isPatrimoine = safeData.selectedOffer === 'prestige';
   const isCorporate = safeData.selectedOffer === 'corporate';
 
@@ -312,7 +312,7 @@ export const PdfDocument = ({ data }) => {
 
           <View style={styles.bulletPoint}>
             <Text style={styles.bullet}>•</Text>
-            <Text style={styles.text}>Montant de l'abonnement : <Text style={styles.textBold}>{isHorizon ? '30 000' : isPatrimoine ? '75 000' : '___________'}</Text> FCFA</Text>
+            <Text style={styles.text}>Montant de l'abonnement : <Text style={styles.textBold}>{isHorizon ? '30 000' : isPatrimoine ? '75 000' : isCorporate ? '500 000' : '___________'}</Text> FCFA</Text>
           </View>
           <View style={styles.bulletPoint}>
             <Text style={styles.bullet}>•</Text>
