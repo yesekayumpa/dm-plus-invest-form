@@ -45,41 +45,41 @@ export default async function handler(req, res) {
 
     // Email envoyé à l'entreprise avec le message du client
     const mailOptions = {
-      from: companyEmail,                    // Expéditeur authentifié sur LWS
+      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',                    // Expéditeur authentifié sur LWS
       to: companyEmail,                      // Destinataire : l'entreprise
       replyTo: clientEmail,                  // Répondre directement au client
       subject: replySubject,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #332E32 0%, #DEB833 100%); padding: 30px; border-radius: 12px 12px 0 0;">
-            <h2 style="color: #fff; margin: 0; font-size: 22px;">💬 Message d'un client</h2>
+            <h2 style="color: #fff; margin: 0; font-size: 22px;">Message d'un client</h2>
             <p style="color: rgba(255,255,255,0.85); margin: 6px 0 0;">Réponse reçue via le portail DM+ Invest</p>
           </div>
 
           <div style="background: #f8fafc; padding: 25px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none;">
 
             <div style="background: #fff; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #DEB833; margin-bottom: 20px;">
-              <p style="margin: 0; font-size: 14px; color: #666;">Informations du client</p>
+              <p style="margin: 0; font-size: 14px; color: #666;"> Informations du client</p>
               <p style="margin: 6px 0 0; font-size: 16px; font-weight: bold; color: #332E32;">
                 ${clientName || 'Nom non fourni'}
               </p>
-              <p style="margin: 2px 0 0; color: #6366f1;">
-                <a href="mailto:${clientEmail}" style="color: #6366f1; text-decoration: none;">${clientEmail}</a>
+              <p style="margin: 2px 0 0; color: #DEB833;">
+                <a href="mailto:${clientEmail}" style="color: #DEB833; text-decoration: none;">${clientEmail}</a>
               </p>
             </div>
 
             <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px;">
-              <h3 style="color: #332E32; margin-top: 0; font-size: 15px;">📩 Message du client :</h3>
+              <h3 style="color: #332E32; margin-top: 0; font-size: 15px;">Message du client :</h3>
               <p style="white-space: pre-wrap; color: #444; line-height: 1.7; margin: 0;">
                 ${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
               </p>
             </div>
 
             <div style="background: #fef3c7; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
-              <p style="margin: 0; font-size: 13px; color: #92400e;">
+              <p style="margin: 0; font-size: 13px; color: #DEB833;">
                 <strong>Action requise :</strong> Répondez directement à cet email pour contacter
                 <strong>${clientName || 'le client'}</strong> à l'adresse
-                <a href="mailto:${clientEmail}" style="color: #92400e;">${clientEmail}</a>.
+                <a href="mailto:${clientEmail}" style="color: #DEB833;">${clientEmail}</a>.
               </p>
             </div>
 
@@ -110,14 +110,14 @@ Pour répondre, utilisez l'adresse : ${clientEmail}
 
     // Email de confirmation envoyé au client
     const confirmationOptions = {
-      from: companyEmail,
+      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',
       to: clientEmail,
       replyTo: companyEmail,
       subject: 'Votre message a bien été reçu - DM+ Invest',
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #332E32 0%, #DEB833 100%); padding: 30px; border-radius: 12px 12px 0 0;">
-            <h2 style="color: #fff; margin: 0; font-size: 22px;">✅ Message bien reçu</h2>
+            <h2 style="color: #fff; margin: 0; font-size: 22px;"> Message bien reçu</h2>
             <p style="color: rgba(255,255,255,0.85); margin: 6px 0 0;">DM+ Invest vous confirme la réception</p>
           </div>
 

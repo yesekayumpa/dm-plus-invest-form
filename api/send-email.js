@@ -80,7 +80,7 @@ export default async function handler(req, res) {
     });
 
     const mailCompanyOptions = {
-      from: 'investment@dmplus-group.com', // Doit être l'adresse authentifiée sur LWS
+      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>', // Doit être l'adresse authentifiée sur LWS
       to: companyEmail, // L'entreprise reçoit immédiatement
       replyTo: _replyto, // L'entreprise peut répondre directement au client
       subject: `NOUVELLE INSCRIPTION REÇUE : ${formData.nom || ''} ${formData.prenoms || ''} (${_replyto || 'email@fourni.com'})`,
@@ -118,7 +118,7 @@ export default async function handler(req, res) {
 
     // 2. EMAIL POUR LE CLIENT (UNIQUEMENT MESSAGE - PAS DE PDF)
     const mailClientOptions = {
-      from: 'investment@dmplus-group.com', // Doit être l'adresse authentifiée sur LWS
+      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>', // Doit être l'adresse authentifiée sur LWS
       to: _replyto, // Envoyer au client (n'importe quel client)
       subject: 'Votre inscription DM+ Invest a été reçue avec succès',
       replyTo: 'investment@dmplus-group.com', // Le client répond sur l'adresse Gmail
