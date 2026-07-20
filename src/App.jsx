@@ -1207,9 +1207,7 @@ function App() {
                         <div className="grid grid-cols-1 gap-3">
                           {[
                             { id: "particulier", title: t.particulier, desc: t.particulierDesc },
-                            { id: "professionnel", title: t.professionnel, desc: t.professionnelDesc },
-                            { id: "debutant", title: t.debutant, desc: t.debutantDesc },
-                            { id: "diaspora", title: t.diaspora, desc: t.diasporaDesc }
+                            { id: "professionnel", title: t.professionnel, desc: t.professionnelDesc }
                           ].map((profil) => (
                             <label key={profil.id} className={`ui-choice-elite ${formData.profilClient === profil.id ? 'ui-choice-selected-elite' : ''}`}>
                               <div className="flex items-center gap-4">
