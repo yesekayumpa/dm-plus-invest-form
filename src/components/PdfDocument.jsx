@@ -573,6 +573,52 @@ export const PdfDocument = ({ data }) => {
 
         {renderFooter()}
       </Page>
+
+      {/* ===================================================================== */}
+      {/* PAGE 6 : ANNEXE - QUESTIONNAIRE DE PROFILAGE */}
+      {/* ===================================================================== */}
+      <Page size="A4" style={styles.page}>
+        {renderHeader()}
+
+        <View style={styles.titleContainer}>
+          <Text style={styles.mainTitle}>ANNEXE - QUESTIONNAIRE DE PROFILAGE ET PRÉFÉRENCES</Text>
+        </View>
+
+        <Text style={[styles.textBold, { marginBottom: 10 }]}>1. Profil Professionnel</Text>
+        <View style={styles.clientBox}>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Statut pro. :</Text><Text style={styles.clientBoxValue}>{safeData.statutPro || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Secteur d'activité :</Text><Text style={styles.clientBoxValue}>{safeData.professionSecActivite || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Employeur :</Text><Text style={styles.clientBoxValue}>{safeData.employeur || 'N/A'}</Text></View>
+        </View>
+
+        <Text style={[styles.textBold, { marginBottom: 10 }]}>2. Objectifs et Horizon d'Investissement</Text>
+        <View style={styles.clientBox}>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Profil Client :</Text><Text style={styles.clientBoxValue}>{safeData.profilClient || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Objectif Principal :</Text><Text style={styles.clientBoxValue}>{safeData.objectifPrincipal || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Horizon Inv. :</Text><Text style={styles.clientBoxValue}>{safeData.horizonInvestissement || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Tolérance Risque :</Text><Text style={styles.clientBoxValue}>{safeData.toleranceRisque || 'N/A'}</Text></View>
+        </View>
+
+        <Text style={[styles.textBold, { marginBottom: 10 }]}>3. Expérience et Situation Financière</Text>
+        <View style={styles.clientBox}>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Expérience Inv. :</Text><Text style={styles.clientBoxValue}>{safeData.experienceInvestissement || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Instruments Exp. :</Text><Text style={styles.clientBoxValue}>{safeData.instrumentsExp || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Revenus Mensuels :</Text><Text style={styles.clientBoxValue}>{safeData.revenus || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Capital à Investir :</Text><Text style={styles.clientBoxValue}>{safeData.capitalInvestir || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Patrimoine Existant :</Text><Text style={styles.clientBoxValue}>{safeData.patrimoineExistant || 'N/A'}</Text></View>
+        </View>
+
+        <Text style={[styles.textBold, { marginBottom: 10 }]}>4. Services et Préférences</Text>
+        <View style={styles.clientBox}>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Services Souhaités :</Text><Text style={styles.clientBoxValue}>{safeData.servicesSouhaites || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Fréquence Suivi :</Text><Text style={styles.clientBoxValue}>{safeData.frequenceSuivi || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Mode Consult. :</Text><Text style={styles.clientBoxValue}>{safeData.modeConsultation || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Membre BRVM ? :</Text><Text style={styles.clientBoxValue}>{safeData.membreBRVM || 'N/A'}</Text></View>
+          <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Dépôt Initial :</Text><Text style={styles.clientBoxValue}>{safeData.depotInitial || 'N/A'}</Text></View>
+        </View>
+
+        {renderFooter()}
+      </Page>
     </Document>
   );
 };
