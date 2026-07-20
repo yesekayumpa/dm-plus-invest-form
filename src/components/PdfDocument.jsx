@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   clientBoxLabel: {
-    width: 120,
+    width: 85,
     fontWeight: 'bold',
     fontSize: 8,
   },
