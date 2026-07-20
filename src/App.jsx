@@ -558,7 +558,8 @@ function App() {
     frequenceSuivi: "", modeConsultation: "", membreBRVM: "", iban: "",
     depotInitial: "", instructionsSpeciales: "", accepteConditions: false,
     accepteConditions2: false, accepteConditions3: false, accepteConditions4: false,
-    luConditionsStep1: false, selectedOffer: "", modePaiement: "virement"
+    luConditionsStep1: false, selectedOffer: "", modePaiement: "virement",
+    hasSGIAccount: "", wantsSGIAssistance: "", sgiPreferenceType: "", selectedSGI: ""
   });
 
   const [errors, setErrors] = useState({});
@@ -1398,6 +1399,78 @@ function App() {
                               );
                             })}
                           </div>
+                        </div>
+
+                        {/* Compte SGI */}
+                        <div className="space-y-4">
+                          <div className="pb-2 border-b border-slate-100">
+                            <div className="text-[11px] font-black uppercase tracking-[0.2em] text-[#deb833]">Compte Titre SGI</div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Avez-vous déjà un compte titre dans une SGI ?</label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {["OUI", "NON"].map((opt) => (
+                                <label key={opt} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${formData.hasSGIAccount === opt ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
+                                  <span className={`text-[9px] font-black uppercase tracking-wider ${formData.hasSGIAccount === opt ? 'text-white' : 'text-slate-700'}`}>{opt}</span>
+                                  <input type="radio" name="hasSGIAccount" value={opt} checked={formData.hasSGIAccount === opt} onChange={handleInputChange} className="sr-only" />
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+
+                          {formData.hasSGIAccount === "NON" && (
+                            <div className="space-y-2 pl-4 border-l-2 border-[#deb833]/30 animate-fade-in">
+                              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Souhaitez-vous qu'on vous accompagne à ouvrir votre compte ?</label>
+                              <div className="grid grid-cols-2 gap-2">
+                                {["OUI", "NON"].map((opt) => (
+                                  <label key={`assist-${opt}`} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${formData.wantsSGIAssistance === opt ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
+                                    <span className={`text-[9px] font-black uppercase tracking-wider ${formData.wantsSGIAssistance === opt ? 'text-white' : 'text-slate-700'}`}>{opt}</span>
+                                    <input type="radio" name="wantsSGIAssistance" value={opt} checked={formData.wantsSGIAssistance === opt} onChange={handleInputChange} className="sr-only" />
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {formData.hasSGIAccount === "NON" && formData.wantsSGIAssistance === "OUI" && (
+                            <div className="space-y-2 pl-8 border-l-2 border-[#deb833]/30 animate-fade-in">
+                              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Avez-vous une préférence pour une SGI ?</label>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {[
+                                  { id: "conseillez_moi", label: "Je vous laisse me conseiller" },
+                                  { id: "ai_preference", label: "J'ai une préférence" }
+                                ].map((opt) => (
+                                  <label key={opt.id} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${formData.sgiPreferenceType === opt.id ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
+                                    <span className={`text-[9px] font-black uppercase tracking-wider ${formData.sgiPreferenceType === opt.id ? 'text-white' : 'text-slate-700'}`}>{opt.label}</span>
+                                    <input type="radio" name="sgiPreferenceType" value={opt.id} checked={formData.sgiPreferenceType === opt.id} onChange={handleInputChange} className="sr-only" />
+                                  </label>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {(formData.hasSGIAccount === "OUI" || (formData.hasSGIAccount === "NON" && formData.wantsSGIAssistance === "OUI" && formData.sgiPreferenceType === "ai_preference")) && (
+                            <div className="space-y-2 animate-fade-in">
+                              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Dans quelle SGI ?</label>
+                              <select 
+                                name="selectedSGI" 
+                                value={formData.selectedSGI} 
+                                onChange={handleInputChange} 
+                                className="ui-input-elite w-full"
+                              >
+                                <option value="">Sélectionner une SGI...</option>
+                                {[
+                                  "BOA Capital Securities", "Bridge Securities", "BICI Bourse", "CGF Bourse",
+                                  "Coris Bourse", "Everest Finance", "FGI (Finance Gestion et Intermédiation)",
+                                  "Global Capital", "Hudson & Cie", "IMPAXIS Securities", "Invictus Capital & Finance",
+                                  "Macari", "NSIA Finance", "SGI Mali", "SGI Togo", "Autre"
+                                ].map(sgi => (
+                                  <option key={sgi} value={sgi}>{sgi}</option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
                         </div>
 
                         {/* Mode de paiement */}

@@ -613,8 +613,17 @@ export const PdfDocument = ({ data }) => {
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Services Souhaités :</Text><Text style={styles.clientBoxValue}>{safeData.servicesSouhaites || 'N/A'}</Text></View>
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Fréquence Suivi :</Text><Text style={styles.clientBoxValue}>{safeData.frequenceSuivi || 'N/A'}</Text></View>
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Mode Consult. :</Text><Text style={styles.clientBoxValue}>{safeData.modeConsultation || 'N/A'}</Text></View>
-            <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Membre BRVM ? :</Text><Text style={styles.clientBoxValue}>{safeData.membreBRVM || 'N/A'}</Text></View>
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Dépôt Initial :</Text><Text style={styles.clientBoxValue}>{safeData.depotInitial || 'N/A'}</Text></View>
+            <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Compte SGI ? :</Text><Text style={styles.clientBoxValue}>{safeData.hasSGIAccount || 'N/A'}</Text></View>
+            {safeData.hasSGIAccount === 'NON' && safeData.wantsSGIAssistance && (
+              <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Besoin Accompag. SGI :</Text><Text style={styles.clientBoxValue}>{safeData.wantsSGIAssistance}</Text></View>
+            )}
+            {safeData.sgiPreferenceType === 'conseillez_moi' && (
+              <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Préf. SGI :</Text><Text style={styles.clientBoxValue}>À CONSEILLER</Text></View>
+            )}
+            {safeData.selectedSGI && (
+              <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Choix SGI :</Text><Text style={styles.clientBoxValue}>{safeData.selectedSGI}</Text></View>
+            )}
           </View>
         </View>
       </Page>
