@@ -130,46 +130,59 @@ export default async function handler(req, res) {
       },
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-          <h2 style="color: #DEB833;">Félicitations !</h2>
-          <p><strong>Votre inscription DM+ Invest a été soumise avec succès.</strong></p>
-          <p>Nous vous remercions de votre confiance. Votre dossier est maintenant entre les mains de notre équipe qui va le traiter dans les plus brefs délais.</p>
-          <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 4px solid #DEB833; margin: 20px 0;">
-            <h3 style="color: #332E32; margin-top: 0;">Prochaines étapes :</h3>
-            <ol style="margin: 10px 0; padding-left: 20px;">
-              <li>Notre équipe examine votre dossier</li>
-              <li>Nous vous contacterons par téléphone ou email</li>
-              <li>Finalisation de votre compte d'investissement</li>
-            </ol>
-          </div>
-          <p><strong>Votre convention de compte titres vous sera envoyée par email séparément après validation.</strong></p>
-          <p>Pour toute question, notre service client est à votre disposition :</p>
-          <ul style="list-style: none; padding-left: 0;">
-            <li><strong>Email :</strong> investment@dmplus-group.com</li>
-            <li><strong>Téléphone :</strong> + 33 829 58 06 / 76 663 82 19</li>
+          <p>Bonjour <strong>${formData.prenoms || ''}</strong>,</p>
+          <p>Nous vous remercions pour votre inscription sur la plateforme DM+ Investment.</p>
+          <p>Votre demande a bien été enregistrée. Les informations transmises nous permettront de mieux comprendre votre profil, vos objectifs d’investissement, votre horizon de placement ainsi que le niveau d’accompagnement souhaité.</p>
+          <p>Chez DM+ Investment, notre ambition est de vous aider à investir avec méthode, à mieux structurer vos décisions financières et à construire progressivement une stratégie patrimoniale adaptée à votre situation.</p>
+          <p>Notre équipe procédera à l’analyse de votre profil et reviendra vers vous dans les meilleurs délais afin de vous orienter vers l’accompagnement le plus adapté.</p>
+          <p>Selon votre besoin, cet accompagnement pourra porter notamment sur :</p>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>la compréhension des opportunités d’investissement ;</li>
+            <li>l’analyse du marché financier ;</li>
+            <li>la construction d’une stratégie patrimoniale ;</li>
+            <li>le suivi de vos objectifs financiers ;</li>
+            <li>l’accès progressif à nos outils digitaux de gestion et de pilotage.</li>
           </ul>
-          <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-            <strong>Cordialement,<br>L'équipe DM+ Invest</strong>
+          <p>Nous vous invitons à rester disponible sur le numéro WhatsApp ou l’adresse e-mail renseignés lors de votre inscription.</p>
+          <p>Merci encore pour votre confiance</p>
+          <br>
+          <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <strong>Service Relation Client</strong><br>
+            <strong>DIGITAL MIND+ INVEST</strong><br>
+            +221 76 663 82 19 / 33 829 58 06<br>
+            <a href="mailto:investment@dmplus-group.com" style="color: #6366f1;">investment@dmplus-group.com</a><br>
+            <a href="https://www.dmplus-group.com" style="color: #6366f1;">www.dmplus-group.com</a>
           </p>
         </div>
       `,
       text: `
-Félicitations ! Votre inscription DM+ Invest a été soumise avec succès.
+Bonjour ${formData.prenoms || ''},
 
-Nous vous remercions de votre confiance. Votre dossier est maintenant entre les mains de notre équipe qui va le traiter dans les plus brefs délais.
+Nous vous remercions pour votre inscription sur la plateforme DM+ Investment.
 
-Prochaines étapes :
-1. Notre équipe examine votre dossier
-2. Nous vous contacterons par téléphone ou email
-3. Finalisation de votre compte d'investissement
+Votre demande a bien été enregistrée. Les informations transmises nous permettront de mieux comprendre votre profil, vos objectifs d’investissement, votre horizon de placement ainsi que le niveau d’accompagnement souhaité.
 
-Votre convention de compte titres vous sera envoyée par email séparément après validation.
+Chez DM+ Investment, notre ambition est de vous aider à investir avec méthode, à mieux structurer vos décisions financières et à construire progressivement une stratégie patrimoniale adaptée à votre situation.
 
-Pour toute question, notre service client est à votre disposition :
-Email : investment@dmplus-group.com
-Téléphone : +221 221 76 663 82 19
+Notre équipe procédera à l’analyse de votre profil et reviendra vers vous dans les meilleurs délais afin de vous orienter vers l’accompagnement le plus adapté.
 
-Cordialement,
-L'équipe DM+ Invest
+Selon votre besoin, cet accompagnement pourra porter notamment sur :
+- la compréhension des opportunités d’investissement ;
+- l’analyse du marché financier ;
+- la construction d’une stratégie patrimoniale ;
+- le suivi de vos objectifs financiers ;
+- l’accès progressif à nos outils digitaux de gestion et de pilotage.
+
+Nous vous invitons à rester disponible sur le numéro WhatsApp ou l’adresse e-mail renseignés lors de votre inscription.
+
+Merci encore pour votre confiance
+
+
+Service Relation Client
+DIGITAL MIND+ INVEST
++221 76 663 82 19 / 33 829 58 06
+investment@dmplus-group.com
+www.dmplus-group.com
       `
       // PAS DE PIÈCE JOINTE POUR LE CLIENT
     };
