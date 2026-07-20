@@ -73,7 +73,7 @@ export default async function handler(req, res) {
     };
 
     const categoryIcons = {
-      'Informations personnelles': '👤',
+      'Informations personnelles': '',
       'Coordonnées': '',
       'Situation financière': '',
       'Services souhaités': ''
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
     let summaryHtml = '';
     Object.entries(categories).forEach(([category, fields]) => {
       const color = categoryColors[category] || '#1a1a2e';
-      const icon = categoryIcons[category] || '📋';
+      const icon = categoryIcons[category] || '';
       const rows = fields
         .filter(f => formData[f])
         .map(f => `
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
       from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',
       to: companyEmail,
       replyTo: _replyto,
-      subject: `🆕 Nouvelle inscription : ${clientFullName} — ${offerLabel}`,
+      subject: `Nouvelle inscription : ${clientFullName} — ${offerLabel}`,
       html: `
 <!DOCTYPE html>
 <html lang="fr">
@@ -146,7 +146,7 @@ export default async function handler(req, res) {
 
       <!-- ALERT BAND -->
       <tr><td style="background: #deb833; padding: 12px 40px; text-align: center;">
-        <span style="font-size: 13px; font-weight: 700; color: #0a0f1e;">⚡ Action requise — Un nouveau client vient de soumettre son dossier</span>
+        <span style="font-size: 13px; font-weight: 700; color: #0a0f1e;"> Action requise — Un nouveau client vient de soumettre son dossier</span>
       </td></tr>
 
       <!-- CLIENT HERO CARD -->
@@ -157,7 +157,7 @@ export default async function handler(req, res) {
               <div style="font-size: 10px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;">Client</div>
               <div style="font-size: 22px; font-weight: 900; color: #0a0f1e; margin-bottom: 4px;">${clientFullName}</div>
               <div style="font-size: 12px; color: #64748b;">
-                📧 ${_replyto || '—'} &nbsp;|&nbsp; 📱 ${formData.telephonePrincipal || '—'}${formData.whatsapp ? ' &nbsp;|&nbsp; 💬 WhatsApp: ' + formData.whatsapp : ''}
+                📧 ${_replyto || '—'} &nbsp;|&nbsp; ${formData.telephonePrincipal || '—'}${formData.whatsapp ? ' &nbsp;|&nbsp; 💬 WhatsApp: ' + formData.whatsapp : ''}
               </div>
             </td>
           </tr>
@@ -172,7 +172,7 @@ export default async function handler(req, res) {
 
       <!-- PDF NOTICE -->
       <tr><td style="background: #f8fafc; border-top: 2px solid #deb833; border-bottom: 2px solid #deb833; padding: 16px 40px; text-align: center;">
-        <span style="font-size: 13px; color: #1e293b;">📎 <strong>Le document PDF contractuel est joint à cet email.</strong></span>
+        <span style="font-size: 13px; color: #1e293b;"> <strong>Le document PDF contractuel est joint à cet email.</strong></span>
       </td></tr>
 
       <!-- ACTION CTA -->
