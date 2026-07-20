@@ -18,16 +18,16 @@ Font.register({
 // ============================================================================
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 35,
-    paddingBottom: 70,
+    paddingTop: 30,
+    paddingBottom: 60,
     paddingHorizontal: 35,
     fontFamily: 'Open Sans',
     fontSize: 9,
     color: '#1f2937',
-    lineHeight: 1.5,
+    lineHeight: 1.4,
   },
   logoContainer: {
-    marginBottom: 30,
+    marginBottom: 20,
     width: 120,
   },
   logoImage: {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
   },
   mainTitle: {
     fontSize: 14,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   text: {
-    marginBottom: 6,
+    marginBottom: 4,
     textAlign: 'justify',
   },
   textBold: {
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
   clientBox: {
     backgroundColor: '#f3f4f6',
     padding: 10,
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: 8,
+    marginBottom: 15,
   },
   clientBoxRow: {
     flexDirection: 'row',
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#f3f4f6',
     alignItems: 'center',
-    marginTop: 15,
-    marginBottom: 10,
+    marginTop: 12,
+    marginBottom: 8,
   },
   articleNum: {
     backgroundColor: '#1f2937',
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
   subSectionTitle: {
     fontWeight: 'bold',
     fontSize: 9,
-    marginTop: 10,
-    marginBottom: 4,
+    marginTop: 8,
+    marginBottom: 3,
   },
   checkboxRow: {
     flexDirection: 'row',
@@ -307,7 +307,7 @@ export const PdfDocument = ({ data }) => {
           </View>
         </View>
 
-        <View break>
+        <View wrap={false}>
           <Text style={[styles.textBold, { marginBottom: 10 }]}>Détail de la formule souscrite :</Text>
 
           <View style={styles.bulletPoint}>
@@ -371,7 +371,7 @@ export const PdfDocument = ({ data }) => {
           </View>
         </View>
 
-        <View break>
+        <View wrap={false}>
           <View style={styles.articleHeader}>
             <Text style={styles.articleNum}>ART. 4</Text>
             <Text style={styles.articleTitle}>OBLIGATIONS DU CLIENT</Text>
@@ -468,7 +468,7 @@ export const PdfDocument = ({ data }) => {
         {/* ===================================================================== */}
         {/* PAGE 4 : CONFIDENTIALITÉ, DURÉE, RÉSILIATION ET RESPONSABILITÉ */}
         {/* ===================================================================== */}
-        <View break>
+        <View wrap={false}>
           <View style={styles.articleHeader}>
             <Text style={styles.articleNum}>ART. 7</Text>
             <Text style={styles.articleTitle}>CONFIDENTIALITÉ & PROTECTION DES DONNÉES</Text>

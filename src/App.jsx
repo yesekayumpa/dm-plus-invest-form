@@ -1385,7 +1385,7 @@ function App() {
                               { id: "1M-5M", label: "1M - 5M FCFA" },
                               { id: "5M-10M", label: "5M - 10M FCFA" },
                               { id: "10M-50M", label: "10M - 50M FCFA" },
-                              { id: "50M+", label: "+ 50 000 000 FCFA" }
+                              { id: "50M+", label: "+ 50MFCFA" }
                             ].map((cap) => {
                               const isSelected = formData.capitalInvestir === cap.id;
                               return (

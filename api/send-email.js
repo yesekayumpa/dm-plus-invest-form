@@ -123,7 +123,7 @@ export default async function handler(req, res) {
     const offerLabel = formData.selectedOffer === 'marche-financier' ? 'Horizon' : formData.selectedOffer === 'prestige' ? 'Patrimoine' : formData.selectedOffer === 'corporate' ? 'Corporate' : formData.selectedOffer || '—';
 
     const mailCompanyOptions = {
-      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',
+      from: '"DM+ INVESTMENT" <investment@dmplus-group.com>',
       to: companyEmail,
       replyTo: _replyto,
       subject: `Nouvelle inscription : ${clientFullName}`,

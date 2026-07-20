@@ -29,7 +29,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // Route pour envoyer l'email avec PDF
-app.post('/send-email', upload.single('convention_pdf'), async (req, res) => {
+app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) => {
   try {
     const { _replyto, ...formData } = req.body;
     const pdfFile = req.file;
@@ -153,7 +153,7 @@ app.post('/send-email', upload.single('convention_pdf'), async (req, res) => {
 });
 
 // Route pour recevoir la réponse du client et la transmettre à l'entreprise
-app.post('/reply-email', async (req, res) => {
+app.post('/api/reply-email', async (req, res) => {
   try {
     const { clientEmail, clientName, subject, message } = req.body;
 
