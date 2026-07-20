@@ -532,7 +532,7 @@ const MembershipConditions = ({ onClose, isStep = false, selectedTier, onTierSel
               return (
                 <div 
                   key={tier.id} 
-                  className={`relative bg-white border rounded-2xl transition-all duration-300 cursor-pointer hover:shadow-xl ${tier.featured ? 'border-[#deb833] shadow-lg' : 'border-slate-200 shadow-md'} ${selectedTier === tier.id ? 'ring-2 ring-[#deb833] ring-offset-2' : ''}`}
+                  className={`relative border rounded-2xl transition-all duration-300 cursor-pointer hover:shadow-xl ${tier.featured ? 'border-[#deb833] shadow-lg' : 'border-slate-200 shadow-md'} ${selectedTier === tier.id ? 'bg-[#deb833]/10 ring-2 ring-[#deb833] ring-offset-2' : 'bg-white'}`}
                   onClick={() => isStep && onTierSelect && onTierSelect(tier.id)}
                 >
                   <div className={clsx('p-5', 'flex', 'flex-col')}>
