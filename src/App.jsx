@@ -562,6 +562,7 @@ function App() {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -647,6 +648,7 @@ function App() {
       return;
     }
     
+    setIsSubmitting(true);
     try {
       const finalData = getFinalData();
       const myPdf = pdf(<PdfDocument data={finalData} />);
@@ -660,7 +662,10 @@ function App() {
       await fetch(serverUrl, { method: 'POST', body: fd });
       setIsSubmitted(true);
       setTimeout(() => window.location.reload(), 5000);
-    } catch (e) { alert(`${t.errorMessage}: ${e.message}`); }
+    } catch (e) { 
+      alert(`${t.errorMessage}: ${e.message}`); 
+      setIsSubmitting(false);
+    }
   };
 
   const stepsInfo = [
@@ -1483,10 +1488,10 @@ function App() {
                       <button
                         type={step === 7 ? "submit" : "button"}
                         onClick={step < 7 ? nextStep : undefined}
-                        disabled={step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4)}
-                        className={`ui-btn-elite-gold py-2 sm:py-3 px-8 sm:px-12 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full sm:w-auto 2xl:h-12 2xl:text-xs mb-4 sm:mb-0 ${step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={isSubmitting || (step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4))}
+                        className={`ui-btn-elite-gold py-2 sm:py-3 px-8 sm:px-12 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full sm:w-auto 2xl:h-12 2xl:text-xs mb-4 sm:mb-0 ${isSubmitting || (step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4)) ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
-                        {step === 7 ? t.soumettreDossier : t.étapeSuivante}
+                        {step === 7 ? (isSubmitting ? (lang === 'EN' ? 'PROCESSING...' : 'TRAITEMENT EN COURS...') : t.soumettreDossier) : t.étapeSuivante}
                       </button>
                     </div>
                   )}
