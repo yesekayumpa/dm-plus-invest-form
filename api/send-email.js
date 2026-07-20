@@ -157,7 +157,7 @@ export default async function handler(req, res) {
               <div style="font-size: 10px; color: #94a3b8; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;">Client</div>
               <div style="font-size: 22px; font-weight: 900; color: #0a0f1e; margin-bottom: 4px;">${clientFullName}</div>
               <div style="font-size: 12px; color: #64748b;">
-                📧 ${_replyto || '—'} &nbsp;|&nbsp; ${formData.telephonePrincipal || '—'}${formData.whatsapp ? ' &nbsp;|&nbsp; 💬 WhatsApp: ' + formData.whatsapp : ''}
+                ${_replyto || '—'} &nbsp;|&nbsp; ${formData.telephonePrincipal || '—'}${formData.whatsapp ? ' &nbsp;|&nbsp;  WhatsApp: ' + formData.whatsapp : ''}
               </div>
             </td>
           </tr>
