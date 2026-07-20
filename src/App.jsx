@@ -608,6 +608,14 @@ function App() {
     }
   };
 
+  const handleRadioClick = (e) => {
+    const { name, value, type } = e.target;
+    if (type === "radio" && formData[name] === value) {
+      setFormData(p => ({ ...p, [name] : "" }));
+    }
+  };
+
+
   const handleOfferSelect = (offerId) => {
     // Sur mobile, activer automatiquement la confirmation des conditions quand une offre est sélectionnée
     const isMobile = window.innerWidth < 1024;
@@ -619,14 +627,27 @@ function App() {
   };
 
   const nextStep = () => {
-  // Validation pour l'étape 1 - nécessite une sélection d'offre et l'acceptation des conditions
-  if (step === 1 && (!formData.selectedOffer || !formData.luConditionsStep1)) {
-    alert(t.alertSelectOffer);
-    return;
-  }
-  setStep(s => Math.min(s + 1, 7)); window.scrollTo(0,0);
-};
-  const prevStep = () => setStep(s => Math.max(s - 1, 1));
+    // Validation pour l'étape 1 - nécessite une sélection d'offre et l'acceptation des conditions
+    if (step === 1 && (!formData.selectedOffer || !formData.luConditionsStep1)) {
+      alert(t.alertSelectOffer);
+      return;
+    }
+    setStep(s => Math.min(s + 1, 7));
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      const container = document.querySelector('.scroll-container');
+      if (container) container.scrollTo(0, 0);
+    }, 10);
+  };
+
+  const prevStep = () => {
+    setStep(s => Math.max(s - 1, 1));
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      const container = document.querySelector('.scroll-container');
+      if (container) container.scrollTo(0, 0);
+    }, 10);
+  };
 
   const getFinalData = () => ({
     ...formData,
@@ -898,7 +919,7 @@ function App() {
                               type="checkbox" 
                               name="luConditionsStep1"
                               checked={formData.luConditionsStep1}
-                              onChange={handleInputChange}
+                              onChange={handleInputChange} onClick={handleRadioClick}
                               className="peer sr-only"
                             />
                             <div className="h-5 w-5 rounded-lg border-2 border-slate-200 bg-white transition-all duration-300 peer-checked:border-[#deb833] peer-checked:bg-[#deb833] group-hover:border-[#deb833]/50 flex items-center justify-center shadow-sm">
@@ -921,21 +942,21 @@ function App() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.nom}</label>
-                            <input type="text" name="nom" value={formData.nom} onChange={handleInputChange} className="ui-input-elite" placeholder={t.nom} />
+                            <input type="text" name="nom" value={formData.nom} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder={t.nom} />
                           </div>
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.prenom}</label>
-                            <input type="text" name="prenoms" value={formData.prenoms} onChange={handleInputChange} className="ui-input-elite" placeholder={t.prenom} />
+                            <input type="text" name="prenoms" value={formData.prenoms} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder={t.prenom} />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.dateNaissance}</label>
-                            <input type="date" name="dateNaissance" value={formData.dateNaissance} onChange={handleInputChange} className="ui-input-elite" />
+                            <input type="date" name="dateNaissance" value={formData.dateNaissance} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                           </div>
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.lieuNaissance}</label>
-                            <input type="text" name="lieuNaissance" value={formData.lieuNaissance} onChange={handleInputChange} className="ui-input-elite" />
+                            <input type="text" name="lieuNaissance" value={formData.lieuNaissance} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                           </div>
                         </div>
                         <div className="space-y-1">
@@ -943,7 +964,7 @@ function App() {
                           <select
                             name="nationalite"
                             value={formData.nationalite}
-                            onChange={handleInputChange}
+                            onChange={handleInputChange} onClick={handleRadioClick}
                             className="ui-input-elite appearance-none"
                           >
                             <option value="">{t.select}</option>
@@ -1043,7 +1064,7 @@ function App() {
                           <select 
                             name="typePiece" 
                             value={formData.typePiece} 
-                            onChange={handleInputChange} 
+                            onChange={handleInputChange} onClick={handleRadioClick} 
                             className="ui-input-elite appearance-none"
                           >
                             <option value="">{t.select}</option>
@@ -1056,7 +1077,7 @@ function App() {
                             <label className="ui-field-label-elite">
                               {t.numeroPiece}
                             </label>
-                            <input type="text" name="numeroPiece" value={formData.numeroPiece} onChange={handleInputChange} className="ui-input-elite" />
+                            <input type="text" name="numeroPiece" value={formData.numeroPiece} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                           </div>
                         </div>
                         <div className="space-y-1">
@@ -1065,7 +1086,7 @@ function App() {
                             type="email" 
                             name="email" 
                             value={formData.email} 
-                            onChange={handleInputChange} 
+                            onChange={handleInputChange} onClick={handleRadioClick} 
                             className={`ui-input-elite ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
                             placeholder="exemple@email.com"
                           />
@@ -1087,7 +1108,7 @@ function App() {
                                 type="tel" 
                                 name="telephonePrincipal" 
                                 value={formData.telephonePrincipal} 
-                                onChange={handleInputChange} 
+                                onChange={handleInputChange} onClick={handleRadioClick} 
                                 placeholder="Numéro"
                                 className="flex-1 ui-input-elite" 
                               />
@@ -1100,7 +1121,7 @@ function App() {
                               type="tel" 
                               name="whatsapp" 
                               value={formData.whatsapp} 
-                              onChange={handleInputChange} 
+                              onChange={handleInputChange} onClick={handleRadioClick} 
                               className="ui-input-elite" 
                               placeholder="+221..."
                             />
@@ -1118,20 +1139,20 @@ function App() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                            <div className="space-y-1">
                              <label className="ui-field-label-elite">{t.ville}</label>
-                             <input type="text" name="ville" value={formData.ville} onChange={handleInputChange} className="ui-input-elite" />
+                             <input type="text" name="ville" value={formData.ville} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                            </div>
                            <div className="space-y-1">
                              <label className="ui-field-label-elite">{t.pays}</label>
-                             <input type="text" name="paysResidence" value={formData.paysResidence} onChange={handleInputChange} className="ui-input-elite" />
+                             <input type="text" name="paysResidence" value={formData.paysResidence} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                            </div>
                         </div>
                         <div className="space-y-1">
                            <label className="ui-field-label-elite">{t.adresse}</label>
-                           <input type="text" name="adresse" value={formData.adresse} onChange={handleInputChange} className="ui-input-elite" />
+                           <input type="text" name="adresse" value={formData.adresse} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                         </div>
                         <div className="space-y-1">
                            <label className="ui-field-label-elite">{t.codePostal}</label>
-                           <input type="text" name="codePostal" value={formData.codePostal} onChange={handleInputChange} className="ui-input-elite" />
+                           <input type="text" name="codePostal" value={formData.codePostal} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
                         </div>
                       </div>
                     )}
@@ -1159,7 +1180,7 @@ function App() {
                                     name="statutPro"
                                     value={s.id}
                                     checked={formData.statutPro === s.id}
-                                    onChange={handleInputChange}
+                                    onChange={handleInputChange} onClick={handleRadioClick}
                                     className="h-4 w-4 text-[#deb833] focus:ring-0"
                                   />
                                   <span className="text-[10px] font-semibold text-slate-700">{s.label}</span>
@@ -1174,7 +1195,7 @@ function App() {
                               type="text" 
                               name="professionSecActivite" 
                               value={formData.professionSecActivite} 
-                              onChange={handleInputChange} 
+                              onChange={handleInputChange} onClick={handleRadioClick} 
                               className="ui-input-elite" 
                             />
                           </div>
@@ -1185,7 +1206,7 @@ function App() {
                               type="text" 
                               name="employeur" 
                               value={formData.employeur} 
-                              onChange={handleInputChange} 
+                              onChange={handleInputChange} onClick={handleRadioClick} 
                               className="ui-input-elite" 
                             />
                           </div>
@@ -1196,7 +1217,7 @@ function App() {
                               type="tel" 
                               name="telephonePro" 
                               value={formData.telephonePro} 
-                              onChange={handleInputChange} 
+                              onChange={handleInputChange} onClick={handleRadioClick} 
                               className="ui-input-elite" 
                               placeholder="+221 33 ..."
                             />
@@ -1217,7 +1238,7 @@ function App() {
                                   name="profilClient"
                                   value={profil.id}
                                   checked={formData.profilClient === profil.id}
-                                  onChange={handleInputChange}
+                                  onChange={handleInputChange} onClick={handleRadioClick}
                                   className="h-4 w-4 text-[#deb833] focus:ring-0"
                                 />
                                 <div>
@@ -1254,7 +1275,7 @@ function App() {
                               return (
                                 <label key={exp.id} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isSelected ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                   <span className={`text-[9px] font-black uppercase tracking-wider ${isSelected ? 'text-white' : 'text-slate-700'}`}>{exp.label}</span>
-                                  <input type="radio" name="experienceInvestissement" value={exp.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
+                                  <input type="radio" name="experienceInvestissement" value={exp.id} checked={isSelected} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               );
                             })}
@@ -1276,7 +1297,7 @@ function App() {
                                 <label key={hor.id} className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isSelected ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                   <span className={`text-[9px] font-black uppercase tracking-wider leading-tight ${isSelected ? 'text-white' : 'text-slate-700'}`}>{hor.label}</span>
                                   <span className={`text-[8px] font-semibold ${isSelected ? 'text-white/70' : 'text-slate-400'}`}>{hor.sub}</span>
-                                  <input type="radio" name="horizonInvestissement" value={hor.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
+                                  <input type="radio" name="horizonInvestissement" value={hor.id} checked={isSelected} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               );
                             })}
@@ -1296,7 +1317,7 @@ function App() {
                               const isSelected = formData.toleranceRisque === risk.id;
                               return (
                                 <label key={risk.id} className="relative cursor-pointer transition-all duration-200">
-                                  <input type="radio" name="toleranceRisque" value={risk.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
+                                  <input type="radio" name="toleranceRisque" value={risk.id} checked={isSelected} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                   <div className={"flex flex-col items-center gap-2 py-4 px-3 rounded-xl border-2 transition-all duration-200 text-center " + (isSelected ? "border-[#deb833] bg-[#deb833] shadow-sm" : "border-slate-200 bg-white hover:border-[#deb833]/40")}>
                                     <span className={"text-[9px] font-black uppercase tracking-wider leading-tight " + (isSelected ? "text-white" : "text-slate-700")}>
                                       {risk.label.split(' - ')[0]}
@@ -1335,7 +1356,7 @@ function App() {
                                     {isChecked && <div className="h-2 w-2 rounded-full bg-white"></div>}
                                   </div>
                                   <span className={`text-[8px] font-black uppercase tracking-wider leading-tight ${isChecked ? 'text-slate-900' : 'text-slate-600'}`}>{obj.label}</span>
-                                  <input type="checkbox" name="patrimoineExistant" value={obj.id} checked={isChecked} onChange={handleInputChange} className="sr-only" />
+                                  <input type="checkbox" name="patrimoineExistant" value={obj.id} checked={isChecked} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               );
                             })}
@@ -1370,7 +1391,7 @@ function App() {
                               return (
                                 <label key={cap.id} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isSelected ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                   <span className={`text-[8px] font-black uppercase tracking-wider ${isSelected ? 'text-white' : 'text-slate-700'}`}>{cap.label}</span>
-                                  <input type="radio" name="capitalInvestir" value={cap.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
+                                  <input type="radio" name="capitalInvestir" value={cap.id} checked={isSelected} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               );
                             })}
@@ -1394,7 +1415,7 @@ function App() {
                                 <label key={inst.id} className={`flex flex-col items-center gap-1 py-3 px-2 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isChecked ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                   <span className={`text-[9px] font-black uppercase tracking-wider ${isChecked ? 'text-white' : 'text-slate-700'}`}>{inst.label}</span>
                                   <span className={`text-[8px] ${isChecked ? 'text-white/70' : 'text-slate-400'}`}>{inst.sub}</span>
-                                  <input type="checkbox" value={inst.id} name="instrumentsExp" checked={isChecked} onChange={handleInputChange} className="sr-only" />
+                                  <input type="checkbox" value={inst.id} name="instrumentsExp" checked={isChecked} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               );
                             })}
@@ -1413,7 +1434,7 @@ function App() {
                               {["OUI", "NON"].map((opt) => (
                                 <label key={opt} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${formData.hasSGIAccount === opt ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                   <span className={`text-[9px] font-black uppercase tracking-wider ${formData.hasSGIAccount === opt ? 'text-white' : 'text-slate-700'}`}>{opt}</span>
-                                  <input type="radio" name="hasSGIAccount" value={opt} checked={formData.hasSGIAccount === opt} onChange={handleInputChange} className="sr-only" />
+                                  <input type="radio" name="hasSGIAccount" value={opt} checked={formData.hasSGIAccount === opt} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               ))}
                             </div>
@@ -1426,7 +1447,7 @@ function App() {
                                 {["OUI", "NON"].map((opt) => (
                                   <label key={`assist-${opt}`} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${formData.wantsSGIAssistance === opt ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                     <span className={`text-[9px] font-black uppercase tracking-wider ${formData.wantsSGIAssistance === opt ? 'text-white' : 'text-slate-700'}`}>{opt}</span>
-                                    <input type="radio" name="wantsSGIAssistance" value={opt} checked={formData.wantsSGIAssistance === opt} onChange={handleInputChange} className="sr-only" />
+                                    <input type="radio" name="wantsSGIAssistance" value={opt} checked={formData.wantsSGIAssistance === opt} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                   </label>
                                 ))}
                               </div>
@@ -1443,7 +1464,7 @@ function App() {
                                 ].map((opt) => (
                                   <label key={opt.id} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${formData.sgiPreferenceType === opt.id ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                     <span className={`text-[9px] font-black uppercase tracking-wider ${formData.sgiPreferenceType === opt.id ? 'text-white' : 'text-slate-700'}`}>{opt.label}</span>
-                                    <input type="radio" name="sgiPreferenceType" value={opt.id} checked={formData.sgiPreferenceType === opt.id} onChange={handleInputChange} className="sr-only" />
+                                    <input type="radio" name="sgiPreferenceType" value={opt.id} checked={formData.sgiPreferenceType === opt.id} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                   </label>
                                 ))}
                               </div>
@@ -1456,7 +1477,7 @@ function App() {
                               <select 
                                 name="selectedSGI" 
                                 value={formData.selectedSGI} 
-                                onChange={handleInputChange} 
+                                onChange={handleInputChange} onClick={handleRadioClick} 
                                 className="ui-input-elite w-full"
                               >
                                 <option value="">Sélectionner une SGI...</option>
@@ -1488,7 +1509,7 @@ function App() {
                               return (
                                 <label key={mode.id} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isSelected ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
                                   <span className={`text-[8px] font-black uppercase tracking-wider ${isSelected ? 'text-white' : 'text-slate-700'}`}>{mode.label}</span>
-                                  <input type="radio" name="modePaiement" value={mode.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
+                                  <input type="radio" name="modePaiement" value={mode.id} checked={isSelected} onChange={handleInputChange} onClick={handleRadioClick} onClick={handleRadioClick} className="sr-only" />
                                 </label>
                               );
                             })}
