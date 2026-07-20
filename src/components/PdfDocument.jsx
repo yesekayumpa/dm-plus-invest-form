@@ -565,7 +565,8 @@ export const PdfDocument = ({ data }) => {
             <View style={styles.signatureCol}>
               <Text style={styles.signatureHeader}>Pour le Client</Text>
               <View style={styles.signatureContent}>
-                <Text style={{ color: '#6b7280' }}>Nom & Prénom : ____________________</Text>
+                <Text style={styles.textBold}>{safeData.prenoms || ''} {safeData.nom || ''}</Text>
+                <Text style={{ fontStyle: 'italic', color: '#6b7280' }}>Le Titulaire</Text>
               </View>
             </View>
           </View>
