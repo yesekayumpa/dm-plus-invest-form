@@ -1355,73 +1355,6 @@ function App() {
                           <p className="text-[9px] text-slate-400 mt-1">{t.subCapital}</p>
                         </div>
 
-                        {/* Conditions Générales */}
-                        <div className="bg-[#deb833]/5 border border-[#deb833]/20 p-4 rounded-xl space-y-3">
-                          <div className="flex items-start gap-3">
-                            <div
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
-                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
-                            >
-                              {formData.accepteConditions && <Check size={11} className="text-white" strokeWidth={3} />}
-                            </div>
-                            <span
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
-                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
-                            >
-                              {t.certification}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={(e) => { e.stopPropagation(); setShowConditions(true); }}
-                              className="text-[9px] text-[#deb833] underline underline-offset-2 hover:text-[#b8962a] transition-colors font-black mt-0 self-start"
-                            >
-                              {t.conditions}
-                            </button>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions2: !p.accepteConditions2 }))}
-                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions2 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
-                            >
-                              {formData.accepteConditions2 && <Check size={11} className="text-white" strokeWidth={3} />}
-                            </div>
-                            <span
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions2: !p.accepteConditions2 }))}
-                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
-                            >
-                              {t.certification2}
-                            </span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions3: !p.accepteConditions3 }))}
-                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions3 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
-                            >
-                              {formData.accepteConditions3 && <Check size={11} className="text-white" strokeWidth={3} />}
-                            </div>
-                            <span
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions3: !p.accepteConditions3 }))}
-                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
-                            >
-                              {t.certification3}
-                            </span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions4: !p.accepteConditions4 }))}
-                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions4 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
-                            >
-                              {formData.accepteConditions4 && <Check size={11} className="text-white" strokeWidth={3} />}
-                            </div>
-                            <span
-                              onClick={() => setFormData(p => ({ ...p, accepteConditions4: !p.accepteConditions4 }))}
-                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
-                            >
-                              {t.certification4}
-                            </span>
-                          </div>
-                        </div>
-
                         {/* Capital à investir */}
                         <div className="space-y-2">
                           <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">{t.capitalInvestir}</label>
@@ -1491,7 +1424,72 @@ function App() {
                           </div>
                         </div>
 
-
+                        {/* Conditions Générales */}
+                        <div className="bg-[#deb833]/5 border border-[#deb833]/20 p-4 rounded-xl space-y-3">
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions: !p.accepteConditions }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setShowConditions(true); }}
+                              className="text-[9px] text-[#deb833] underline underline-offset-2 hover:text-[#b8962a] transition-colors font-black mt-0 self-start"
+                            >
+                              {t.conditions}
+                            </button>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions2: !p.accepteConditions2 }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions2 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions2 && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions2: !p.accepteConditions2 }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification2}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions3: !p.accepteConditions3 }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions3 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions3 && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions3: !p.accepteConditions3 }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification3}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions4: !p.accepteConditions4 }))}
+                              className={`mt-0.5 h-5 w-5 rounded-md border-2 flex-shrink-0 flex items-center justify-center transition-all duration-200 cursor-pointer flex-none ${formData.accepteConditions4 ? 'border-[#deb833] bg-[#deb833]' : 'border-slate-300 bg-white hover:border-[#deb833]/60'}`}
+                            >
+                              {formData.accepteConditions4 && <Check size={11} className="text-white" strokeWidth={3} />}
+                            </div>
+                            <span
+                              onClick={() => setFormData(p => ({ ...p, accepteConditions4: !p.accepteConditions4 }))}
+                              className="text-[9px] text-slate-600 leading-relaxed font-semibold cursor-pointer select-none"
+                            >
+                              {t.certification4}
+                            </span>
+                          </div>
+                        </div>
 
                       </div>
                     )}
