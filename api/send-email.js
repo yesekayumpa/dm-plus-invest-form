@@ -146,7 +146,14 @@ export default async function handler(req, res) {
           <p>Nous vous invitons à rester disponible sur le numéro WhatsApp ou l’adresse e-mail renseignés lors de votre inscription.</p>
           <p>Merci encore pour votre confiance</p>
           <br>
-          <div style="margin-top: 20px; padding-top: 20px;">
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <p style="margin-bottom: 15px; font-size: 14px; line-height: 1.5;">
+              <strong>Service Relation Client</strong><br>
+              <strong>DIGITAL MIND+ INVEST</strong><br>
+              +221 76 663 82 19 / 33 829 58 06<br>
+              <a href="mailto:investment@dmplus-group.com" style="color: #6366f1;">investment@dmplus-group.com</a><br>
+              <a href="https://www.dmplus-group.com" style="color: #6366f1;">www.dmplus-group.com</a>
+            </p>
             <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4xLmyMadHj5ik8nWyu9cW0sPlPdlrePUqhjbLuf-aZyiwiRQtXJ186nXJFQT1WE9EIGHMLD8Q-NjPC2" alt="Signature DM+ Invest" style="max-width: 100%; height: auto; border: none; outline: none; text-decoration: none;" />
           </div>
         </div>
