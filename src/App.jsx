@@ -558,7 +558,7 @@ function App() {
     frequenceSuivi: "", modeConsultation: "", membreBRVM: "", iban: "",
     depotInitial: "", instructionsSpeciales: "", accepteConditions: false,
     accepteConditions2: false, accepteConditions3: false, accepteConditions4: false,
-    luConditionsStep1: false, selectedOffer: ""
+    luConditionsStep1: false, selectedOffer: "", modePaiement: "virement"
   });
 
   const [errors, setErrors] = useState({});
@@ -1396,6 +1396,28 @@ function App() {
                                   <span className={`text-[9px] font-black uppercase tracking-wider ${isChecked ? 'text-white' : 'text-slate-700'}`}>{inst.label}</span>
                                   <span className={`text-[8px] ${isChecked ? 'text-white/70' : 'text-slate-400'}`}>{inst.sub}</span>
                                   <input type="checkbox" value={inst.id} name="instrumentsExp" checked={isChecked} onChange={handleInputChange} className="sr-only" />
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Mode de paiement */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Mode de paiement souhaité</label>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            {[
+                              { id: "virement", label: "Virement bancaire" },
+                              { id: "mobile", label: "Mobile Money (Wave / OM)" },
+                              { id: "cheque", label: "Chèque bancaire" }
+                            ].map((mode) => {
+                              const isSelected = formData.modePaiement === mode.id;
+                              return (
+                                <label key={mode.id} className={`flex items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-center ${isSelected ? 'border-[#deb833] bg-[#deb833] shadow-sm' : 'border-slate-200 bg-white hover:border-[#deb833]/40'}`}>
+                                  <span className={`text-[8px] font-black uppercase tracking-wider ${isSelected ? 'text-white' : 'text-slate-700'}`}>{mode.label}</span>
+                                  <input type="radio" name="modePaiement" value={mode.id} checked={isSelected} onChange={handleInputChange} className="sr-only" />
                                 </label>
                               );
                             })}

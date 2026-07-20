@@ -263,14 +263,9 @@ export const PdfDocument = ({ data }) => {
           </View>
           <View style={styles.clientBoxRow}>
             <Text style={styles.clientBoxLabel}>Numéro unique :</Text>
-            <Text style={styles.clientBoxValue}>{numeroUnique}</Text>
-            <Text style={styles.clientBoxValue}>DAKAR</Text>
-          </View>
-          <View style={styles.clientBoxRow}>
-            <Text style={styles.clientBoxLabel}>Identifiant unique :</Text>
-            <Text style={styles.clientBoxValue}></Text>
+            <Text style={[styles.clientBoxValue, { flex: 1 }]}>{numeroUnique}</Text>
             <Text style={styles.clientBoxLabel}>Nationalité :</Text>
-            <Text style={styles.clientBoxValue}>{safeData.nationalite || ''}</Text>
+            <Text style={[styles.clientBoxValue, { flex: 1 }]}>{safeData.nationalite || ''}</Text>
           </View>
         </View>
 
@@ -416,16 +411,22 @@ export const PdfDocument = ({ data }) => {
           <Text style={styles.subSectionTitle}>5.4 Modalités de paiement</Text>
           <Text style={[styles.text, { fontStyle: 'italic', fontSize: 8, marginBottom: 5 }]}>Choisissez votre mode de paiement :</Text>
           <View style={styles.bulletPoint}>
-            <View style={styles.checkbox}><Text style={{ fontSize: 7, fontWeight: 'bold' }}>{safeData.modePaiement === 'virement' ? 'X' : ''}</Text></View>
-            <Text style={styles.text}>Virement bancaire</Text>
+            <View style={[styles.checkbox, safeData.modePaiement === 'virement' && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
+              <Text style={{ fontSize: 7, fontWeight: 'bold', color: safeData.modePaiement === 'virement' ? '#deb833' : 'transparent' }}>✓</Text>
+            </View>
+            <Text style={[styles.text, safeData.modePaiement === 'virement' && { fontWeight: 'bold' }]}>Virement bancaire</Text>
           </View>
           <View style={styles.bulletPoint}>
-            <View style={styles.checkbox}><Text style={{ fontSize: 7, fontWeight: 'bold' }}>{safeData.modePaiement === 'mobile' ? 'X' : ''}</Text></View>
-            <Text style={styles.text}>Mobile Money (Wave / Orange Money)</Text>
+            <View style={[styles.checkbox, safeData.modePaiement === 'mobile' && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
+              <Text style={{ fontSize: 7, fontWeight: 'bold', color: safeData.modePaiement === 'mobile' ? '#deb833' : 'transparent' }}>✓</Text>
+            </View>
+            <Text style={[styles.text, safeData.modePaiement === 'mobile' && { fontWeight: 'bold' }]}>Mobile Money (Wave / Orange Money)</Text>
           </View>
           <View style={styles.bulletPoint}>
-            <View style={styles.checkbox}><Text style={{ fontSize: 7, fontWeight: 'bold' }}>{safeData.modePaiement === 'cheque' ? 'X' : ''}</Text></View>
-            <Text style={styles.text}>Chèque bancaire</Text>
+            <View style={[styles.checkbox, safeData.modePaiement === 'cheque' && { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
+              <Text style={{ fontSize: 7, fontWeight: 'bold', color: safeData.modePaiement === 'cheque' ? '#deb833' : 'transparent' }}>✓</Text>
+            </View>
+            <Text style={[styles.text, safeData.modePaiement === 'cheque' && { fontWeight: 'bold' }]}>Chèque bancaire</Text>
           </View>
 
           <Text style={styles.subSectionTitle}>5.5 Retard de paiement</Text>
