@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     marginBottom: 30,
-    width: 180,
+    width: 120,
   },
   logoImage: {
     width: '100%',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#d97706',
+    color: '#deb833',
     textAlign: 'center',
   },
   subTitle: {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   articleNum: {
     backgroundColor: '#1f2937',
-    color: '#d97706',
+    color: '#deb833',
     fontWeight: 'bold',
     paddingVertical: 4,
     paddingHorizontal: 8,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   footerColorBar: {
     width: '30%',
-    backgroundColor: '#d97706',
+    backgroundColor: '#deb833',
     height: 15,
   },
   footerInfo: {
