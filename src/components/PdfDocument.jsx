@@ -572,6 +572,13 @@ export const PdfDocument = ({ data }) => {
           </View>
         </View>
 
+      </Page>
+      
+      {/* NOUVELLE PAGE POUR L'ANNEXE */}
+      <Page size="A4" style={styles.page} wrap>
+        {renderHeader()}
+        {renderFooter()}
+        
         <View>
           <View style={[styles.titleContainer, { marginBottom: 10 }]}>
             <Text style={styles.mainTitle}>ANNEXE - QUESTIONNAIRE DE PROFILAGE ET PRÉFÉRENCES</Text>
@@ -608,34 +615,6 @@ export const PdfDocument = ({ data }) => {
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Mode Consult. :</Text><Text style={styles.clientBoxValue}>{safeData.modeConsultation || 'N/A'}</Text></View>
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Membre BRVM ? :</Text><Text style={styles.clientBoxValue}>{safeData.membreBRVM || 'N/A'}</Text></View>
             <View style={styles.clientBoxRow}><Text style={styles.clientBoxLabel}>Dépôt Initial :</Text><Text style={styles.clientBoxValue}>{safeData.depotInitial || 'N/A'}</Text></View>
-          </View>
-
-          <Text style={[styles.textBold, { marginBottom: 5 }]}>5. Déclarations et Engagements</Text>
-          <View style={[styles.clientBox, { marginBottom: 10, marginTop: 5, padding: 8 }]}>
-            <View style={styles.bulletPoint}>
-              <View style={[styles.checkbox, { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>
-              </View>
-              <Text style={styles.text}>Je déclare que les informations fournies dans ce formulaire sont exactes, complètes et sincères. Je m'engage à informer DM+ Investment de tout changement de ma situation.</Text>
-            </View>
-            <View style={styles.bulletPoint}>
-              <View style={[styles.checkbox, { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>
-              </View>
-              <Text style={styles.text}>J'ai pris connaissance de l'offre de services DM+ Investment, des conditions générales et de la grille tarifaire, et j'accepte les termes de la formule sélectionnée.</Text>
-            </View>
-            <View style={styles.bulletPoint}>
-              <View style={[styles.checkbox, { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>
-              </View>
-              <Text style={styles.text}>J'autorise DM+ Investment à collecter, conserver et traiter mes données personnelles dans le strict cadre de la relation contractuelle, conformément à la réglementation en vigueur.</Text>
-            </View>
-            <View style={styles.bulletPoint}>
-              <View style={[styles.checkbox, { backgroundColor: '#1f2937', borderColor: '#1f2937' }]}>
-                <Text style={{ fontSize: 7, fontWeight: 'bold', color: '#deb833' }}>✓</Text>
-              </View>
-              <Text style={styles.text}>Je certifie avoir été informé(e) des risques liés à l'investissement sur les marchés financiers. Les performances passées ne préjugent pas des performances futures.</Text>
-            </View>
           </View>
         </View>
       </Page>
