@@ -227,7 +227,7 @@ export const PdfDocument = ({ data }) => {
         <Text style={styles.text}>Entre les soussignés</Text>
         
         <Text style={styles.text}>
-          <Text style={styles.textBold}>DM+ Investment</Text>, Société par Actions Simplifiée (SAS) au capital de <Text style={styles.textBold}>1 000 000 FCFA</Text>, immatriculée au Registre du Commerce sous le numéro <Text style={styles.textBold}>RC SN DKR 2026 B 21469</Text>, dont le siège social est situé à Médina rue 37x24, Dakar, Sénégal, représentée par <Text style={styles.textBold}>Monsieur YANKHOBA KONATE</Text>, en sa qualité de Directeur Général,
+          <Text style={styles.textBold}>DM+ Investment</Text>, Société par Actions Simplifiée (SAS) au capital de <Text style={styles.textBold}>1 000 000 FCFA</Text>, immatriculée au Registre du Commerce sous le numéro <Text style={styles.textBold}>RC SN DKR 2026 B 21469</Text>, dont le siège social est situé à Médina rue 37x24, Dakar, Sénégal, représentée par <Text style={styles.textBold}>Monsieur GBANE ALMAMY MAHAMA</Text>, en sa qualité de Directeur Général,
         </Text>
         <Text style={[styles.text, { fontStyle: 'italic', marginBottom: 10 }]}>ci-après dénommée « le Conseiller »</Text>
         
@@ -557,7 +557,7 @@ export const PdfDocument = ({ data }) => {
           <View style={styles.signatureCol}>
             <Text style={styles.signatureHeader}>Pour DM+ Investment</Text>
             <View style={styles.signatureContent}>
-              <Text style={styles.textBold}>YANKHOBA KONATE</Text>
+              <Text style={styles.textBold}>GBANE ALMAMY MAHAMA</Text>
               <Text style={{ fontStyle: 'italic', color: '#6b7280', marginBottom: 5 }}>Directeur Général</Text>
               <Text style={{ color: '#6b7280' }}>Digital Mind+ Group</Text>
             </View>
