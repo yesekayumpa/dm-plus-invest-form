@@ -33,8 +33,8 @@ export default async function handler(req, res) {
     // Validation de l'email du client
     if (!_replyto || !_replyto.includes('@')) {
       console.error('Erreur: Email client invalide:', _replyto);
-      return res.status(400).json({ 
-        success: false, 
+      return res.status(400).json({
+        success: false,
         message: 'Email du client invalide',
         error: 'Veuillez fournir une adresse email valide'
       });
@@ -60,38 +60,23 @@ export default async function handler(req, res) {
 
     // 1. EMAIL POUR L'ENTREPRISE (IMMÉDIAT - INFOS CLIENT + PDF)
     const companyEmail = 'investment@dmplus-group.com';
-    let summaryHtml = '';
-    
+    let summaryHtml = `<h3 style="color: #DEB833; margin-top: 20px;">Informations du client :</h3>`;
+
     const categories = {
       'Informations personnelles': ['nom', 'prenoms', 'dateNaissance', 'lieuNaissance', 'nationalite', 'typePiece', 'numeroPiece'],
-      'Coordonnées': ['email', 'telephonePrincipal', 'adresse', 'ville', 'paysResidence'],
-      'Situation financière': ['professionSecActivite', 'revenus', 'patrimoineExistant', 'capitalInvestir'],
-      'Services souhaités': ['selectedOffer', 'servicesSouhaites', 'frequenceSuivi', 'modeConsultation']
+      'Coordonnées': ['email', 'telephonePrincipal', 'telephoneSecondaire', 'whatsapp', 'adresse', 'ville', 'paysResidence', 'codePostal'],
+      'Situation financière': ['profession', 'revenuMensuel', 'patrimoineEstime', 'origineFonds', 'objectifInvestissement'],
+      'Services souhaités': ['servicesSouhaites', 'frequenceSuivi', 'modeConsultation', 'membreBRVM', 'iban', 'depotInitial', 'instructionsSpeciales']
     };
 
     Object.entries(categories).forEach(([category, fields]) => {
-      const hasData = fields.some(field => formData[field]);
-      if (hasData) {
-        summaryHtml += `
-          <div style="margin-bottom: 25px;">
-            <h4 style="color: #DEB833; margin: 0 0 12px 0; border-bottom: 1px solid #eee; padding-bottom: 8px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px;">${category}</h4>
-            <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px;">
-        `;
-        fields.forEach(field => {
-          if (formData[field]) {
-            summaryHtml += `
-              <tr>
-                <td width="40%" style="padding: 8px 0; color: #666; font-weight: bold; border-bottom: 1px dashed #eee;">${field}</td>
-                <td width="60%" style="padding: 8px 0; color: #332E32; border-bottom: 1px dashed #eee;">${formData[field]}</td>
-              </tr>
-            `;
-          }
-        });
-        summaryHtml += `
-            </table>
-          </div>
-        `;
-      }
+      summaryHtml += `<h4 style="color: #DEB833; margin-top: 20px;">${category}</h4><ul style="list-style: none; padding-left: 10px;">`;
+      fields.forEach(field => {
+        if (formData[field]) {
+          summaryHtml += `<li><strong>${field}:</strong> ${formData[field]}</li>`;
+        }
+      });
+      summaryHtml += '</ul>';
     });
 
     const mailCompanyOptions = {
@@ -100,48 +85,26 @@ export default async function handler(req, res) {
       replyTo: _replyto, // L'entreprise peut répondre directement au client
       subject: `NOUVELLE INSCRIPTION REÇUE : ${formData.nom || ''} ${formData.prenoms || ''} (${_replyto || 'email@fourni.com'})`,
       html: `
-        <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 650px; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-          <div style="background: linear-gradient(135deg, #332E32 0%, #1a171a 100%); padding: 35px 30px; text-align: center; border-bottom: 5px solid #DEB833;">
-            <h2 style="color: #DEB833; margin: 0; font-size: 26px; text-transform: uppercase; letter-spacing: 1px;">Nouveau Client Inscrit</h2>
-            <p style="color: #e5e7eb; margin: 12px 0 0; font-size: 16px;">Une nouvelle demande d'inscription a été soumise sur votre portail.</p>
+        <div style="font-family: Arial, sans-serif;">
+          <h2 style="color: #DEB833;"> NOUVEAU CLIENT INSCRIT</h2>
+          <p><strong>Un client vient de terminer et soumettre son formulaire d'inscription.</strong></p>
+          <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #DEB833; margin: 15px 0;">
+            <p style="margin: 0; font-weight: bold;"> Informations complètes du client :</p>
           </div>
-          
-          <div style="padding: 30px 40px; background-color: #ffffff;">
-            
-            <div style="background: #fdfaf2; padding: 25px; border-radius: 10px; border-left: 5px solid #DEB833; margin-bottom: 35px;">
-              <h3 style="margin: 0 0 15px 0; color: #332E32; font-size: 18px; display: flex; align-items: center;">Contacts Rapides</h3>
-              <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 15px;">
-                <tr>
-                  <td width="30%" style="padding: 6px 0; color: #555;">Email :</td>
-                  <td width="70%" style="padding: 6px 0;"><strong><a href="mailto:${_replyto}" style="color: #DEB833; text-decoration: none;">${_replyto || 'Non fourni'}</a></strong></td>
-                </tr>
-                <tr>
-                  <td width="30%" style="padding: 6px 0; color: #555;">Téléphone :</td>
-                  <td width="70%" style="padding: 6px 0;"><strong>${formData.telephonePrincipal || 'Non fourni'}</strong></td>
-                </tr>
-                <tr>
-                  <td width="30%" style="padding: 6px 0; color: #555;">WhatsApp :</td>
-                  <td width="70%" style="padding: 6px 0;"><strong>${formData.whatsapp || 'Non fourni'}</strong></td>
-                </tr>
-              </table>
-            </div>
-
-            <div style="margin-bottom: 30px;">
-              ${summaryHtml}
-            </div>
-
-            <div style="background: #332E32; color: #fff; padding: 25px; border-radius: 10px; text-align: center; margin-top: 40px;">
-              <p style="margin: 0; font-size: 15px; line-height: 1.5;">
-                <span style="color: #DEB833; font-weight: bold; font-size: 16px; display: block; margin-bottom: 8px;">Le document PDF contractuel est joint à cet email.</span>
-                Veuillez contacter ce client pour finaliser son inscription.
-              </p>
-            </div>
-            
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #DEB833;">
+            ${summaryHtml}
           </div>
-          
-          <div style="background: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb; font-size: 13px; color: #6b7280;">
-            <p style="margin: 0;">Ceci est un message automatique généré par le portail DM+ Invest.</p>
-          </div>
+          <p><strong>Informations de contact direct du client :</strong></p>
+          <ul style="list-style: none; padding-left: 10px;">
+            <li><strong>Email du client :</strong> ${_replyto || 'Non fourni'}</li>
+            <li><strong>Téléphone principal :</strong> ${formData.telephonePrincipal || 'Non fourni'}</li>
+            <li><strong>WhatsApp :</strong> ${formData.whatsapp || 'Non fourni'}</li>
+          </ul>
+          <p><strong>Document PDF contractuel joint à cet email.</strong></p>
+          <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+          <p style="font-size: 12px; color: #666;">
+            <strong>Action requise :</strong> Contacter le client à l'adresse ${_replyto || 'email non fourni'} pour finaliser son inscription.
+          </p>
         </div>
       `,
       attachments: [
@@ -188,8 +151,8 @@ export default async function handler(req, res) {
               <strong>Service Relation Client</strong><br>
               <strong>DIGITAL MIND+ INVEST</strong><br>
               +221 76 663 82 19 / 33 829 58 06<br>
-              <a href="mailto:investment@dmplus-group.com" style="color: #DEB833;">investment@dmplus-group.com</a><br>
-              <a href="https://www.dmplus-group.com" style="color: #DEB833;">www.dmplus-group.com</a>
+              <a href="mailto:investment@dmplus-group.com" style="color: #1a73e8;">investment@dmplus-group.com</a><br>
+              <a href="https://www.dmplus-group.com" style="color: #1a73e8;">www.dmplus-group.com</a>
             </p>
             <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4xLmyMadHj5ik8nWyu9cW0sPlPdlrePUqhjbLuf-aZyiwiRQtXJ186nXJFQT1WE9EIGHMLD8Q-NjPC2" alt="Signature DM+ Invest" style="max-width: 100%; height: auto; border: none; outline: none; text-decoration: none;" />
           </div>
@@ -230,31 +193,31 @@ www.dmplus-group.com
     console.log('Envoi des mails...');
     console.log('Email client (_replyto):', _replyto);
     console.log('Email entreprise:', companyEmail);
-    
+
     try {
       // Envoyer l'email au client d'abord
       console.log('Envoi email au client...');
       await transporter.sendMail(mailClientOptions);
       console.log('Email au client envoyé avec succès');
-      
+
       // Envoyer l'email à l'entreprise
       console.log('Envoi email à l\'entreprise...');
       await transporter.sendMail(mailCompanyOptions);
       console.log('Email à l\'entreprise envoyé avec succès');
-      
+
     } catch (error) {
       console.error(' Erreur lors de l\'envoi des emails:', error);
-      
+
       // Vérifier si c'est une erreur de destinataire invalide
       if (error.message.includes('all recipients were rejected')) {
         console.error('Erreur de destinataire - vérifiez les adresses email');
-        return res.status(400).json({ 
-          success: false, 
+        return res.status(400).json({
+          success: false,
           message: 'Adresse email invalide',
           error: 'L\'adresse email du client semble incorrecte'
         });
       }
-      
+
       throw error; // Relancer l'erreur pour le bloc catch principal
     }
 
@@ -263,10 +226,10 @@ www.dmplus-group.com
 
   } catch (error) {
     console.error('ERREUR SERVEUR VERCEL:', error);
-    return res.status(500).json({ 
-      success: false, 
+    return res.status(500).json({
+      success: false,
       message: 'Erreur lors de l\'envoi',
-      error: error.message 
+      error: error.message
     });
   }
 }
