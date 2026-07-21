@@ -17,7 +17,7 @@ export const MaintenancePage = () => {
                 </div>
 
                 {/* Main heading */}
-                <h1 className="mb-4 text-center font-black text-white">
+                <h1 className="mb-4 text-center font-extrabold text-white">
                     <span className="block text-xl uppercase tracking-tight md:text-5xl lg:text-6xl">
                         Faites-en + avec
                     </span>
@@ -27,7 +27,7 @@ export const MaintenancePage = () => {
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-center text-sm text-white/80 md:text-base">
+                <p className="text-center text-sm text-white/80 md:text-base font-semibold">
                     Avec Digital Mind Plus Investment
                 </p>
 
