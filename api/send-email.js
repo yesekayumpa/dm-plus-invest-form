@@ -206,7 +206,7 @@ export default async function handler(req, res) {
 
     // 2. EMAIL POUR LE CLIENT (UNIQUEMENT MESSAGE - PAS DE PDF)
     const mailClientOptions = {
-      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>', // Doit être l'adresse authentifiée sur LWS
+      from: '"DM+ INVESTMENT" <investment@dmplus-group.com>', // Doit être l'adresse authentifiée sur LWS
       to: _replyto, // Envoyer au client (n'importe quel client)
       subject: 'Votre inscription DM+ Invest a été reçue avec succès',
       replyTo: 'investment@dmplus-group.com', // Le client répond sur l'adresse Gmail

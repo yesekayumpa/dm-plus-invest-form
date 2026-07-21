@@ -45,7 +45,7 @@ export default async function handler(req, res) {
 
     // Email envoyé à l'entreprise avec le message du client
     const mailOptions = {
-      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',                    // Expéditeur authentifié sur LWS
+      from: '"DM+ INVESTMENT" <investment@dmplus-group.com>',                    // Expéditeur authentifié sur LWS
       to: companyEmail,                      // Destinataire : l'entreprise
       replyTo: clientEmail,                  // Répondre directement au client
       subject: replySubject,
@@ -110,7 +110,7 @@ Pour répondre, utilisez l'adresse : ${clientEmail}
 
     // Email de confirmation envoyé au client
     const confirmationOptions = {
-      from: '"DM MIND PLUS INVESTMENT" <investment@dmplus-group.com>',
+      from: '"DM+ INVESTMENT" <investment@dmplus-group.com>',
       to: clientEmail,
       replyTo: companyEmail,
       subject: 'Votre message a bien été reçu - DM+ Invest',
