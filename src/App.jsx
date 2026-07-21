@@ -541,7 +541,8 @@ function dialFromPaysResidence(pays) {
 }
 
 function App() {
-  if (MAINTENANCE_MODE) return <MaintenancePage />;
+  const isSouscription = window.location.pathname.toLowerCase() === '/souscription';
+  if (MAINTENANCE_MODE && !isSouscription) return <MaintenancePage />;
 
   const [showForm, setShowForm] = useState(false);
   const [step, setStep] = useState(1);
