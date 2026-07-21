@@ -1,5 +1,5 @@
 import { Settings } from 'lucide-react';
-import logoSrc from '../assets/LOGOTYPE [Récupéré]-06.png';
+import logoSrc from '../assets/logo-maintenance.png';
 
 export const MaintenancePage = () => {
     return (
