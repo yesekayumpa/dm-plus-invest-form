@@ -3,7 +3,13 @@ import logoSrc from '../assets/LOGOTYPE [Récupéré]-06.png';
 
 export const MaintenancePage = () => {
     return (
-        <div className='relative min-h-screen w-full flex flex-col items-center justify-center px-4 font-sans overflow-hidden' style={{ backgroundColor: '#E0BF3A' }}>
+        <div 
+            className='relative min-h-screen w-full flex flex-col items-center justify-center px-4 overflow-hidden' 
+            style={{ 
+                backgroundColor: '#E0BF3A',
+                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
+            }}
+        >
             {/* Background Image Grid */}
             <div className="absolute inset-0 z-0 h-full w-full">
                 <img src="/grid-black.jpg" className='mix-blend-overlay opacity-10 h-full md:w-full object-cover' alt="" />
@@ -17,7 +23,7 @@ export const MaintenancePage = () => {
                 </div>
 
                 {/* Main heading */}
-                <h1 className="mb-4 text-center font-extrabold text-white">
+                <h1 className="mb-4 text-center font-black text-white">
                     <span className="block text-xl uppercase tracking-tight md:text-5xl lg:text-6xl">
                         Faites-en + avec
                     </span>
