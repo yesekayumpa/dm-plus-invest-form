@@ -13,7 +13,7 @@ export const MaintenancePage = ()  => {
             >
                 {/* Logo */}
                 <div className="mb-6 flex items-center gap-2">
-                <img src="/LOGOTYPE [Récupéré]-06.png" alt="logo" width={250} height={125} />
+                <img src="/LOGOTYPE DM+ Group WHITE-21.png" alt="logo" width={250} height={125} />
                 </div>
 
                 {/* Main heading */}
