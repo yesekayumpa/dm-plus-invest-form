@@ -10,7 +10,7 @@ import { MaintenancePage } from './components/maintenance';
 import './styles/screen-1920.css';
 
 // 🔧 Passer à true pour afficher la page de maintenance
-const MAINTENANCE_MODE = false;
+const MAINTENANCE_MODE = true;
 
 const HERO_IMAGE_SRC = "/samsung.jpg";
 const LOGO_DARK_SRC = "/LOGOTYPE 10.png";
