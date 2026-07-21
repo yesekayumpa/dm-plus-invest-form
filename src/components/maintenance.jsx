@@ -1,4 +1,5 @@
 import { Settings } from 'lucide-react';
+import logoSrc from '../assets/LOGOTYPE [Récupéré]-06.png';
 
 export const MaintenancePage = () => {
     return (
@@ -11,30 +12,30 @@ export const MaintenancePage = () => {
             {/* Center content */}
             <div className='relative z-20 flex flex-col items-center justify-center w-full'>
                 {/* Logo */}
-                <div className="mb-10 flex items-center gap-2">
-                    <img src="/logo-white.png" alt="logo" width={220} height={110} style={{ filter: 'brightness(0) invert(1)' }} />
+                <div className="mb-6 flex items-center gap-2">
+                    <img src={logoSrc} alt="logo" width={250} height={125} />
                 </div>
 
                 {/* Main heading */}
-                <h1 className="mb-4 text-center font-black text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                    <span className="block text-4xl md:text-5xl lg:text-7xl uppercase tracking-tighter" style={{ lineHeight: '1.1' }}>
+                <h1 className="mb-4 text-center font-black text-white">
+                    <span className="block text-xl uppercase tracking-tight md:text-5xl lg:text-6xl">
                         Faites-en + avec
                     </span>
-                    <span className="block text-4xl md:text-5xl lg:text-7xl uppercase tracking-tighter" style={{ lineHeight: '1.1' }}>
+                    <span className="block text-xl uppercase tracking-tight md:text-5xl lg:text-6xl">
                         vots investissements
                     </span>
                 </h1>
 
                 {/* Subtitle */}
-                <p className="mb-12 text-center text-sm md:text-lg text-white" style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 500 }}>
+                <p className="text-center text-sm text-white/80 md:text-base">
                     Avec Digital Mind Plus Investment
                 </p>
 
                 {/* Maintenance notice */}
-                <div className='rounded-full border border-white/40 bg-transparent px-8 py-3 backdrop-blur-sm'>
-                    <p className="flex items-center justify-center gap-3 text-center text-sm md:text-base font-semibold text-white" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                <div className='mt-12 rounded-full border border-white/30 bg-white/10 px-8 py-3 backdrop-blur-sm transition-all duration-1000 delay-700'>
+                    <p className="flex items-center justify-center gap-3 text-center text-sm font-medium text-white">
                         <Settings 
-                            className="animate-spin"
+                            className="animate-spin flex-shrink-0"
                             style={{ animationDuration: "3s" }}
                             size={18}
                         />
