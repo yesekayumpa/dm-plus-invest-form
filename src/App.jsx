@@ -6,7 +6,11 @@ import PrivacyPolicy from "./PrivacyPolicy";
 import MembershipConditions from "./components/MembershipConditions";
 import { pdf, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import PdfDocument from './components/PdfDocument';
+import { MaintenancePage } from './components/maintenance';
 import './styles/screen-1920.css';
+
+// 🔧 Passer à true pour afficher la page de maintenance
+const MAINTENANCE_MODE = false;
 
 const HERO_IMAGE_SRC = "/samsung.jpg";
 const LOGO_DARK_SRC = "/LOGOTYPE 10.png";
@@ -537,6 +541,8 @@ function dialFromPaysResidence(pays) {
 }
 
 function App() {
+  if (MAINTENANCE_MODE) return <MaintenancePage />;
+
   const [showForm, setShowForm] = useState(false);
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
