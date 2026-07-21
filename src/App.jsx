@@ -650,7 +650,50 @@ function App() {
   };
 
   const getFinalData = () => {
-    const mapLabel = (val) => t[val] || val;
+    // Map statique: ID du formulaire → label lisible pour le PDF
+    const labelMap = {
+      // Expérience investissement
+      debutant: "Investisseur débutant",
+      initie: "Initié – quelques notions de base",
+      intermediaire: "Intermédiaire – j'ai déjà investi",
+      confirme: "Confirmé – je gère un portefeuille actif",
+      // Horizon d'investissement
+      courtTerme: "Court terme (< 1 an)",
+      moyenTerme: "Moyen terme (1 à 3 ans)",
+      longTerme: "Long terme (3 à 7 ans)",
+      tresLongTerme: "Très long terme (+ 7 ans)",
+      // Objectifs patrimoniaux
+      constitutionEpargne: "Constitution d'une épargne",
+      transmissionPatrimoniale: "Transmission patrimoniale",
+      investissementBRVM: "Investissement BRVM",
+      financementImmobilier: "Financement immobilier",
+      preparationRetraite: "Préparation de la retraite",
+      optimisationFiscale: "Optimisation fiscale",
+      diversificationPatrimoine: "Diversification du patrimoine",
+      protectionFamille: "Protection de la famille",
+      // Tolérance au risque
+      prudent: "Prudent",
+      equilibre: "Équilibré",
+      dynamique: "Dynamique",
+      agressif: "Agressif",
+      // Profil client
+      particulier: "Particulier",
+      professionnel: "Professionnel / Entrepreneur",
+      institutionnel: "Institutionnel",
+      diaspora: "Diaspora africaine",
+      // Instruments financiers
+      actions: "Actions",
+      obligations: "Obligations",
+      fcp: "FCP",
+      // Patrimoine existant (services souhaités ou patrimoine)
+      gestionPatrimoniale: "Gestion patrimoniale",
+      investissementBoursier: "Investissement boursier",
+      conseilFinancier: "Conseil financier",
+      epargne: "Épargne",
+      immobilier: "Immobilier",
+    };
+
+    const mapLabel = (val) => (val && labelMap[val]) ? labelMap[val] : (val || '');
     const mapArray = (arr) => Array.isArray(arr) ? arr.map(mapLabel).join(', ') : mapLabel(arr);
 
     return {
