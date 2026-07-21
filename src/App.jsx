@@ -649,12 +649,22 @@ function App() {
     }, 10);
   };
 
-  const getFinalData = () => ({
-    ...formData,
-    instrumentsExp: Array.isArray(formData.instrumentsExp) ? formData.instrumentsExp.join(', ') : formData.instrumentsExp,
-    patrimoineExistant: Array.isArray(formData.patrimoineExistant) ? formData.patrimoineExistant.join(', ') : formData.patrimoineExistant,
-    servicesSouhaites: Array.isArray(formData.servicesSouhaites) ? formData.servicesSouhaites.join(', ') : formData.servicesSouhaites
-  });
+  const getFinalData = () => {
+    const mapLabel = (val) => t[val] || val;
+    const mapArray = (arr) => Array.isArray(arr) ? arr.map(mapLabel).join(', ') : mapLabel(arr);
+
+    return {
+      ...formData,
+      instrumentsExp: mapArray(formData.instrumentsExp),
+      patrimoineExistant: mapArray(formData.patrimoineExistant),
+      servicesSouhaites: mapArray(formData.servicesSouhaites),
+      objectifPrincipal: mapLabel(formData.objectifPrincipal),
+      horizonInvestissement: mapLabel(formData.horizonInvestissement),
+      toleranceRisque: mapLabel(formData.toleranceRisque),
+      profilClient: mapLabel(formData.profilClient),
+      experienceInvestissement: mapLabel(formData.experienceInvestissement)
+    };
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
