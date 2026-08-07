@@ -1012,21 +1012,21 @@ function App() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.nom}</label>
-                            <input type="text" name="nom" value={formData.nom} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder={t.nom} />
+                            <input type="text" name="nom" value={formData.nom} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Nze" />
                           </div>
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.prenom}</label>
-                            <input type="text" name="prenoms" value={formData.prenoms} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder={t.prenom} />
+                            <input type="text" name="prenoms" value={formData.prenoms} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Kephren" />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.dateNaissance}</label>
-                            <input type="date" name="dateNaissance" value={formData.dateNaissance} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                            <input type="date" name="dateNaissance" value={formData.dateNaissance} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="JJ/MM/AAAA" />
                           </div>
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.lieuNaissance}</label>
-                            <input type="text" name="lieuNaissance" value={formData.lieuNaissance} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                            <input type="text" name="lieuNaissance" value={formData.lieuNaissance} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Dakar" />
                           </div>
                         </div>
                         <div className="space-y-1">
@@ -1147,7 +1147,7 @@ function App() {
                             <label className="ui-field-label-elite">
                               {t.numeroPiece}
                             </label>
-                            <input type="text" name="numeroPiece" value={formData.numeroPiece} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                            <input type="text" name="numeroPiece" value={formData.numeroPiece} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: B0123456" />
                           </div>
                         </div>
                         <div className="space-y-1">
@@ -1209,20 +1209,20 @@ function App() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                            <div className="space-y-1">
                              <label className="ui-field-label-elite">{t.ville}</label>
-                             <input type="text" name="ville" value={formData.ville} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                             <input type="text" name="ville" value={formData.ville} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Dakar" />
                            </div>
                            <div className="space-y-1">
                              <label className="ui-field-label-elite">{t.pays}</label>
-                             <input type="text" name="paysResidence" value={formData.paysResidence} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                             <input type="text" name="paysResidence" value={formData.paysResidence} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Sénégal" />
                            </div>
                         </div>
                         <div className="space-y-1">
                            <label className="ui-field-label-elite">{t.adresse}</label>
-                           <input type="text" name="adresse" value={formData.adresse} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                           <input type="text" name="adresse" value={formData.adresse} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: 12 Rue des Almadies, Dakar" />
                         </div>
                         <div className="space-y-1">
                            <label className="ui-field-label-elite">{t.codePostal}</label>
-                           <input type="text" name="codePostal" value={formData.codePostal} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" />
+                           <input type="text" name="codePostal" value={formData.codePostal} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: BP 5400" />
                         </div>
                       </div>
                     )}
@@ -1267,6 +1267,7 @@ function App() {
                               value={formData.professionSecActivite} 
                               onChange={handleInputChange} onClick={handleRadioClick} 
                               className="ui-input-elite" 
+                              placeholder="Ex: Ingénieur, Comptable, Médecin..."
                             />
                           </div>
                           
@@ -1278,6 +1279,7 @@ function App() {
                               value={formData.employeur} 
                               onChange={handleInputChange} onClick={handleRadioClick} 
                               className="ui-input-elite" 
+                              placeholder="Ex: Sonatel, Orange, Total..."
                             />
                           </div>
                           
