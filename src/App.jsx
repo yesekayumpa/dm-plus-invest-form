@@ -1,7 +1,7 @@
 import {
   ArrowLeft, ArrowRight, Check, Crown, Lock, Shield, Sparkles, Target, User, Wallet, Phone, MapPin, Building2, CreditCard, Briefcase, Star, TrendingUp, Users, Quote, ChevronDown, ExternalLink, Globe, Layers, FileText, Layout, Scale, Zap
 } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import PrivacyPolicy from "./PrivacyPolicy";
 import MembershipConditions from "./components/MembershipConditions";
 import { pdf, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
@@ -555,20 +555,38 @@ function App() {
   const [showConditions, setShowConditions] = useState(false);
   const [showPdfDemo, setShowPdfDemo] = useState(false);
   
-  const [formData, setFormData] = useState({
-    nom: "", prenoms: "", dateNaissance: "", lieuNaissance: "", nationalite: "",
-    typePiece: "", numeroPiece: "", email: "", telephonePrincipal: "", telephoneSecondaire: "",
-    whatsapp: "", adresse: "", ville: "", paysResidence: "", codePostal: "",
-    statutPro: "", professionSecActivite: "", employeur: "", telephonePro: "", profilClient: "",
-    objectifPrincipal: "", horizonInvestissement: "", toleranceRisque: "",
-    experienceInvestissement: "", instrumentsExp: [], revenus: "", capitalInvestir: "",
-    patrimoineExistant: [], informationsComplementaires: "", servicesSouhaites: [],
-    frequenceSuivi: "", modeConsultation: "", membreBRVM: "", iban: "",
-    depotInitial: "", instructionsSpeciales: "", accepteConditions: false,
-    accepteConditions2: false, accepteConditions3: false, accepteConditions4: false,
-    luConditionsStep1: false, selectedOffer: "", modePaiement: "virement",
-    hasSGIAccount: "", wantsSGIAssistance: "", sgiPreferenceType: "", selectedSGI: ""
+  const STORAGE_KEY = 'dmplus_invest_form_draft';
+
+  const [formData, setFormData] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed;
+      }
+    } catch (e) { /* ignore */ }
+    return {
+      nom: "", prenoms: "", dateNaissance: "", lieuNaissance: "", nationalite: "",
+      typePiece: "", numeroPiece: "", email: "", telephonePrincipal: "", telephoneSecondaire: "",
+      whatsapp: "", adresse: "", ville: "", paysResidence: "", codePostal: "",
+      statutPro: "", professionSecActivite: "", employeur: "", telephonePro: "", profilClient: "",
+      objectifPrincipal: "", horizonInvestissement: "", toleranceRisque: "",
+      experienceInvestissement: "", instrumentsExp: [], revenus: "", capitalInvestir: "",
+      patrimoineExistant: [], informationsComplementaires: "", servicesSouhaites: [],
+      frequenceSuivi: "", modeConsultation: "", membreBRVM: "", iban: "",
+      depotInitial: "", instructionsSpeciales: "", accepteConditions: false,
+      accepteConditions2: false, accepteConditions3: false, accepteConditions4: false,
+      luConditionsStep1: false, selectedOffer: "", modePaiement: "virement",
+      hasSGIAccount: "", wantsSGIAssistance: "", sgiPreferenceType: "", selectedSGI: ""
+    };
   });
+
+  // 💾 Auto-sauvegarde dans localStorage à chaque modification
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+    } catch (e) { /* ignore */ }
+  }, [formData]);
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -753,6 +771,8 @@ function App() {
       fd.append('convention_pdf', blob, `${t.pdfFilenamePrefix}_${finalData.nom}_DM_Invest.pdf`);
       await fetch(serverUrl, { method: 'POST', body: fd });
       setIsSubmitted(true);
+      // 🧹 Effacement du brouillon sauvegardé après soumission réussie
+      localStorage.removeItem(STORAGE_KEY);
       setTimeout(() => window.location.reload(), 5000);
     } catch (e) { 
       alert(`${t.errorMessage}: ${e.message}`); 
