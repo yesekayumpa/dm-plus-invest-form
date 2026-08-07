@@ -1032,11 +1032,11 @@ function App() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.nom}</label>
-                            <input type="text" name="nom" value={formData.nom} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Nze" />
+                            <input type="text" name="nom" value={formData.nom} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Diallo" />
                           </div>
                           <div className="space-y-1 min-w-0">
                             <label className="ui-field-label-elite">{t.prenom}</label>
-                            <input type="text" name="prenoms" value={formData.prenoms} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Kephren" />
+                            <input type="text" name="prenoms" value={formData.prenoms} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Mamadou" />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
