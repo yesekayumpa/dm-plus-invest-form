@@ -7,6 +7,7 @@ import MembershipConditions from "./components/MembershipConditions";
 import { pdf, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import PdfDocument from './components/PdfDocument';
 import { MaintenancePage } from './components/maintenance';
+import { submitFormToBackend } from './services/api.service';
 import './styles/screen-1920.css';
 
 // 🔧 Passer à true pour afficher la page de maintenance
@@ -733,6 +734,15 @@ function App() {
     setIsSubmitting(true);
     try {
       const finalData = getFinalData();
+      
+      // Soumission des données via notre nouveau service backend
+      try {
+        await submitFormToBackend(finalData);
+      } catch (backendError) {
+        console.error("Erreur backend:", backendError);
+        // On continue même si l'enregistrement backend échoue pour envoyer l'email (ou vous pouvez choisir de bloquer)
+      }
+
       const myPdf = pdf(<PdfDocument data={finalData} />);
       const blob = await myPdf.toBlob();
       const serverUrl = window.location.hostname === 'localhost' ? 'http://localhost:3002/api/send-email' : '/api/send-email';
