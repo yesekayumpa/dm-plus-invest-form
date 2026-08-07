@@ -1,9 +1,14 @@
 // URL de base de l'API (configurée dans .env via VITE_API_URL)
 // Exemple : VITE_API_URL=https://dmplus-investment-back.onrender.com/api/
-const BASE_URL = (import.meta.env.VITE_API_URL || 'https://dmplus-investment-back.onrender.com/api').replace(/\/+$/, '');
+const BASE_URL = (import.meta.env.VITE_API_URL || 'https://dmplus-investment-back.onrender.com/api/v1').replace(/\/+$/, '');
 
-// Construction de l'endpoint submissions
-const SUBMISSIONS_ENDPOINT = `${BASE_URL}/v1/submissions`;
+// Construction intelligente de l'endpoint
+let SUBMISSIONS_ENDPOINT = `${BASE_URL}/submissions`;
+if (!BASE_URL.endsWith('/v1') && !BASE_URL.endsWith('/v1/')) {
+  SUBMISSIONS_ENDPOINT = BASE_URL.endsWith('/api') 
+    ? `${BASE_URL}/v1/submissions` 
+    : `${BASE_URL}/api/v1/submissions`;
+}
 
 export const getSubmissionsFromBackend = async () => {
   const response = await fetch(SUBMISSIONS_ENDPOINT, {
