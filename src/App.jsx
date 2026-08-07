@@ -652,6 +652,28 @@ function App() {
     }));
   };
 
+  // ✅ Validation par étape : retourne true si tous les champs obligatoires sont remplis
+  const isStepValid = () => {
+    switch (step) {
+      case 1:
+        return !!(formData.selectedOffer && formData.luConditionsStep1);
+      case 2:
+        return !!(formData.nom && formData.prenoms && formData.dateNaissance && formData.lieuNaissance && formData.nationalite);
+      case 3:
+        return !!(formData.typePiece && formData.numeroPiece && formData.email && validateEmail(formData.email) && formData.telephonePrincipal);
+      case 4:
+        return !!(formData.ville && formData.paysResidence && formData.adresse);
+      case 5:
+        return !!(formData.statutPro && formData.professionSecActivite && formData.profilClient);
+      case 6:
+        return !!(formData.experienceInvestissement && formData.horizonInvestissement && formData.toleranceRisque && formData.patrimoineExistant && formData.patrimoineExistant.length > 0);
+      case 7:
+        return !!(formData.capitalInvestir && formData.accepteConditions && formData.accepteConditions2 && formData.accepteConditions3 && formData.accepteConditions4);
+      default:
+        return true;
+    }
+  };
+
   const nextStep = () => {
     // Validation pour l'étape 1 - nécessite une sélection d'offre et l'acceptation des conditions
     if (step === 1 && (!formData.selectedOffer || !formData.luConditionsStep1)) {
@@ -1696,8 +1718,8 @@ function App() {
                       <button
                         type={step === 7 ? "submit" : "button"}
                         onClick={step < 7 ? nextStep : undefined}
-                        disabled={isSubmitting || (step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4))}
-                        className={`ui-btn-elite-gold py-2 sm:py-3 px-8 sm:px-12 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full sm:w-auto 2xl:h-12 2xl:text-xs mb-4 sm:mb-0 ${isSubmitting || (step === 7 && (!formData.accepteConditions || !formData.accepteConditions2 || !formData.accepteConditions3 || !formData.accepteConditions4)) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={isSubmitting || !isStepValid()}
+                        className={`ui-btn-elite-gold py-2 sm:py-3 px-8 sm:px-12 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] w-full sm:w-auto 2xl:h-12 2xl:text-xs mb-4 sm:mb-0 ${(isSubmitting || !isStepValid()) ? 'opacity-40 cursor-not-allowed' : ''}`}
                       >
                         {step === 7 ? (isSubmitting ? (lang === 'EN' ? 'PROCESSING...' : 'TRAITEMENT EN COURS...') : t.soumettreDossier) : t.étapeSuivante}
                       </button>
