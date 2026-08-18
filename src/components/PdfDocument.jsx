@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Font, Image, Svg, Path } from '@react-pdf/renderer';
 
 // ============================================================================
 // 1. CONFIGURATION DES POLICES (FONTS)
@@ -130,27 +130,52 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 30,
     left: 0,
     right: 0,
     flexDirection: 'row',
-    height: 40,
-    alignItems: 'center',
+    height: 45,
+    alignItems: 'stretch',
   },
-  footerColorBar: {
+  footerYellow: {
     width: '30%',
-    backgroundColor: '#deb833',
-    height: 15,
+    backgroundColor: '#e0bf3a',
   },
-  footerInfo: {
-    flex: 1,
+  footerWhite: {
+    width: '55%',
     flexDirection: 'row',
-    paddingHorizontal: 20,
-    justifyContent: 'space-between',
-    fontSize: 7,
+    alignItems: 'center',
+    paddingHorizontal: 15,
   },
-  footerCol: {
-    flex: 1,
+  footerBlack: {
+    width: '15%',
+    backgroundColor: '#2b2b2b',
+  },
+  footerColLeft: {
+    paddingRight: 10,
+    borderRightWidth: 1,
+    borderRightColor: '#9ca3af',
+    justifyContent: 'center',
+  },
+  footerColRight: {
+    paddingLeft: 10,
+    justifyContent: 'center',
+  },
+  footerTextBold: {
+    fontWeight: 'bold',
+    fontSize: 8,
+    marginBottom: 2,
+    color: '#000',
+  },
+  footerText: {
+    fontSize: 7.5,
+    marginBottom: 1.5,
+    color: '#000',
+  },
+  footerIconRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2.5,
   },
   signatureBox: {
     flexDirection: 'row',
@@ -184,19 +209,36 @@ const renderHeader = () => (
 
 const renderFooter = () => (
   <View style={styles.footer} fixed>
-    <View style={styles.footerColorBar}></View>
-    <View style={styles.footerInfo}>
-      <View style={styles.footerCol}>
-        <Text style={{ fontWeight: 'bold' }}>DIGITAL MIND + GROUP</Text>
-        <Text><Text style={{ fontWeight: 'bold' }}>NINEA :</Text> 006879227</Text>
-        <Text><Text style={{ fontWeight: 'bold' }}>RCCM :</Text> SN STL 2018 A0973</Text>
+    <View style={styles.footerYellow}></View>
+    <View style={styles.footerWhite}>
+      <View style={styles.footerColLeft}>
+        <Text style={styles.footerTextBold}>DIGITAL MIND + GROUP</Text>
+        <Text style={styles.footerText}><Text style={{ fontWeight: 'bold' }}>NINEA :</Text> 00687 9227</Text>
+        <Text style={styles.footerText}><Text style={{ fontWeight: 'bold' }}>RCCM :</Text> SN STL 2018 A0973</Text>
       </View>
-      <View style={[styles.footerCol, { alignItems: 'flex-end' }]}>
-        <Text>Médina rue 37x24 / Dakar, Sénégal</Text>
-        <Text>(+221) 76 619 34 10 / 33 829 58 06</Text>
-        <Text>investment@dmplus-group.com</Text>
+      <View style={styles.footerColRight}>
+        <View style={styles.footerIconRow}>
+          <Svg width="9" height="9" viewBox="0 0 24 24" style={{ marginRight: 5 }}>
+            <Path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="none" stroke="#374151" strokeWidth="1.5"/>
+          </Svg>
+          <Text style={styles.footerText}>Médina rue 37x24 / Dakar, Sénégal</Text>
+        </View>
+        <View style={styles.footerIconRow}>
+          <Svg width="9" height="9" viewBox="0 0 24 24" style={{ marginRight: 5 }}>
+            <Path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="none" stroke="#374151" strokeWidth="1.5"/>
+          </Svg>
+          <Text style={styles.footerText}>(+221)76 619 34 10 / 33 829 58 06</Text>
+        </View>
+        <View style={styles.footerIconRow}>
+          <Svg width="9" height="9" viewBox="0 0 24 24" style={{ marginRight: 5 }}>
+            <Path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" fill="none" stroke="#374151" strokeWidth="1.5"/>
+            <Path d="M22 6l-10 7L2 6" fill="none" stroke="#374151" strokeWidth="1.5"/>
+          </Svg>
+          <Text style={styles.footerText}>investment@dmplus-group.com</Text>
+        </View>
       </View>
     </View>
+    <View style={styles.footerBlack}></View>
   </View>
 );
 
