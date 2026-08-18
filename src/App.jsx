@@ -919,16 +919,20 @@ function App() {
     try {
       const finalData = getFinalData();
       
-      // Soumission des données via notre nouveau service backend
-      try {
-        await submitFormToBackend(finalData);
-      } catch (backendError) {
-        console.error("Erreur backend:", backendError);
-        // On continue même si l'enregistrement backend échoue pour envoyer l'email (ou vous pouvez choisir de bloquer)
-      }
-
+      // Génération du PDF en premier pour pouvoir l'envoyer au backend
       const myPdf = pdf(<PdfDocument data={finalData} />);
       const blob = await myPdf.toBlob();
+      const pdfFile = new File([blob], `${t.pdfFilenamePrefix}_${finalData.nom}_DM_Invest.pdf`, { type: 'application/pdf' });
+
+      // Soumission des données + PDF au backend
+      try {
+        await submitFormToBackend(finalData, pdfFile);
+      } catch (backendError) {
+        console.error("Erreur backend:", backendError);
+        // On continue même si l'enregistrement backend échoue pour envoyer l'email
+      }
+
+      // Envoi de l'email avec le PDF en pièce jointe
       const serverUrl = window.location.hostname === 'localhost' ? 'http://localhost:3002/api/send-email' : '/api/send-email';
       const fd = new FormData();
       Object.keys(finalData).forEach(k => fd.append(k, typeof finalData[k] === 'object' ? JSON.stringify(finalData[k]) : String(finalData[k])));

@@ -1,58 +1,78 @@
-// URL de base de l'API (configurée dans .env via VITE_API_URL)
-// Exemple : VITE_API_URL=https://dmplus-investment-back.onrender.com/api/
-const BASE_URL = (import.meta.env.VITE_API_URL || 'https://dmplus-investment-back.onrender.com/api/v1').replace(/\/+$/, '');
-
-// Construction intelligente de l'endpoint
-let SUBMISSIONS_ENDPOINT = `${BASE_URL}/submissions`;
-if (!BASE_URL.endsWith('/v1') && !BASE_URL.endsWith('/v1/')) {
-  SUBMISSIONS_ENDPOINT = BASE_URL.endsWith('/api') 
-    ? `${BASE_URL}/v1/submissions` 
-    : `${BASE_URL}/api/v1/submissions`;
-}
+// Endpoint fixe et simplifié — plus de logique complexe source d'erreurs
+const SUBMISSIONS_ENDPOINT = 'https://dmplus-investment-back.onrender.com/api/v1/submissions';
 
 export const getSubmissionsFromBackend = async () => {
   const response = await fetch(SUBMISSIONS_ENDPOINT, {
     method: 'GET',
-    headers: {
-      'Accept': 'application/json'
-    }
+    headers: { 'Accept': 'application/json' }
   });
-
-  if (!response.ok) {
-    throw new Error(`Erreur HTTP GET: ${response.status}`);
-  }
-
+  if (!response.ok) throw new Error(`Erreur HTTP GET: ${response.status}`);
   return response.json();
 };
 
-export const submitFormToBackend = async (data) => {
-  // Mapping exact des données pour le back-end de DM+ Invest
-  const mappedData = {
-    ...data,
-    membreBrvm: data.membreBRVM,
-    hasSgiAccount: data.hasSGIAccount,
-    selectedSgi: data.selectedSGI,
-    wantsSgiAssistance: data.wantsSGIAssistance
+export const submitFormToBackend = async (data, file = null) => {
+  // Copie des données avec correction de la casse (camelCase → backend)
+  const mappedData = { ...data };
+
+  // Renommage membreBRVM → membreBrvm, hasSGIAccount → hasSgiAccount, etc.
+  if ('membreBRVM' in mappedData) { mappedData.membreBrvm = mappedData.membreBRVM; delete mappedData.membreBRVM; }
+  if ('hasSGIAccount' in mappedData) { mappedData.hasSgiAccount = mappedData.hasSGIAccount; delete mappedData.hasSGIAccount; }
+  if ('selectedSGI' in mappedData) { mappedData.selectedSgi = mappedData.selectedSGI; delete mappedData.selectedSGI; }
+  if ('wantsSGIAssistance' in mappedData) { mappedData.wantsSgiAssistance = mappedData.wantsSGIAssistance; delete mappedData.wantsSGIAssistance; }
+
+  // Conversion OUI/NON → true/false (les radio buttons du formulaire stockent des strings)
+  const ouiNonToBoolean = (val) => {
+    if (val === 'OUI') return true;
+    if (val === 'NON') return false;
+    return val; // laisser tel quel si déjà boolean ou null
   };
+  mappedData.hasSgiAccount = ouiNonToBoolean(mappedData.hasSgiAccount);
+  mappedData.wantsSgiAssistance = ouiNonToBoolean(mappedData.wantsSgiAssistance);
+  if ('membreBrvm' in mappedData) mappedData.membreBrvm = ouiNonToBoolean(mappedData.membreBrvm);
+
+  // Le PDF joint les tableaux en String ("Actions, Obligations").
+  // Le backend Spring Boot exige des List<String> → on reconvertit.
+  ['instrumentsExp', 'patrimoineExistant', 'servicesSouhaites'].forEach(field => {
+    const val = mappedData[field];
+    if (typeof val === 'string') {
+      mappedData[field] = val.trim() === '' ? [] : val.split(',').map(s => s.trim()).filter(Boolean);
+    } else if (!Array.isArray(val)) {
+      mappedData[field] = [];
+    }
+  });
+
+  // Nettoyer uniquement les chaînes vides ("") — garder null, false, 0, et les tableaux vides []
+  const cleanData = {};
   
-  // Suppression des anciennes clés avec la mauvaise casse pour éviter les conflits
-  delete mappedData.membreBRVM;
-  delete mappedData.hasSGIAccount;
-  delete mappedData.selectedSGI;
-  delete mappedData.wantsSGIAssistance;
+  // Champs spécifiques au frontend à ne pas envoyer au backend (pour éviter les erreurs 500 UnrecognizedPropertyException)
+  const frontendOnlyFields = [
+    'accepteConditions', 'accepteConditions2', 'accepteConditions3', 'accepteConditions4', 'luConditionsStep1'
+  ];
+
+  Object.keys(mappedData).forEach(key => {
+    if (mappedData[key] !== undefined && mappedData[key] !== '' && !frontendOnlyFields.includes(key)) {
+      cleanData[key] = mappedData[key];
+    }
+  });
+
+  console.log('Données envoyées au backend :', JSON.stringify(cleanData, null, 2));
+
+  const formData = new FormData();
+  // Le backend attend une part nommée "data" contenant le JSON avec Content-Type application/json
+  formData.append('data', new Blob([JSON.stringify(cleanData)], { type: 'application/json' }));
+
+  // PDF joint sous le nom "image" (champ attendu par le backend)
+  if (file) formData.append('image', file, file.name);
 
   const response = await fetch(SUBMISSIONS_ENDPOINT, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(mappedData)
+    headers: { 'Accept': 'application/json' },
+    body: formData
   });
 
   if (!response.ok) {
     const errorText = await response.text();
-    console.error("Détails de l'erreur 400 renvoyée par le serveur :", errorText);
+    console.error('Erreur backend :', errorText);
     throw new Error(`Erreur HTTP POST: ${response.status} - ${errorText}`);
   }
 
