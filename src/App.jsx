@@ -1,7 +1,7 @@
 import {
   ArrowLeft, ArrowRight, Check, Crown, Lock, Shield, Sparkles, Target, User, Wallet, Phone, MapPin, Building2, CreditCard, Briefcase, Star, TrendingUp, Users, Quote, ChevronDown, ExternalLink, Globe, Layers, FileText, Layout, Scale, Zap
 } from "lucide-react";
-import { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef, Children } from "react";
 import PrivacyPolicy from "./PrivacyPolicy";
 import MembershipConditions from "./components/MembershipConditions";
 import { pdf, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
@@ -541,6 +541,131 @@ function dialFromPaysResidence(pays) {
   return null;
 }
 
+const citiesByCountry = {
+  "Sénégal": ["Dakar", "Thiès", "Saint-Louis", "Ziguinchor", "Touba", "Rufisque", "Mbour", "Diourbel", "Kaolack", "Kolda", "Tambacounda", "Fatick", "Autre"],
+  "Côte d'Ivoire": ["Abidjan", "Bouaké", "Daloa", "Yamoussoukro", "San-Pédro", "Korhogo", "Man", "Divo", "Gagnoa", "Abengourou", "Autre"],
+  "Mali": ["Bamako", "Sikasso", "Mopti", "Koutiala", "Kayes", "Ségou", "Gao", "Tombouctou", "Autre"],
+  "Burkina Faso": ["Ouagadougou", "Bobo-Dioulasso", "Koudougou", "Banfora", "Ouahigouya", "Dédougou", "Kaya", "Autre"],
+  "Bénin": ["Cotonou", "Porto-Novo", "Parakou", "Djougou", "Bohicon", "Kandi", "Abomey", "Natitingou", "Autre"],
+  "Togo": ["Lomé", "Sokodé", "Kara", "Kpalimé", "Atakpamé", "Dapaong", "Tsévié", "Autre"],
+  "Niger": ["Niamey", "Zinder", "Maradi", "Agadez", "Tahoua", "Dosso", "Diffa", "Autre"],
+  "Guinée": ["Conakry", "Nzérékoré", "Kankan", "Kindia", "Siguiri", "Labé", "Boké", "Autre"],
+  "Cameroun": ["Douala", "Yaoundé", "Garoua", "Bamenda", "Maroua", "Bafoussam", "Autre"],
+  "Gabon": ["Libreville", "Port-Gentil", "Franceville", "Oyem", "Moanda", "Autre"],
+  "France": ["Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg", "Montpellier", "Bordeaux", "Lille", "Autre"],
+  "États-Unis": ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "Autre"],
+  "Canada": ["Toronto", "Montréal", "Vancouver", "Calgary", "Edmonton", "Ottawa", "Autre"]
+};
+
+const postalCodesByCity = {
+  // --- SÉNÉGAL ---
+  "Dakar": ["Dakar Plateau : 10000", "Médina : 11000", "Fass - Colobane : 11100", "Point E - Amitié : 11200", "Grand Dakar : 11300", "Sicap Liberté : 11400", "HLM : 11500", "Hann Bel-Air : 12000", "Grand Yoff : 12100", "Parcelles Assainies : 12200", "Yoff : 13000", "Ngor - Almadies : 13100", "Ouakam : 13200", "Rufisque : 14000", "Guédiawaye : 15000", "Pikine : 16000", "Keur Massar : 17000", "Autre"],
+  "Thiès": ["21000", "Autre"],
+  "Saint-Louis": ["32000", "Autre"],
+  "Ziguinchor": ["27000", "Autre"],
+  "Touba": ["25000", "Autre"],
+  "Rufisque": ["14000", "Autre"],
+  "Mbour": ["23000", "Autre"],
+  "Diourbel": ["20000", "Autre"],
+  "Kaolack": ["19000", "Autre"],
+  "Kolda": ["28000", "Autre"],
+  "Tambacounda": ["31000", "Autre"],
+  "Fatick": ["22000", "Autre"],
+
+  // --- CÔTE D'IVOIRE ---
+  "Abidjan": ["Plateau : 01 BP", "Treichville : 02 BP", "Adjamé : 03 BP", "Attécoubé : 04 BP", "Koumassi : 05 BP", "Marcory : 26 BP", "Port-Bouët : 07 BP", "Cocody : 08 BP", "Yopougon : 21 BP", "Abobo : 13 BP", "Autre"],
+  "Bouaké": ["01 BP", "02 BP", "Autre"],
+  "Yamoussoukro": ["01 BP", "02 BP", "Autre"],
+  
+  // --- MALI ---
+  "Bamako": ["Commune I : E2301", "Commune II : E2302", "Commune III : E2303", "Commune IV : E2304", "Commune V : E2305", "Commune VI : E2306", "Autre"],
+  
+  // --- BURKINA FASO ---
+  "Ouagadougou": ["01 BP", "02 BP", "03 BP", "04 BP", "05 BP", "06 BP", "Autre"],
+  "Bobo-Dioulasso": ["01 BP", "02 BP", "Autre"],
+
+  // --- BÉNIN ---
+  "Cotonou": ["01 BP", "02 BP", "03 BP", "04 BP", "05 BP", "06 BP", "07 BP", "Autre"],
+
+  // --- TOGO ---
+  "Lomé": ["Lomé : 01 BP", "Autre"],
+
+  // --- NIGER ---
+  "Niamey": ["Niamey I", "Niamey II", "Niamey III", "Niamey IV", "Niamey V", "Autre"],
+
+  // --- GUINÉE ---
+  "Conakry": ["Kaloum", "Dixinn", "Matam", "Ratoma", "Matoto", "Autre"],
+
+  // --- CAMEROUN ---
+  "Douala": ["Douala I", "Douala II", "Douala III", "Douala IV", "Douala V", "Douala VI", "Autre"],
+  "Yaoundé": ["Yaoundé I", "Yaoundé II", "Yaoundé III", "Yaoundé IV", "Yaoundé V", "Yaoundé VI", "Yaoundé VII", "Autre"],
+
+  // --- GABON ---
+  "Libreville": ["1er Arrondissement", "2e Arrondissement", "3e Arrondissement", "4e Arrondissement", "5e Arrondissement", "6e Arrondissement", "Autre"],
+
+  // --- AUTRES CAPITALS / VILLES MAJEURES ---
+  "Paris": ["75001", "75002", "75003", "75004", "75005", "75006", "75007", "75008", "75009", "75010", "75011", "75012", "75013", "75014", "75015", "75016", "75017", "75018", "75019", "75020", "Autre"]
+};
+
+const CustomSelect = ({ name, value, onChange, className = "", children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef(null);
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const allOptions = Children.toArray(children).filter(child => child.type === 'option').map(child => ({
+    value: child.props.value,
+    label: child.props.children
+  }));
+  
+  const placeholderOption = allOptions.find(opt => opt.value === "");
+  const options = allOptions.filter(opt => opt.value !== "");
+  const selectedOption = options.find(opt => String(opt.value) === String(value));
+
+  return (
+    <div ref={selectRef} className={`relative w-full ${className}`}>
+      <div 
+        className={`ui-input-elite w-full flex justify-between items-center cursor-pointer ${!value ? 'text-slate-400' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="truncate">{selectedOption ? selectedOption.label : (placeholderOption ? placeholderOption.label : "Sélectionner...")}</span>
+        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+      {isOpen && (
+        <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-60 overflow-y-auto custom-scrollbar">
+          {options.length === 0 ? (
+            <div className="px-4 py-3 text-sm text-slate-400 text-center">Aucune option</div>
+          ) : (
+            options.map((opt, i) => (
+              <div 
+                key={i} 
+                className={`px-4 py-3 cursor-pointer text-sm transition-colors border-b border-slate-50 last:border-0 hover:bg-slate-50 ${String(value) === String(opt.value) ? 'bg-slate-50 text-[#deb833] font-medium' : 'text-slate-700'}`}
+                onClick={() => {
+                  onChange({ target: { name, value: opt.value, type: 'select-one' } });
+                  setIsOpen(false);
+                }}
+              >
+                {opt.label}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+      <select name={name} value={value} onChange={onChange} className="hidden">
+        {children}
+      </select>
+    </div>
+  );
+};
+
 function App() {
   const isSouscription = window.location.pathname.toLowerCase() === '/souscription';
   if (MAINTENANCE_MODE && !isSouscription) return <MaintenancePage />;
@@ -568,7 +693,7 @@ function App() {
     return {
       nom: "", prenoms: "", dateNaissance: "", lieuNaissance: "", nationalite: "",
       typePiece: "", numeroPiece: "", email: "", telephonePrincipal: "", telephoneSecondaire: "",
-      whatsapp: "", adresse: "", ville: "", paysResidence: "", codePostal: "",
+      whatsapp: "", adresse: "", ville: "", villeCustom: "", paysResidence: "", codePostal: "", codePostalCustom: "",
       statutPro: "", professionSecActivite: "", employeur: "", telephonePro: "", profilClient: "",
       objectifPrincipal: "", horizonInvestissement: "", toleranceRisque: "",
       experienceInvestissement: "", instrumentsExp: [], revenus: "", capitalInvestir: "",
@@ -577,7 +702,8 @@ function App() {
       depotInitial: "", instructionsSpeciales: "", accepteConditions: false,
       accepteConditions2: false, accepteConditions3: false, accepteConditions4: false,
       luConditionsStep1: false, selectedOffer: "", modePaiement: "virement",
-      hasSGIAccount: "", wantsSGIAssistance: "", sgiPreferenceType: "", selectedSGI: ""
+      hasSGIAccount: "", wantsSGIAssistance: "", sgiPreferenceType: "", selectedSGI: "",
+      typePieceCustom: "", typePieceAutreSaisie: ""
     };
   });
 
@@ -594,6 +720,17 @@ function App() {
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const validateNumeroPiece = (type, numero) => {
+    if (!numero) return false;
+    const cleanNum = numero.replace(/[\s-]/g, '');
+    if (type === 'Passeport') {
+      return /^[A-Za-z0-9]{6,15}$/.test(cleanNum);
+    } else if (type === 'CNI') {
+      return /^[A-Za-z0-9]{7,20}$/.test(cleanNum);
+    }
+    return true; // Pour "Autre" on est plus permissif
   };
 
   const handleInputChange = (e) => {
@@ -660,7 +797,9 @@ function App() {
       case 2:
         return !!(formData.nom && formData.prenoms && formData.dateNaissance && formData.lieuNaissance && formData.nationalite);
       case 3:
-        return !!(formData.typePiece && formData.numeroPiece && formData.email && validateEmail(formData.email) && formData.telephonePrincipal);
+        const isTypeAutreValide = formData.typePiece !== 'Autre' || 
+          (formData.typePieceCustom && (formData.typePieceCustom !== 'Autre' || formData.typePieceAutreSaisie));
+        return !!(formData.typePiece && formData.numeroPiece && validateNumeroPiece(formData.typePiece, formData.numeroPiece) && isTypeAutreValide && formData.email && validateEmail(formData.email) && formData.telephonePrincipal);
       case 4:
         return !!(formData.ville && formData.paysResidence && formData.adresse);
       case 5:
@@ -746,6 +885,11 @@ function App() {
 
     return {
       ...formData,
+      ville: formData.ville === "Autre" ? formData.villeCustom : formData.ville,
+      codePostal: formData.codePostal === "Autre" ? formData.codePostalCustom : formData.codePostal,
+      typePiece: formData.typePiece === "Autre" 
+        ? (formData.typePieceCustom === "Autre" ? formData.typePieceAutreSaisie : formData.typePieceCustom) 
+        : formData.typePiece,
       instrumentsExp: mapArray(formData.instrumentsExp),
       patrimoineExistant: mapArray(formData.patrimoineExistant),
       servicesSouhaites: mapArray(formData.servicesSouhaites),
@@ -1073,11 +1217,10 @@ function App() {
                         </div>
                         <div className="space-y-1">
                           <label className="ui-field-label-elite">{t.nationalite}</label>
-                          <select
+                          <CustomSelect
                             name="nationalite"
                             value={formData.nationalite}
-                            onChange={handleInputChange} onClick={handleRadioClick}
-                            className="ui-input-elite appearance-none"
+                            onChange={(e) => { handleInputChange(e); }}
                           >
                             <option value="">{t.select}</option>
                             <option value="Sénégal">{t.paysList.senegal}</option>
@@ -1159,7 +1302,7 @@ function App() {
                             <option value="Mexique">{t.paysList.mexique}</option>
                             <option value="Australie">{t.paysList.australie}</option>
                             <option value="Autre">{t.paysList.autre}</option>
-                          </select>
+                          </CustomSelect>
                         </div>
                       </div>
                     )}
@@ -1173,23 +1316,65 @@ function App() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                           <div className="space-y-1">
                           <label className="ui-field-label-elite">{t.typePiece}</label>
-                          <select 
+                          <CustomSelect
                             name="typePiece" 
                             value={formData.typePiece} 
-                            onChange={handleInputChange} onClick={handleRadioClick} 
-                            className="ui-input-elite appearance-none"
+                            onChange={(e) => {
+                              handleInputChange(e);
+                              if(e.target.value !== 'Autre') {
+                                setFormData(prev => ({...prev, typePieceCustom: "", typePieceAutreSaisie: ""}));
+                              }
+                            }}
                           >
                             <option value="">{t.select}</option>
                             <option value="CNI">{t.cin}</option>
                             <option value="Passeport">{t.passeport}</option>
                             <option value="Autre">{t.autre}</option>
-                          </select>
+                          </CustomSelect>
+                          {formData.typePiece === 'Autre' && (
+                            <div className="mt-2 space-y-2">
+                              <CustomSelect
+                                name="typePieceCustom"
+                                value={formData.typePieceCustom}
+                                onChange={handleInputChange}
+                              >
+                                <option value="">Sélectionnez le type de pièce...</option>
+                                <option value="Carte Consulaire">Carte Consulaire</option>
+                                <option value="Permis de Conduire">Permis de Conduire</option>
+                                <option value="Carte de Séjour">Carte de Séjour</option>
+                                <option value="Autre">Autre (préciser)</option>
+                              </CustomSelect>
+                              {formData.typePieceCustom === 'Autre' && (
+                                <input
+                                  type="text"
+                                  name="typePieceAutreSaisie"
+                                  value={formData.typePieceAutreSaisie}
+                                  onChange={handleInputChange}
+                                  className="ui-input-elite"
+                                  placeholder="Précisez le type de pièce"
+                                />
+                              )}
+                            </div>
+                          )}
                         </div>
                           <div className="space-y-1">
                             <label className="ui-field-label-elite">
                               {t.numeroPiece}
                             </label>
-                            <input type="text" name="numeroPiece" value={formData.numeroPiece} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: B0123456" />
+                            <input 
+                              type="text" 
+                              name="numeroPiece" 
+                              value={formData.numeroPiece} 
+                              onChange={handleInputChange} 
+                              onClick={handleRadioClick} 
+                              className={`ui-input-elite ${formData.numeroPiece && !validateNumeroPiece(formData.typePiece, formData.numeroPiece) ? 'border-red-500 focus:border-red-500' : ''}`} 
+                              placeholder="Ex: B0123456" 
+                            />
+                            {formData.numeroPiece && !validateNumeroPiece(formData.typePiece, formData.numeroPiece) && (
+                               <p className="text-red-500 text-xs mt-1">
+                                 Format incorrect pour une {formData.typePiece}. (Doit contenir entre {formData.typePiece === 'Passeport' ? '6 et 15' : '7 et 20'} caractères alphanumériques).
+                               </p>
+                            )}
                           </div>
                         </div>
                         <div className="space-y-1">
@@ -1250,12 +1435,126 @@ function App() {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 2xl:gap-6">
                            <div className="space-y-1">
-                             <label className="ui-field-label-elite">{t.ville}</label>
-                             <input type="text" name="ville" value={formData.ville} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Dakar" />
+                             <label className="ui-field-label-elite">{t.pays}</label>
+                             <CustomSelect
+                               name="paysResidence"
+                               value={formData.paysResidence}
+                               onChange={(e) => {
+                                 handleInputChange(e);
+                                 setFormData(prev => ({ ...prev, ville: "", villeCustom: "", codePostal: "", codePostalCustom: "" }));
+                               }}
+                             >
+                               <option value="">{t.select}</option>
+                               <option value="Sénégal">{t.paysList.senegal}</option>
+                               <option value="Côte d'Ivoire">{t.paysList.coteIvoire}</option>
+                               <option value="Mali">{t.paysList.mali}</option>
+                               <option value="Burkina Faso">{t.paysList.burkina}</option>
+                               <option value="Bénin">{t.paysList.benin}</option>
+                               <option value="Togo">{t.paysList.togo}</option>
+                               <option value="Niger">{t.paysList.niger}</option>
+                               <option value="Guinée">{t.paysList.guinee}</option>
+                               <option value="Guinée-Bissau">{t.paysList.guineeBissau}</option>
+                               <option value="Mauritanie">{t.paysList.mauritanie}</option>
+                               <option value="Cameroun">{t.paysList.cameroun}</option>
+                               <option value="Gabon">{t.paysList.gabon}</option>
+                               <option value="Congo">{t.paysList.congo}</option>
+                               <option value="République Démocratique du Congo">{t.paysList.rdc}</option>
+                               <option value="République Centrafricaine">{t.paysList.centrafricaine}</option>
+                               <option value="Tchad">{t.paysList.tchad}</option>
+                               <option value="Nigeria">{t.paysList.nigeria}</option>
+                               <option value="Ghana">{t.paysList.ghana}</option>
+                               <option value="Liberia">{t.paysList.liberia}</option>
+                               <option value="Sierra Leone">{t.paysList.sierraLeone}</option>
+                               <option value="Guinée Équatoriale">{t.paysList.guineeEquatoriale}</option>
+                               <option value="São Tomé et Principe">{t.paysList.saotome}</option>
+                               <option value="Cap-Vert">{t.paysList.capVert}</option>
+                               <option value="Comores">{t.paysList.comores}</option>
+                               <option value="Madagascar">{t.paysList.madagascar}</option>
+                               <option value="Maurice">{t.paysList.maurice}</option>
+                               <option value="Seychelles">{t.paysList.seychelles}</option>
+                               <option value="Djibouti">{t.paysList.djibouti}</option>
+                               <option value="Érythrée">{t.paysList.erythree}</option>
+                               <option value="Éthiopie">{t.paysList.ethiopie}</option>
+                               <option value="Kenya">{t.paysList.kenya}</option>
+                               <option value="Somalie">{t.paysList.somalie}</option>
+                               <option value="Soudan">{t.paysList.soudan}</option>
+                               <option value="Soudan du Sud">{t.paysList.soudanSud}</option>
+                               <option value="Ouganda">{t.paysList.ouganda}</option>
+                               <option value="Tanzanie">{t.paysList.tanzanie}</option>
+                               <option value="Rwanda">{t.paysList.rwanda}</option>
+                               <option value="Burundi">{t.paysList.burundi}</option>
+                               <option value="Angola">{t.paysList.angola}</option>
+                               <option value="Botswana">{t.paysList.botswana}</option>
+                               <option value="Lesotho">{t.paysList.lesotho}</option>
+                               <option value="Malawi">{t.paysList.malawi}</option>
+                               <option value="Mozambique">{t.paysList.mozambique}</option>
+                               <option value="Namibie">{t.paysList.namibie}</option>
+                               <option value="Afrique du Sud">{t.paysList.afriqueSud}</option>
+                               <option value="Eswatini">{t.paysList.eswatini}</option>
+                               <option value="Zambie">{t.paysList.zambie}</option>
+                               <option value="Zimbabwe">{t.paysList.zimbabwe}</option>
+                               <option value="Maroc">{t.paysList.maroc}</option>
+                               <option value="Algérie">{t.paysList.algerie}</option>
+                               <option value="Tunisie">{t.paysList.tunisie}</option>
+                               <option value="Libye">{t.paysList.libye}</option>
+                               <option value="Égypte">{t.paysList.egypte}</option>
+                               <option value="France">{t.paysList.france}</option>
+                               <option value="Belgique">{t.paysList.belgique}</option>
+                               <option value="Suisse">{t.paysList.suisse}</option>
+                               <option value="Canada">{t.paysList.canada}</option>
+                               <option value="États-Unis">{t.paysList.etatsUnis}</option>
+                               <option value="Royaume-Uni">{t.paysList.royaumeUni}</option>
+                               <option value="Allemagne">{t.paysList.allemagne}</option>
+                               <option value="Espagne">{t.paysList.espagne}</option>
+                               <option value="Italie">{t.paysList.italie}</option>
+                               <option value="Portugal">{t.paysList.portugal}</option>
+                               <option value="Pays-Bas">{t.paysList.paysBas}</option>
+                               <option value="Autriche">{t.paysList.autriche}</option>
+                               <option value="Suède">{t.paysList.suede}</option>
+                               <option value="Norvège">{t.paysList.norvege}</option>
+                               <option value="Danemark">{t.paysList.danemark}</option>
+                               <option value="Finlande">{t.paysList.finlande}</option>
+                               <option value="Russie">{t.paysList.russie}</option>
+                               <option value="Chine">{t.paysList.chine}</option>
+                               <option value="Japon">{t.paysList.japon}</option>
+                               <option value="Corée du Sud">{t.paysList.coreeSud}</option>
+                               <option value="Inde">{t.paysList.inde}</option>
+                               <option value="Brésil">{t.paysList.bresil}</option>
+                               <option value="Argentine">{t.paysList.argentine}</option>
+                               <option value="Mexique">{t.paysList.mexique}</option>
+                               <option value="Australie">{t.paysList.australie}</option>
+                               <option value="Autre">{t.paysList.autre}</option>
+                             </CustomSelect>
                            </div>
                            <div className="space-y-1">
-                             <label className="ui-field-label-elite">{t.pays}</label>
-                             <input type="text" name="paysResidence" value={formData.paysResidence} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Sénégal" />
+                             <label className="ui-field-label-elite">{t.ville}</label>
+                             {citiesByCountry[formData.paysResidence] ? (
+                               <CustomSelect
+                                 name="ville"
+                                 value={formData.ville}
+                                 onChange={(e) => {
+                                   handleInputChange(e);
+                                   setFormData(prev => ({ ...prev, codePostal: "", codePostalCustom: "" }));
+                                 }}
+                               >
+                                 <option value="">{t.select}</option>
+                                 {citiesByCountry[formData.paysResidence].map(city => (
+                                   <option key={city} value={city}>{city}</option>
+                                 ))}
+                               </CustomSelect>
+                             ) : (
+                               <input type="text" name="ville" value={formData.ville} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: Dakar" />
+                             )}
+                             {formData.ville === "Autre" && (
+                               <input 
+                                 type="text" 
+                                 name="villeCustom" 
+                                 value={formData.villeCustom || ""}
+                                 className="ui-input-elite mt-2" 
+                                 placeholder="Précisez votre ville" 
+                                 onChange={handleInputChange}
+                               />
+                             )}
                            </div>
                         </div>
                         <div className="space-y-1">
@@ -1264,7 +1563,37 @@ function App() {
                         </div>
                         <div className="space-y-1">
                            <label className="ui-field-label-elite">{t.codePostal}</label>
-                           <input type="text" name="codePostal" value={formData.codePostal} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: BP 5400" />
+                           {postalCodesByCity[formData.ville] ? (
+                             <div className="space-y-2">
+                               <CustomSelect 
+                                 name="codePostal" 
+                                 value={formData.codePostal} 
+                                 onChange={(e) => {
+                                   handleInputChange(e);
+                                   if(e.target.value !== 'Autre') {
+                                     setFormData(prev => ({...prev, codePostalCustom: ""}));
+                                   }
+                                 }}
+                               >
+                                 <option value="">Sélectionnez le code postal...</option>
+                                 {postalCodesByCity[formData.ville].map(cp => (
+                                   <option key={cp} value={cp}>{cp}</option>
+                                 ))}
+                               </CustomSelect>
+                               {formData.codePostal === 'Autre' && (
+                                 <input 
+                                   type="text" 
+                                   name="codePostalCustom" 
+                                   value={formData.codePostalCustom || ""}
+                                   onChange={handleInputChange} 
+                                   className="ui-input-elite" 
+                                   placeholder="Précisez votre code postal" 
+                                 />
+                               )}
+                             </div>
+                           ) : (
+                             <input type="text" name="codePostal" value={formData.codePostal} onChange={handleInputChange} onClick={handleRadioClick} className="ui-input-elite" placeholder="Ex: BP 5400" />
+                           )}
                         </div>
                       </div>
                     )}
@@ -1588,11 +1917,10 @@ function App() {
                           {(formData.hasSGIAccount === "OUI" || (formData.hasSGIAccount === "NON" && formData.wantsSGIAssistance === "OUI" && formData.sgiPreferenceType === "ai_preference")) && (
                             <div className="space-y-2 animate-fade-in">
                               <label className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Dans quelle SGI ?</label>
-                              <select 
+                              <CustomSelect 
                                 name="selectedSGI" 
                                 value={formData.selectedSGI} 
-                                onChange={handleInputChange} onClick={handleRadioClick} 
-                                className="ui-input-elite w-full"
+                                onChange={handleInputChange}
                               >
                                 <option value="">Sélectionner une SGI...</option>
                                 {[
@@ -1603,7 +1931,7 @@ function App() {
                                 ].map(sgi => (
                                   <option key={sgi} value={sgi}>{sgi}</option>
                                 ))}
-                              </select>
+                              </CustomSelect>
                             </div>
                           )}
                         </div>
