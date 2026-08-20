@@ -5,11 +5,9 @@ import {
   Eye, EyeOff, LogOut, RefreshCw, TrendingUp, Star
 } from 'lucide-react';
 
-// En production VITE_API_URL = "https://dmplus-investment-back.onrender.com/api/"
+// En production VITE_API_URL = "https://dmplus-investment-back.onrender.com"
 // En dev local, le proxy Vite redirige /api/* → localhost:3002/api/*
-// On nettoie le /api/ final pour ne jamais le doubler
-const RAW_URL = (import.meta.env.VITE_API_URL || '').replace(/\/api\/?$/, '');
-const API_BASE = RAW_URL; // En dev = '' → proxy Vite, En prod = URL Render
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 
 // ─── Identifiants Admin (à sécuriser côté backend en production) ───────────
