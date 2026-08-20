@@ -5,11 +5,30 @@ import cors from 'cors';
 import nodemailer from 'nodemailer';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs/promises';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
+
+const DATA_DIR = path.join(path.resolve(), 'data');
+const SUBMISSIONS_FILE = path.join(DATA_DIR, 'submissions.json');
+
+// Assurez-vous que le répertoire de données existe
+async function ensureDataDir() {
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    try {
+      await fs.access(SUBMISSIONS_FILE);
+    } catch {
+      await fs.writeFile(SUBMISSIONS_FILE, JSON.stringify([]));
+    }
+  } catch (error) {
+    console.error("Erreur d'initialisation du répertoire de données:", error);
+  }
+}
+ensureDataDir();
 
 // Middleware
 app.use(cors());
@@ -128,18 +147,40 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
       // PAS DE PIÈCE JOINTE POUR LE CLIENT
     };
 
-    // 3. ENVOI DES DEUX EMAILS EN PARALLÈLE
-    await Promise.all([
-      transporter.sendMail(mailClientOptions),
-      transporter.sendMail(mailCompanyOptions)
-    ]);
+    // 3. SAUVEGARDE DE LA SOUMISSION (EN PREMIER)
+    try {
+      const submissionsData = await fs.readFile(SUBMISSIONS_FILE, 'utf-8');
+      const submissions = JSON.parse(submissionsData || '[]');
+      
+      const newSubmission = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        ...formData,
+      };
+      
+      submissions.unshift(newSubmission);
+      await fs.writeFile(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
+    } catch (fsError) {
+      console.error("Erreur lors de la sauvegarde de la soumission:", fsError);
+    }
 
-    console.log('Success: Confirmation envoyée au client ET copie envoyée à l\'entreprise.');
+    // 4. ENVOI DES DEUX EMAILS EN PARALLÈLE
+    try {
+      await Promise.all([
+        transporter.sendMail(mailClientOptions),
+        transporter.sendMail(mailCompanyOptions)
+      ]);
+      console.log('Success: Confirmation envoyée au client ET copie envoyée à l\'entreprise.');
+    } catch (emailError) {
+      console.error("Erreur d'envoi d'email (mais la soumission est sauvegardée):", emailError);
+      // On continue pour ne pas bloquer le client si l'email échoue
+    }
 
     res.status(200).json({ 
       success: true, 
-      message: 'Emails envoyés avec succès (Client + Entreprise)' 
+      message: 'Soumission enregistrée' 
     });
+
 
 
   } catch (error) {
@@ -274,6 +315,18 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // Route de test pour l'API
 app.get('/api/health', (req, res) => {
   res.json({ message: 'Serveur DM+ Invest opérationnel' });
+});
+
+// Route pour récupérer les soumissions pour l'administration
+app.get('/api/admin/submissions', async (req, res) => {
+  try {
+    const submissionsData = await fs.readFile(SUBMISSIONS_FILE, 'utf-8');
+    const submissions = JSON.parse(submissionsData || '[]');
+    res.status(200).json({ success: true, data: submissions });
+  } catch (error) {
+    console.error('Erreur lors de la lecture des soumissions:', error);
+    res.status(500).json({ success: false, message: 'Erreur lors de la récupération des données' });
+  }
 });
 
 // Route par défaut qui sert l'application React

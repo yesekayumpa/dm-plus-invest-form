@@ -7,6 +7,7 @@ import MembershipConditions from "./components/MembershipConditions";
 import { pdf, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import PdfDocument from './components/PdfDocument';
 import { MaintenancePage } from './components/maintenance';
+import AdminPage from './Admin';
 import { submitFormToBackend } from './services/api.service';
 import './styles/screen-1920.css';
 
@@ -667,7 +668,11 @@ const CustomSelect = ({ name, value, onChange, className = "", children }) => {
 };
 
 function App() {
-  const isSouscription = window.location.pathname.toLowerCase() === '/souscription';
+  const pathname = window.location.pathname.toLowerCase();
+  const isSouscription = pathname === '/souscription';
+  const isAdmin = pathname === '/admin';
+
+  if (isAdmin) return <AdminPage />;
   if (MAINTENANCE_MODE && !isSouscription) return <MaintenancePage />;
 
   const [showForm, setShowForm] = useState(false);
@@ -924,13 +929,7 @@ function App() {
       const blob = await myPdf.toBlob();
       const pdfFile = new File([blob], `${t.pdfFilenamePrefix}_${finalData.nom}_DM_Invest.pdf`, { type: 'application/pdf' });
 
-      // Soumission des données + PDF au backend
-      try {
-        await submitFormToBackend(finalData, pdfFile);
-      } catch (backendError) {
-        console.error("Erreur backend:", backendError);
-        // On continue même si l'enregistrement backend échoue pour envoyer l'email
-      }
+      // Envoi de l'email avec le PDF en pièce jointe (qui s'occupe aussi de sauvegarder les données)
 
       // Envoi de l'email avec le PDF en pièce jointe
       const serverUrl = window.location.hostname === 'localhost' ? 'http://localhost:3002/api/send-email' : '/api/send-email';
