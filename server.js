@@ -48,13 +48,27 @@ app.use(express.urlencoded({ extended: true }));
 // Configuration de multer pour les fichiers
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Configuration du transporteur d'email avec Gmail et App Password
+// Configuration du transporteur SMTP (LWS)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST || 'mail.dmplus-group.com',
+  port: parseInt(process.env.SMTP_PORT || '465'),
+  secure: (process.env.SMTP_SECURE || 'true') === 'true', // true pour port 465 (SSL), false pour 587 (TLS/STARTTLS)
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false, // utile si le certificat SSL du serveur LWS est auto-signé
+  },
+});
+
+// Vérification de la connexion SMTP au démarrage
+transporter.verify((error) => {
+  if (error) {
+    console.error('❌ Connexion SMTP échouée :', error.message);
+  } else {
+    console.log('✅ Connexion SMTP établie avec succès.');
+  }
 });
 
 // Route pour envoyer l'email avec PDF
@@ -346,74 +360,19 @@ app.get('*', (req, res) => {
 
 /*
 ================================================================================
-EXPLICATION DE LA MÉTHODE UTILISÉE : ETHEREAL EMAIL
+CONFIGURATION SMTP LWS
 ================================================================================
+Le transporteur utilise directement le serveur SMTP de LWS.
+Variables d'environnement requises dans le fichier .env :
 
-Je vais vous expliquer la méthode que j'ai utilisée pour résoudre le problème d'envoi d'emails.
+  EMAIL_USER=investment@dmplus-group.com
+  EMAIL_PASS=<mot_de_passe>
+  SMTP_HOST=mail.dmplus-group.com   (ou ssl0.ovh.net selon LWS)
+  SMTP_PORT=465                      (SSL) ou 587 (STARTTLS)
+  SMTP_SECURE=true                   (true pour 465, false pour 587)
 
-## Méthode utilisée : Ethereal Email
-
-### Le problème initial
-Vous aviez des erreurs d'authentification avec les services email traditionnels :
-- Gmail nécessite un "App Password" (configuration complexe)
-- Mailtrap nécessite des identifiants valides (que nous n'avions pas)
-
-### La solution : Ethereal Email
-
-**Ethereal Email** est un service de test de Nodemailer qui :
-
-1. **Crée automatiquement un compte email de test**
-   ```javascript
-   let testAccount = await nodemailer.createTestAccount();
-   ```
-
-2. **Génère des identifiants valides** pour chaque session
-   - Email temporaire
-   - Mot de passe temporaire
-   - Serveur SMTP fonctionnel
-
-3. **Fournit une URL de prévisualisation** pour voir les emails envoyés
-   ```javascript
-   console.log('URL de prévisualisation :', nodemailer.getTestMessageUrl(info));
-   ```
-
-### Le processus complet
-
-1. **Configuration du transporteur** :
-   ```javascript
-   const transporter = nodemailer.createTransport({
-     host: 'smtp.ethereal.email',
-     port: 587,
-     secure: false,
-     auth: {
-       user: testAccount.user,    // email généré automatiquement
-       pass: testAccount.pass,    // mot de passe généré automatiquement
-     },
-   });
-   ```
-
-2. **Envoi de l'email principal** à votre adresse `dmplusgroup@gmail.com` 
-
-3. **Envoi de l'email de confirmation** au client (seulement si email fourni)
-
-4. **Affichage de l'URL de prévisualisation** pour vérifier le contenu
-
-### Avantages de cette méthode
-
-- **Pas de configuration requise** : fonctionne immédiatement
-- **Pas d'identifiants à gérer** : tout est automatique
-- **Test visuel** : URL pour voir l'email exact envoyé
-- **PDF fonctionnel** : pièce jointe incluse
-- **Débogage facile** : messages clairs dans la console
-
-### Pour la production
-
-Pour passer en production, vous devrez :
-1. Utiliser un vrai service email (Gmail avec App Password, SendGrid, etc.)
-2. Remplacer la configuration Ethereal par celle du service choisi
-3. Supprimer les URLs de prévisualisation
-
-Cette méthode est parfaite pour **tester rapidement** sans configuration complexe !
+Si le SMTP_HOST n'est pas défini, la valeur par défaut 'mail.dmplus-group.com'
+est utilisée. Ajustez selon les paramètres fournis par LWS dans votre panel.
 ================================================================================
 */
 
