@@ -9,6 +9,8 @@ import {
 // En dev local, le proxy Vite redirige /api/* → localhost:3002/api/*
 const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
+import { getSubmissionsFromBackend } from './services/api.service';
+
 
 // ─── Identifiants Admin (à sécuriser côté backend en production) ───────────
 const ADMIN_CREDENTIALS = {
@@ -379,21 +381,19 @@ const Dashboard = ({ onLogout }) => {
     setLoading(true);
     setFetchError('');
     try {
-      const url = `${API_BASE}/api/admin/submissions`;
-      console.log('[Admin] Fetch URL:', url);
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP ${response.status} - ${response.statusText}`);
-      }
-      const result = await response.json();
-      if (result.success) {
+      const result = await getSubmissionsFromBackend();
+      // Le backend Spring Boot peut renvoyer directement le tableau ou un objet { success, data }
+      if (Array.isArray(result)) {
+        setSubmissions(result);
+      } else if (result && result.data) {
         setSubmissions(result.data);
       } else {
-        setFetchError('Le serveur a retourné une erreur : ' + (result.message || 'inconnue'));
+        // Au cas où le format est différent
+        setSubmissions(result || []);
       }
     } catch (err) {
       console.error('Erreur lors de la récupération des données:', err);
-      setFetchError(`Impossible de contacter le serveur.\n\nDétail : ${err.message}\n\nURL appelée : ${API_BASE}/api/admin/submissions`);
+      setFetchError(`Impossible de contacter le backend Spring Boot.\n\nDétail : ${err.message}`);
     } finally {
       setLoading(false);
     }

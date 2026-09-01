@@ -932,7 +932,7 @@ function App() {
       // Envoi de l'email avec le PDF en pièce jointe (qui s'occupe aussi de sauvegarder les données)
 
       // Envoi de l'email avec le PDF en pièce jointe
-      const serverUrl = window.location.hostname === 'localhost' ? 'http://localhost:3002/api/send-email' : '/api/send-email';
+      const serverUrl = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/send-email` : '/api/send-email';
       const fd = new FormData();
       Object.keys(finalData).forEach(k => fd.append(k, typeof finalData[k] === 'object' ? JSON.stringify(finalData[k]) : String(finalData[k])));
       fd.append('sujet', t.emailSubject);

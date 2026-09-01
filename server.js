@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -6,6 +5,7 @@ import nodemailer from 'nodemailer';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
+import EmailRequestDto from './dto/EmailRequestDto.js';
 
 dotenv.config();
 
@@ -71,18 +71,21 @@ transporter.verify((error) => {
   }
 });
 
-// Route pour envoyer l'email avec PDF
-app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) => {
+// Route pour envoyer l'email avec PDF - API RESTful versionnée
+app.post('/api/v1/email/send', upload.single('convention_pdf'), async (req, res) => {
   try {
     const { _replyto, ...formData } = req.body;
     const pdfFile = req.file;
 
-    if (!pdfFile) {
-      return res.status(400).json({ success: false, message: 'Fichier PDF manquant' });
-    }
+    // Utilisation du DTO pour validation et structuration
+    const emailDto = EmailRequestDto.createSendEmailDto(
+      { ...formData, _replyto },
+      pdfFile
+    );
 
     // 1. EMAIL POUR L'ENTREPRISE (IMMÉDIAT - INFOS CLIENT + PDF)
     const companyEmail = 'investment@dmplus-group.com';
+    const validatedData = emailDto.formData;
     let summaryHtml = `<h3 style="color: #6366f1; margin-top: 20px;">Informations du client :</h3>`;
     
     const categories = {
@@ -95,8 +98,8 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
     Object.entries(categories).forEach(([category, fields]) => {
       summaryHtml += `<h4 style="color: #6366f1; margin-top: 20px;">${category}</h4><ul style="list-style: none; padding-left: 10px;">`;
       fields.forEach(field => {
-        if (formData[field]) {
-          summaryHtml += `<li><strong>${field}:</strong> ${formData[field]}</li>`;
+        if (validatedData[field]) {
+          summaryHtml += `<li><strong>${field}:</strong> ${validatedData[field]}</li>`;
         }
       });
       summaryHtml += '</ul>';
@@ -105,7 +108,7 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
     const mailCompanyOptions = {
       from: companyEmail, // L'entreprise envoie depuis sa propre adresse
       to: companyEmail, // L'entreprise reçoit immédiatement
-      subject: `NOUVELLE INSCRIPTION REÇUE : ${formData.nom || ''} ${formData.prenoms || ''} (${_replyto || 'email@fourni.com'})`,
+      subject: `NOUVELLE INSCRIPTION REÇUE : ${validatedData.nom || ''} ${validatedData.prenoms || ''} (${emailDto._replyto || 'email@fourni.com'})`,
       html: `
         <div style="font-family: Arial, sans-serif;">
           <h2 style="color: #d97706;">NOUVEAU CLIENT INSCRIT</h2>
@@ -118,30 +121,34 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
           </div>
           <p><strong>Informations de contact direct du client :</strong></p>
           <ul style="list-style: none; padding-left: 10px;">
-            <li><strong>Email du client :</strong> ${_replyto || 'Non fourni'}</li>
-            <li><strong>Téléphone principal :</strong> ${formData.telephonePrincipal || 'Non fourni'}</li>
-            <li><strong>WhatsApp :</strong> ${formData.whatsapp || 'Non fourni'}</li>
+            <li><strong>Email du client :</strong> ${emailDto._replyto || 'Non fourni'}</li>
+            <li><strong>Téléphone principal :</strong> ${validatedData.telephonePrincipal || 'Non fourni'}</li>
+            <li><strong>WhatsApp :</strong> ${validatedData.whatsapp || 'Non fourni'}</li>
           </ul>
           <p><strong>Document PDF contractuel joint à cet email.</strong></p>
           <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
           <p style="font-size: 12px; color: #666;">
-            <strong>Action requise :</strong> Contacter le client à l'adresse ${_replyto || 'email non fourni'} pour finaliser son inscription.
+            <strong>Action requise :</strong> Contacter le client à l'adresse ${emailDto._replyto || 'email non fourni'} pour finaliser son inscription.
           </p>
+          <div style="margin-top: 20px;">
+            <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4xLmyMadHj5ik8nWyu9cW0sPlPdlrePUqhjbLuf-aZyiwiRQtXJ186nXJFQT1WE9EIGHMLD8Q-NjPC2" alt="Signature DM+ Invest" style="max-width: 100%; height: auto;">
+          </div>
         </div>
       `,
       attachments: [
         {
-          filename: `Convention_${formData.nom || 'Client'}_DM_Invest.pdf`,
-          content: pdfFile.buffer,
+          filename: `Convention_${validatedData.nom || 'Client'}_DM_Invest.pdf`,
+          content: emailDto.pdfFile.buffer,
           contentType: 'application/pdf'
         }
       ]
     };
 
     // 2. EMAIL POUR LE CLIENT (UNIQUEMENT MESSAGE - PAS DE PDF)
+    const clientEmailAddress = emailDto._replyto || validatedData.email;
     const mailClientOptions = {
       from: companyEmail, // L'ENVOIE DEPUIS L'ENTREPRISE (investment@dmplus-group.com)
-      to: _replyto, // Envoyer au client (n'importe quel client)
+      to: clientEmailAddress, // Envoyer au client (n'importe quel client)
       subject: 'Votre inscription DM+ Invest a été reçue avec succès',
       replyTo: companyEmail, // Le client répond à l'entreprise
       html: `
@@ -166,6 +173,9 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
           <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
             <strong>Cordialement,<br>L'équipe DM+ Invest</strong>
           </p>
+          <div style="margin-top: 20px;">
+            <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4xLmyMadHj5ik8nWyu9cW0sPlPdlrePUqhjbLuf-aZyiwiRQtXJ186nXJFQT1WE9EIGHMLD8Q-NjPC2" alt="Signature DM+ Invest" style="max-width: 100%; height: auto;">
+          </div>
         </div>
       `
       // PAS DE PIÈCE JOINTE POUR LE CLIENT
@@ -179,7 +189,7 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
       const newSubmission = {
         id: Date.now().toString(),
         date: new Date().toISOString(),
-        ...formData,
+        ...validatedData,
       };
       
       submissions.unshift(newSubmission);
@@ -200,55 +210,56 @@ app.post('/api/send-email', upload.single('convention_pdf'), async (req, res) =>
       // On continue pour ne pas bloquer le client si l'email échoue
     }
 
-    res.status(200).json({ 
-      success: true, 
-      message: 'Soumission enregistrée' 
-    });
+    // Réponse API RESTful standardisée
+    const responseData = EmailRequestDto.createSuccessResponse(
+      'Soumission enregistrée avec succès',
+      {
+        clientEmail: validatedData.email,
+        clientName: `${validatedData.nom} ${validatedData.prenoms}`,
+        submittedAt: new Date().toISOString(),
+        warnings: emailDto.metadata?.warnings
+      }
+    );
+
+    res.status(200).json(responseData);
 
 
 
   } catch (error) {
     console.error('Erreur lors de l\'envoi de l\'email:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Erreur lors de l\'envoi de l\'email',
-      error: error.message 
-    });
+    
+    const errorResponse = EmailRequestDto.createErrorResponse(
+      'Erreur lors de l\'envoi de l\'email',
+      [error.message]
+    );
+    
+    res.status(500).json(errorResponse);
   }
 });
 
-// Route pour recevoir la réponse du client et la transmettre à l'entreprise
-app.post('/api/reply-email', async (req, res) => {
+// Route pour recevoir la réponse du client et la transmettre à l'entreprise - API RESTful versionnée
+app.post('/api/v1/email/reply', async (req, res) => {
   try {
     const { clientEmail, clientName, subject, message } = req.body;
 
-    // Validation des champs
-    if (!clientEmail || !clientEmail.includes('@')) {
-      return res.status(400).json({
-        success: false,
-        message: 'Adresse email invalide',
-        error: 'Veuillez fournir une adresse email valide',
-      });
-    }
-
-    if (!message || message.trim() === '') {
-      return res.status(400).json({
-        success: false,
-        message: 'Message vide',
-        error: "Veuillez écrire un message avant d'envoyer",
-      });
-    }
+    // Utilisation du DTO pour validation et structuration
+    const replyDto = EmailRequestDto.createReplyEmailDto({
+      clientEmail,
+      clientName,
+      subject,
+      message
+    });
 
     const companyEmail = 'investment@dmplus-group.com';
-    const replySubject = subject
-      ? `Réponse client : ${subject}`
-      : `Message de ${clientName || clientEmail}`;
+    const replySubject = replyDto.subject
+      ? `Réponse client : ${replyDto.subject}` 
+      : `Message de ${replyDto.clientName || replyDto.clientEmail}`;
 
     // Email transmis à l'entreprise avec le message du client
     const mailToCompany = {
       from: companyEmail,
       to: companyEmail,
-      replyTo: clientEmail,
+      replyTo: replyDto.clientEmail,
       subject: replySubject,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto;">
@@ -259,32 +270,32 @@ app.post('/api/reply-email', async (req, res) => {
           <div style="background: #f8fafc; padding: 25px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none;">
             <div style="background: #fff; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #DEB833; margin-bottom: 20px;">
               <p style="margin: 0; font-size: 14px; color: #666;">Informations du client</p>
-              <p style="margin: 6px 0 0; font-size: 16px; font-weight: bold; color: #332E32;">${clientName || 'Nom non fourni'}</p>
+              <p style="margin: 6px 0 0; font-size: 16px; font-weight: bold; color: #332E32;">${replyDto.clientName || 'Nom non fourni'}</p>
               <p style="margin: 2px 0 0; color: #6366f1;">
-                <a href="mailto:${clientEmail}" style="color: #6366f1; text-decoration: none;">${clientEmail}</a>
+                <a href="mailto:${replyDto.clientEmail}" style="color: #6366f1; text-decoration: none;">${replyDto.clientEmail}</a>
               </p>
             </div>
             <div style="background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 20px;">
               <h3 style="color: #332E32; margin-top: 0; font-size: 15px;">📩 Message du client :</h3>
-              <p style="white-space: pre-wrap; color: #444; line-height: 1.7; margin: 0;">${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+              <p style="white-space: pre-wrap; color: #444; line-height: 1.7; margin: 0;">${replyDto.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
             </div>
             <div style="background: #fef3c7; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #f59e0b;">
               <p style="margin: 0; font-size: 13px; color: #92400e;">
                 <strong>Action requise :</strong> Répondez directement à cet email pour contacter
-                <strong>${clientName || 'le client'}</strong> à l'adresse
-                <a href="mailto:${clientEmail}" style="color: #92400e;">${clientEmail}</a>.
+                <strong>${replyDto.clientName || 'le client'}</strong> à l'adresse
+                <a href="mailto:${replyDto.clientEmail}" style="color: #92400e;">${replyDto.clientEmail}</a>.
               </p>
             </div>
           </div>
         </div>
       `,
-      text: `Message de ${clientName || clientEmail} (${clientEmail})\n\n${message}\n\nRépondre à : ${clientEmail}`,
+      text: `Message de ${replyDto.clientName || replyDto.clientEmail} (${replyDto.clientEmail})\n\n${replyDto.message}\n\nRépondre à : ${replyDto.clientEmail}`,
     };
 
     // Email de confirmation envoyé au client
     const mailToClient = {
       from: companyEmail,
-      to: clientEmail,
+      to: replyDto.clientEmail,
       replyTo: companyEmail,
       subject: 'Votre message a bien été reçu - DM+ Invest',
       html: `
@@ -294,11 +305,11 @@ app.post('/api/reply-email', async (req, res) => {
             <p style="color: rgba(255,255,255,0.85); margin: 6px 0 0;">DM+ Invest vous confirme la réception</p>
           </div>
           <div style="background: #f8fafc; padding: 25px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none;">
-            <p>Bonjour <strong>${clientName || ''}</strong>,</p>
+            <p>Bonjour <strong>${replyDto.clientName || ''}</strong>,</p>
             <p>Nous avons bien reçu votre message. Notre équipe vous répondra dans les meilleurs délais.</p>
             <div style="background: #fff; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #DEB833; margin: 20px 0;">
               <p style="margin: 0; font-size: 13px; color: #666;">Votre message :</p>
-              <p style="white-space: pre-wrap; color: #444; margin: 8px 0 0; font-style: italic;">"${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}"</p>
+              <p style="white-space: pre-wrap; color: #444; margin: 8px 0 0; font-style: italic;">"${replyDto.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}"</p>
             </div>
             <p>Pour toute urgence :</p>
             <ul style="list-style: none; padding-left: 0;">
@@ -308,10 +319,13 @@ app.post('/api/reply-email', async (req, res) => {
             <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
               <strong>Cordialement,<br>L'équipe DM+ Invest</strong>
             </p>
+            <div style="margin-top: 20px;">
+              <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4xLmyMadHj5ik8nWyu9cW0sPlPdlrePUqhjbLuf-aZyiwiRQtXJ186nXJFQT1WE9EIGHMLD8Q-NjPC2" alt="Signature DM+ Invest" style="max-width: 100%; height: auto;">
+            </div>
           </div>
         </div>
       `,
-      text: `Bonjour ${clientName || ''},\n\nNous avons bien reçu votre message.\n\nCordialement,\nL'équipe DM+ Invest`,
+      text: `Bonjour ${replyDto.clientName || ''},\n\nNous avons bien reçu votre message.\n\nCordialement,\nL'équipe DM+ Invest`,
     };
 
     await Promise.all([
@@ -319,16 +333,28 @@ app.post('/api/reply-email', async (req, res) => {
       transporter.sendMail(mailToClient),
     ]);
 
-    console.log(`Reply-email: message de ${clientEmail} transmis à ${companyEmail}`);
-    res.status(200).json({ success: true, message: 'Message envoyé avec succès.' });
+    console.log(`Reply-email: message de ${replyDto.clientEmail} transmis à ${companyEmail}`);
+
+    // Réponse API RESTful standardisée
+    const responseData = EmailRequestDto.createSuccessResponse(
+      'Message envoyé avec succès',
+      {
+        recipient: replyDto.clientEmail,
+        sentAt: new Date().toISOString()
+      }
+    );
+
+    res.status(200).json(responseData);
 
   } catch (error) {
-    console.error('Erreur /reply-email:', error);
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de l'envoi du message",
-      error: error.message,
-    });
+    console.error('Erreur /api/v1/email/reply:', error);
+    
+    const errorResponse = EmailRequestDto.createErrorResponse(
+      "Erreur lors de l'envoi du message",
+      [error.message]
+    );
+    
+    res.status(500).json(errorResponse);
   }
 });
 
@@ -336,9 +362,31 @@ app.post('/api/reply-email', async (req, res) => {
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Route de test pour l'API
+// Route de test pour l'API - versionnée
+app.get('/api/v1/health', (req, res) => {
+  const healthResponse = EmailRequestDto.createSuccessResponse(
+    'Serveur DM+ Invest opérationnel',
+    {
+      version: 'v1',
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString()
+    }
+  );
+  res.json(healthResponse);
+});
+
+// Route de compatibilité pour l'ancien endpoint (redirection)
 app.get('/api/health', (req, res) => {
-  res.json({ message: 'Serveur DM+ Invest opérationnel' });
+  res.redirect('/api/v1/health');
+});
+
+// Routes de compatibilité pour les anciens endpoints (redirection temporaire pour POST)
+app.post('/api/send-email', upload.single('convention_pdf'), (req, res) => {
+  res.redirect(307, '/api/v1/email/send'); // 307 = Temporary Redirect pour POST
+});
+
+app.post('/api/reply-email', (req, res) => {
+  res.redirect(307, '/api/v1/email/reply'); // 307 = Temporary Redirect pour POST
 });
 
 // Route pour récupérer les soumissions pour l'administration

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: dmplus-investment-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: EMAIL_HOST
+        value: mail.dmplus-group.com
+      - key: EMAIL_PORT
+        value: 465
+      - key: EMAIL_USER
+        value: investment@dmplus-group.com
+      - key: EMAIL_PASS
+        sync: false
+      - key: PORT
+        value: 3002
